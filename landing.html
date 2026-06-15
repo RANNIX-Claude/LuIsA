@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Medivóz — El Expediente Clínico que se llena solo</title>
+  <meta name="description" content="Dictado con voz + IA + Historia Clínica IMSS Bienestar. Diseñado para médicos mexicanos. Prueba gratis 30 días."/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230A66C2'/><text y='.9em' font-size='72' x='12'>🏥</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","CLARITY_PROJECT_ID");</script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans','Segoe UI',sans-serif;background:#fff;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+    /* Botones */
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:linear-gradient(135deg,#0A66C2,#004182);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(10,102,194,.3);font-family:inherit}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,102,194,.4)}
+    .btn-white{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:#fff;color:#0A66C2;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.2);font-family:inherit}
+    .btn-white:hover{transform:translateY(-2px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;background:rgba(255,255,255,.1);color:#fff;border:2px solid rgba(255,255,255,.4);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
+    .btn-outline:hover{background:rgba(255,255,255,.2)}
+    .btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:#fff;color:#0A66C2;border:2px solid #0A66C2;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;width:100%;justify-content:center}
+    .btn-secondary:hover{background:#F0F7FF}
+    .btn-plan{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;background:linear-gradient(135deg,#0A66C2,#004182);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:all .2s}
+    .btn-plan:hover{transform:translateY(-1px)}
+    .btn-contacto{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;background:#fff;color:#0A66C2;border:2px solid #0A66C2;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;width:100%;font-family:inherit}
+
+    /* Badge */
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:700;letter-spacing:.3px}
+
+    /* Cards */
+    .feature-card{background:#fff;border-radius:12px;padding:22px;border:1px solid #E0DFDC;display:flex;gap:16px;align-items:flex-start}
+    .feature-card h3{font-size:15px;font-weight:700;margin-bottom:6px;color:#1a1a1a}
+    .feature-card p{font-size:13px;color:#666;line-height:1.6}
+    .feature-icon{font-size:28px;flex-shrink:0}
+
+    .step-card{background:#E3F2FD;border-radius:16px;padding:28px;text-align:center}
+    .step-card.verde{background:#E8F5E9}
+    .step-card.naranja{background:#FFF3E0}
+    .step-icon{font-size:40px;margin-bottom:14px}
+    .step-card h3{font-weight:800;margin-bottom:10px}
+    .step-card p{font-size:14px;color:#555;line-height:1.6}
+
+    /* Precios */
+    .plan-card{border:1.5px solid #E0DFDC;border-radius:16px;padding:28px;text-align:center}
+    .plan-card.popular{border:2px solid #0A66C2;box-shadow:0 8px 32px rgba(10,102,194,.15);position:relative}
+    .plan-nombre{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#888;margin-bottom:12px}
+    .plan-precio{font-size:44px;font-weight:900;letter-spacing:-2px}
+    .plan-precio.azul{color:#0A66C2}
+    .plan-sub{font-size:12px;color:#888;margin-bottom:20px}
+    .plan-features{text-align:left;margin-bottom:24px}
+    .plan-feature{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px}
+    .check-verde{color:#057642;font-weight:700}
+    .check-azul{color:#0A66C2;font-weight:700}
+    .popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0A66C2,#004182);color:#fff;font-size:12px;font-weight:700;padding:4px 16px;border-radius:20px;white-space:nowrap}
+
+    /* Testimonios */
+    .testi-card{background:#fff;border-radius:14px;padding:24px;border:1px solid #E0DFDC;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+    .testi-stars{font-size:18px;margin-bottom:12px}
+    .testi-text{font-size:14px;color:#333;line-height:1.7;font-style:italic;margin-bottom:16px}
+    .testi-autor{display:flex;align-items:center;gap:10px}
+    .testi-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0A66C2,#004182);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
+    .testi-nombre{font-weight:700;font-size:13px}
+    .testi-esp{font-size:11px;color:#888}
+
+    /* Stat bar */
+    .stat-item{padding:16px;text-align:center}
+    .stat-icon{font-size:28px;margin-bottom:6px}
+    .stat-num{font-size:28px;font-weight:900;color:#0A66C2;letter-spacing:-1px}
+    .stat-desc{font-size:12px;color:#666;margin-top:4px;line-height:1.4}
+
+    /* Nav */
+    nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid #E0DFDC;padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between}
+    .nav-links{display:flex;align-items:center;gap:8px}
+    .nav-link{padding:8px 16px;color:#555;font-size:14px;font-weight:600}
+
+    /* Animations */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade-up{animation:fadeUp .6s ease forwards}
+
+    /* Grid */
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+
+    @media(max-width:768px){
+      .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+      .grid-precios{grid-template-columns:1fr!important}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div style="display:flex;align-items:center;gap:8px">
+    <img src="/assets/img/logo_horizontal.png" alt="Medivóz" style="height:40px;object-fit:contain;max-width:180px"/>
+    <span style="background:#E8F0FE;color:#0A66C2;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700">BETA</span>
+  </div>
+  <div class="nav-links">
+    <a href="#precios" class="nav-link">Precios</a>
+    <a href="#features" class="nav-link">Funciones</a>
+    <a href="/app.html" class="btn-primary" style="padding:9px 20px;font-size:14px">Probar gratis →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section style="background:linear-gradient(135deg,#004182 0%,#0A66C2 50%,#1565C0 100%);padding:80px 24px 90px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;inset:0;opacity:.05;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:30px 30px"></div>
+  <div class="container" style="position:relative">
+    <div style="margin-bottom:20px">
+      <img src="/assets/img/logo_horizontal.png" alt="Medivóz" style="height:66px;object-fit:contain;filter:brightness(0) invert(1)"/>
+    </div>
+    <div class="badge" style="background:rgba(255,255,255,.15);color:#fff;margin-bottom:24px">
+      🇲🇽 Diseñado para médicos mexicanos · Formato IMSS Bienestar
+    </div>
+    <h1 style="font-size:clamp(36px,5vw,62px);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-1.5px;margin-bottom:20px">
+      El expediente clínico<br/>
+      <span style="color:#7EC8E3">que se llena solo</span>
+    </h1>
+    <p style="font-size:clamp(16px,2.5vw,20px);color:rgba(255,255,255,.8);max-width:600px;margin:0 auto 36px;line-height:1.6">
+      Dicta la consulta con tu voz. La IA extrae los datos, detecta interacciones medicamentosas
+      y genera receta, interconsulta y solicitud de laboratorio — en segundos.
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="/app.html" class="btn-white">🚀 Empezar gratis — 30 días</a>
+      <a href="#demo" class="btn-outline">▶ Ver cómo funciona</a>
+    </div>
+    <div style="margin-top:36px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.65)">
+      <span>✅ Sin tarjeta de crédito</span>
+      <span>✅ Setup en 5 minutos</span>
+      <span>✅ Soporte en español</span>
+      <span>✅ NOM-024 compatible</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── STAT BAR ── -->
+<section style="background:#F0F4F8;padding:32px 24px;border-bottom:1px solid #E0DFDC">
+  <div class="container">
+    <div class="grid-4">
+      <div class="stat-item">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-num">75%</div>
+        <div class="stat-desc">Menos tiempo en papeleo por consulta</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🎙️</div>
+        <div class="stat-num">&lt; 30 seg</div>
+        <div class="stat-desc">Para llenar una consulta completa</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-num">100%</div>
+        <div class="stat-desc">Detección de interacciones medicamentosas</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">📄</div>
+        <div class="stat-num">3 docs</div>
+        <div class="stat-desc">Receta + Interconsulta + Lab en un clic</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DEMO ── -->
+<section id="demo" style="padding:72px 24px;background:#fff">
+  <div class="container" style="text-align:center;margin-bottom:48px">
+    <div class="badge" style="background:#E8F0FE;color:#0A66C2;margin-bottom:16px">🎙️ Así funciona</div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1px">Dictás, la IA trabaja</h2>
+    <p style="font-size:16px;color:#666;margin-top:10px;max-width:500px;margin-left:auto;margin-right:auto">3 pasos. Sin teclado. Sin formularios interminables.</p>
+  </div>
+  <div class="container">
+    <div class="grid-3">
+      <div class="step-card">
+        <div class="step-icon">🎤</div>
+        <h3 style="color:#1565C0">1. Dictás</h3>
+        <p>El médico habla normal durante la consulta. Medivóz escucha en tiempo real con reconocimiento en español mexicano.</p>
+      </div>
+      <div class="step-card verde">
+        <div class="step-icon">🤖</div>
+        <h3 style="color:#1b5e20">2. La IA extrae</h3>
+        <p>Claude analiza el dictado, llena automáticamente la Historia Clínica IMSS Bienestar y detecta interacciones con medicamentos actuales.</p>
+      </div>
+      <div class="step-card naranja">
+        <div class="step-icon">📄</div>
+        <h3 style="color:#E65100">3. Tú validas y firmas</h3>
+        <p>Revisas los campos, corriges lo necesario y generas receta, interconsulta o solicitud de laboratorio con un clic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section id="features" style="padding:72px 24px;background:#F8FAFB">
+  <div class="container" style="text-align:center;margin-bottom:48px">
+    <div class="badge" style="background:#E8F0FE;color:#0A66C2;margin-bottom:16px">⚡ Funcionalidades</div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1px">Todo lo que necesita tu consultorio</h2>
+  </div>
+  <div class="container">
+    <div class="grid-2">
+
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div>
+          <h3>Historia Clínica IMSS Bienestar completa</h3>
+          <p>Formato oficial con todos los apartados: Ficha, AHF, APNP, APP, Gineco-obstétrico, Padecimiento actual, Interrogatorio por aparatos, Signos vitales, Exploración física, Paraclínicos, Diagnóstico y Plan.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎙️</div>
+        <div>
+          <h3>Dictado con voz en español mexicano</h3>
+          <p>Reconocimiento de voz nativo en Chrome. Habla con naturalidad durante la consulta — la IA entiende terminología médica en español.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚠️</div>
+        <div>
+          <h3>Alertas de interacciones medicamentosas</h3>
+          <p>Claude analiza en tiempo real los medicamentos nuevos vs los actuales del paciente. Alerta crítica o moderada + sugerencia de alternativa farmacológica.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <div>
+          <h3>Documentos con un clic</h3>
+          <p>Receta con firma, Solicitud de interconsulta a especialidad, y Solicitud de estudios de laboratorio y gabinete. Todo imprimible como PDF.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🧪</div>
+        <div>
+          <h3>Análisis de estudios clínicos con IA</h3>
+          <p>Sube PDF o imagen de laboratorio, RX, TAC, RMN o USG. La IA extrae valores, detecta críticos y genera diagnóstico diferencial con probabilidades.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🗂️</div>
+        <div>
+          <h3>Expediente por paciente</h3>
+          <p>Historial completo de consultas. Cada nota incluye el dictado original, campos extraídos y alertas registradas. Vista expandible y navegación rápida.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <div>
+          <h3>Login seguro por médico</h3>
+          <p>PIN de 4 dígitos por médico. Múltiples perfiles en un mismo dispositivo. Historial separado por especialista.</p>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div>
+          <h3>PWA — funciona como app</h3>
+          <p>Instalable en iPhone y Android directo desde el navegador. Funciona en tablet en el consultorio sin descargar nada.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── PRECIOS ── -->
+<section id="precios" style="padding:80px 24px;background:#fff">
+  <div class="container" style="text-align:center;margin-bottom:52px">
+    <div class="badge" style="background:#E8F0FE;color:#0A66C2;margin-bottom:16px">💳 Precios</div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-1px">Simple y transparente</h2>
+    <p style="font-size:16px;color:#666;margin-top:10px">Sin contratos. Sin sorpresas. Cancela cuando quieras.</p>
+  </div>
+  <div class="container">
+    <div class="grid-precios" style="display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:20px;align-items:start;max-width:900px;margin:0 auto">
+
+      <!-- Básico -->
+      <div class="plan-card">
+        <div class="plan-nombre">Básico</div>
+        <div class="plan-precio">$299<span style="font-size:16px;font-weight:500;color:#888">/mes</span></div>
+        <div class="plan-sub">por médico · MXN</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check-verde">✓</span> 1 médico</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Dictado por voz</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Notas SOAP con IA</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Historia clínica básica</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Receta imprimible</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> 50 consultas/mes</div>
+        </div>
+        <a href="/app.html" class="btn-secondary">Empezar gratis</a>
+      </div>
+
+      <!-- Pro -->
+      <div class="plan-card popular">
+        <div class="popular-badge">MÁS POPULAR</div>
+        <div class="plan-nombre" style="color:#0A66C2">Pro</div>
+        <div class="plan-precio azul">$599<span style="font-size:16px;font-weight:500;color:#888">/mes</span></div>
+        <div class="plan-sub">por médico · MXN</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check-azul">✓</span> Todo lo de Básico</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Historia Clínica IMSS Bienestar</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Alertas de interacciones IA</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Receta + Interconsulta + Lab</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Análisis de estudios clínicos</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Historial ilimitado</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Consultas ilimitadas</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Google Sheets sync</div>
+          <div class="plan-feature"><span class="check-azul">✓</span> Soporte prioritario</div>
+        </div>
+        <a href="/app.html" class="btn-plan">Empezar gratis →</a>
+      </div>
+
+      <!-- Clínica -->
+      <div class="plan-card">
+        <div class="plan-nombre">Clínica / Hospital</div>
+        <div class="plan-precio" style="font-size:34px">Custom</div>
+        <div class="plan-sub">precio por volumen</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="check-verde">✓</span> Todo lo de Pro</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Médicos ilimitados</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Recepcionista virtual 24/7</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Agenda con Google Calendar</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Recordatorios WhatsApp/SMS</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Firma electrónica</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> Migración asistida sin costo</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> API personalizada</div>
+          <div class="plan-feature"><span class="check-verde">✓</span> SLA garantizado</div>
+        </div>
+        <a href="https://wa.me/5215500000000?text=Hola,%20quiero%20información%20sobre%20Medivóz%20para%20mi%20clínica" class="btn-contacto">Contactar →</a>
+      </div>
+
+    </div>
+    <p style="text-align:center;font-size:13px;color:#888;margin-top:24px">🔒 30 días gratis sin tarjeta · Cancela cuando quieras · Soporte humano en español</p>
+  </div>
+</section>
+
+<!-- ── TESTIMONIOS ── -->
+<section style="padding:72px 24px;background:#F8FAFB">
+  <div class="container" style="text-align:center;margin-bottom:40px">
+    <h2 style="font-size:32px;font-weight:800;letter-spacing:-1px">Lo que dicen los médicos</h2>
+  </div>
+  <div class="container">
+    <div class="grid-3">
+
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Antes tardaba 8 minutos por consulta solo en capturar datos. Con Medivóz dicto en 30 segundos y la historia clínica queda lista. Cambió mi práctica completamente."</p>
+        <div class="testi-autor">
+          <div class="testi-avatar">VN</div>
+          <div>
+            <div class="testi-nombre">Dra. Valeria Navarrete</div>
+            <div class="testi-esp">Geriatra · IMSS Bienestar</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"Lo que más me sorprende es la detección de interacciones. Un paciente tomaba warfarina y le iba a recetar aspirina — Medivóz me alertó antes de imprimir la receta. Invaluable."</p>
+        <div class="testi-autor">
+          <div class="testi-avatar">AC</div>
+          <div>
+            <div class="testi-nombre">Dr. Aguilar Cota</div>
+            <div class="testi-esp">Internista · Consultorio privado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testi-text">"El formato IMSS Bienestar queda perfecto para pegar al expediente físico. Mis pacientes de primera vez tienen su historia completa en minutos en lugar de 20 minutos de preguntas."</p>
+        <div class="testi-autor">
+          <div class="testi-avatar">PM</div>
+          <div>
+            <div class="testi-nombre">Dra. Patricia Morales</div>
+            <div class="testi-esp">Médico general · Centro de salud</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA FINAL ── -->
+<section style="padding:80px 24px;background:linear-gradient(135deg,#004182,#0A66C2);text-align:center">
+  <div class="container">
+    <div style="margin-bottom:16px">
+      <img src="/assets/img/logo_horizontal.png" alt="Medivóz" style="height:60px;object-fit:contain;filter:brightness(0) invert(1)"/>
+    </div>
+    <h2 style="font-size:clamp(28px,4vw,46px);font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:14px">¿Listo para dejar de teclear?</h2>
+    <p style="font-size:17px;color:rgba(255,255,255,.8);max-width:500px;margin:0 auto 36px;line-height:1.6">30 días gratis. Sin tarjeta. Empieza en 5 minutos.</p>
+    <a href="/app.html" class="btn-white" style="font-size:17px;padding:16px 36px">🚀 Empezar gratis ahora</a>
+    <div style="margin-top:24px;font-size:13px;color:rgba(255,255,255,.55)">
+      ¿Tienes preguntas? Escríbenos a
+      <a href="mailto:hola@medivoz.click" style="color:rgba(255,255,255,.85);text-decoration:underline">hola@medivoz.click</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer style="background:#0a0e1a;padding:36px 24px;color:rgba(255,255,255,.5);font-size:13px">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <img src="/assets/img/logo_horizontal.png" alt="Medivóz" style="height:28px;object-fit:contain;filter:brightness(0) invert(1);opacity:.8"/>
+    <div>© 2026 RANNIX Consulting · Medivóz · Todos los derechos reservados</div>
+    <div style="display:flex;gap:16px">
+      <a href="#" style="color:rgba(255,255,255,.5)">Privacidad</a>
+      <a href="#" style="color:rgba(255,255,255,.5)">Términos</a>
+      <a href="#" style="color:rgba(255,255,255,.5)">NOM-024</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Animación sutil al hacer scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, {threshold: 0.1});
+
+document.querySelectorAll('section').forEach(s => {
+  s.style.opacity = '0';
+  s.style.transform = 'translateY(16px)';
+  s.style.transition = 'opacity .6s ease, transform .6s ease';
+  observer.observe(s);
+});
+</script>
+
+</body>
+</html>

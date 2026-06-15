@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Expediente Médico — LUISA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--teal:#00C9A7;--teal-d:#00A88C;--teal-bg:#E6FAF7;--navy:#0F1F3D;--navy-l:#1B3F72;--blue:#1B5499;--cyan:#38BDF8;--bg:#F5F9FF;--white:#fff;--border:#E2EBF5;--muted:#607D99;--red:#DC2626;--red-bg:#FEE2E2;--orange:#D97706;--orange-bg:#FEF3C7;--green:#059669;--green-bg:#D1FAE5}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* HEADER */
+    .header{background:linear-gradient(135deg,var(--navy),var(--navy-l));padding:1.5rem 1.2rem 1rem;color:#fff}
+    .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+    .logo{font-size:1.4rem;font-weight:800;letter-spacing:-.03em}
+    .logo span{color:var(--teal)}
+    .badge-readonly{font-size:.68rem;padding:.25rem .6rem;border-radius:100px;background:rgba(0,201,167,.15);color:var(--teal);border:1px solid rgba(0,201,167,.3);font-weight:600}
+    .pac-name{font-size:1.8rem;font-weight:800;margin-bottom:.25rem}
+    .pac-meta{font-size:.82rem;color:rgba(255,255,255,.6);display:flex;flex-wrap:wrap;gap:.8rem}
+    .pac-meta span{display:flex;align-items:center;gap:.3rem}
+    .token-expiry{font-size:.72rem;color:rgba(255,255,255,.4);margin-top:.75rem;padding:.5rem .8rem;background:rgba(255,255,255,.05);border-radius:6px;border:1px solid rgba(255,255,255,.1)}
+
+    /* ALERTA CRÍTICA */
+    .crit-banner{background:var(--red-bg);border-left:4px solid var(--red);padding:.9rem 1.2rem;display:flex;gap:.8rem;align-items:flex-start}
+    .crit-banner.warn{background:var(--orange-bg);border-color:var(--orange)}
+    .crit-ico{font-size:1.3rem;flex-shrink:0}
+    .crit-txt{font-size:.82rem;line-height:1.5}
+    .crit-txt strong{display:block;font-weight:700;margin-bottom:.2rem}
+
+    /* LANG SELECTOR */
+    .lang-bar{background:var(--white);border-bottom:1px solid var(--border);padding:.6rem 1.2rem;display:flex;gap:.4rem;overflow-x:auto}
+    .lang-btn{font-size:.73rem;padding:.3rem .7rem;border-radius:100px;border:1.5px solid var(--border);background:var(--bg);color:var(--navy);white-space:nowrap;cursor:pointer;transition:all .2s}
+    .lang-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+    /* SECCIONES */
+    .content{padding:1rem;max-width:680px;margin:0 auto}
+    .section{background:var(--white);border-radius:12px;border:1px solid var(--border);margin-bottom:.9rem;overflow:hidden}
+    .sec-header{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
+    .sec-ico{font-size:1.2rem}
+    .sec-title{font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+    .sec-body{padding:1rem 1.1rem}
+
+    /* CAMPOS */
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem}
+    .field-row.full{grid-template-columns:1fr}
+    .field-item{}
+    .field-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.2rem}
+    .field-value{font-size:.9rem;font-weight:500;color:var(--navy)}
+    .field-value.empty{color:var(--muted);font-style:italic;font-weight:400}
+
+    /* CHIPS */
+    .chips-wrap{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem}
+    .chip{font-size:.73rem;padding:.2rem .7rem;border-radius:100px;font-weight:600}
+    .chip.teal{background:var(--teal-bg);color:var(--teal-d)}
+    .chip.red{background:var(--red-bg);color:var(--red)}
+    .chip.orange{background:var(--orange-bg);color:var(--orange)}
+    .chip.navy{background:var(--navy);color:#fff}
+    .chip.green{background:var(--green-bg);color:var(--green)}
+
+    /* BITÁCORA */
+    .bita-item{display:flex;align-items:flex-start;gap:.75rem;padding:.7rem;background:var(--bg);border-radius:9px;border:1px solid var(--border);margin-bottom:.5rem}
+    .bita-ico{font-size:1.3rem;flex-shrink:0}
+    .bita-title{font-size:.85rem;font-weight:700}
+    .bita-meta{font-size:.73rem;color:var(--muted);margin-top:.1rem}
+
+    /* MEDICAMENTOS */
+    .med-item{display:flex;align-items:flex-start;gap:.75rem;padding:.7rem;border-bottom:1px solid var(--border)}
+    .med-item:last-child{border-bottom:none}
+    .med-pill{width:32px;height:32px;border-radius:8px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .med-nombre{font-size:.88rem;font-weight:700}
+    .med-dosis{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+
+    /* VACUNAS */
+    .vac-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid var(--border);font-size:.85rem}
+    .vac-row:last-child{border-bottom:none}
+
+    /* CTA MÉDICO */
+    .cta-medico{background:linear-gradient(135deg,var(--navy),var(--navy-l));border-radius:14px;padding:1.5rem 1.2rem;text-align:center;margin:1.5rem 0}
+    .cta-medico h3{color:#fff;font-size:1rem;font-weight:800;margin-bottom:.4rem}
+    .cta-medico p{color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:1rem}
+    .cta-btn{display:inline-block;background:var(--teal);color:#fff;font-weight:700;padding:.75rem 1.5rem;border-radius:10px;font-size:.88rem;text-decoration:none}
+
+    /* FOOTER */
+    .footer{text-align:center;padding:1.5rem;font-size:.72rem;color:var(--muted)}
+    .footer strong{color:var(--navy)}
+
+    /* LOADING / ERROR */
+    .loading{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted)}
+    .spinner{width:36px;height:36px;border:3px solid rgba(0,201,167,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .error-box{max-width:340px;margin:auto;text-align:center;padding:2rem}
+    .error-ico{font-size:3rem;margin-bottom:1rem}
+    .error-title{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+    .error-msg{font-size:.85rem;color:var(--muted);line-height:1.6}
+
+    /* TRADUCIDO BADGE */
+    .trans-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;padding:.2rem .6rem;border-radius:100px;background:rgba(0,201,167,.1);color:var(--teal-d);border:1px solid rgba(0,201,167,.2);margin-bottom:.8rem}
+  </style>
+</head>
+<body>
+
+<div id="root">
+  <div class="loading">
+    <div class="spinner"></div>
+    <div>Verificando acceso…</div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://isxspjlwuzbbtpamkknq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeHNwamx3dXpiYnRwYW1ra25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDYwMjMsImV4cCI6MjA5NTM4MjAyM30.D5iWO9K7137hFW_pBx9xYASHFfnyUcDthi9_A-6pksA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const LANGS = {
+  es: 'Español', en: 'English', de: 'Deutsch', fr: 'Français', pt: 'Português', it: 'Italiano', zh: '中文'
+};
+
+let paciente = null;
+let meds     = [];
+let vacunas  = [];
+let currentLang = 'es';
+let translatedData = {};
+
+async function init() {
+  const params = new URLSearchParams(location.search);
+  const token  = params.get('token');
+  const lang   = params.get('lang') || 'es';
+  currentLang  = lang;
+
+  if (!token) { showError('Token inválido', 'Este enlace no contiene un código de acceso válido.'); return; }
+
+  // Verificar token
+  const { data: acceso, error: accErr } = await sb
+    .from('accesos_expediente')
+    .select('*, perfiles_pacientes(*)')
+    .eq('token', token)
+    .eq('activo', true)
+    .single();
+
+  if (accErr || !acceso) { showError('Acceso denegado', 'Este código QR no existe o ha sido revocado.'); return; }
+  if (new Date(acceso.fecha_expiracion) < new Date()) { showError('Código expirado', 'Este código QR venció. El paciente puede generar uno nuevo desde su aplicación LUISA.'); return; }
+
+  paciente = acceso.perfiles_pacientes;
+  if (!paciente) { showError('Sin datos', 'No se encontró el expediente asociado a este código.'); return; }
+
+  // Registrar acceso
+  await sb.from('accesos_expediente').update({ accedido: true, fecha_acceso: new Date().toISOString() }).eq('id', acceso.id);
+
+  // Cargar medicamentos y vacunas
+  const [{ data: medsData }, { data: vacData }] = await Promise.all([
+    sb.from('medicamentos_paciente').select('*').eq('id_paciente', paciente.id).eq('activo', true),
+    sb.from('vacunas_paciente').select('*').eq('id_paciente', paciente.id).order('fecha_aplicacion', {ascending: false})
+  ]);
+  meds    = medsData || [];
+  vacunas = vacData  || [];
+
+  // Si se pidió idioma distinto al español, traducir con IA
+  if (lang !== 'es') {
+    await traducirExpediente(lang);
+  }
+
+  renderExpediente(acceso);
+}
+
+async function traducirExpediente(lang) {
+  const langNombre = LANGS[lang] || lang;
+  const resumen = buildResumenTexto();
+  try {
+    const resp = await fetch('/.netlify/functions/claude', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 2048,
+        system: `You are a medical translator. Translate the following clinical summary to ${langNombre}. Keep medical terms precise. Return a JSON object with these keys: resumen (string), alergias (array of strings), enfermedades (array of strings), medicamentos (array of strings). Keep the same structure.`,
+        messages: [{ role: 'user', content: resumen }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.[0]?.text || '';
+    try {
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) translatedData = JSON.parse(jsonMatch[0]);
+    } catch(e) { console.warn('No se pudo parsear traducción'); }
+  } catch(e) { console.warn('Error traducción:', e); }
+}
+
+function buildResumenTexto() {
+  const p = paciente;
+  const pat = p.antecedentes_patologicos || {};
+  const edad = p.fecha_nacimiento ? Math.floor((Date.now()-new Date(p.fecha_nacimiento))/31557600000) : '?';
+  return JSON.stringify({
+    resumen: `Patient: ${p.nombre} ${p.apellidos}, ${edad} years, ${p.genero==='F'?'Female':'Male'}, Blood type: ${p.tipo_sangre||'unknown'}`,
+    alergias: [...(pat.alergias_medicamentos||[]), ...(pat.alergias_alimentos||[])],
+    enfermedades: pat.enfermedades_cronicas||[],
+    medicamentos: meds.map(m => `${m.nombre_generico} ${m.dosis||''} ${m.frecuencia||''}`.trim())
+  });
+}
+
+function renderExpediente(acceso) {
+  const p = paciente;
+  const pat  = p.antecedentes_patologicos || {};
+  const ahf  = p.antecedentes_heredofamiliares || {};
+  const gin  = p.antecedentes_gineco || {};
+  const hab  = p.habitos || {};
+  const bita = p.bitacora_mantenimiento || [];
+  const edad = p.fecha_nacimiento ? Math.floor((Date.now()-new Date(p.fecha_nacimiento))/31557600000) : '—';
+  const isTranslated = currentLang !== 'es' && Object.keys(translatedData).length > 0;
+  const expiraEn = Math.ceil((new Date(acceso.fecha_expiracion)-new Date())/60000);
+
+  // Alertas críticas
+  const alertas = [];
+  const alergiasMed = isTranslated ? translatedData.alergias : (pat.alergias_medicamentos||[]);
+  if (alergiasMed?.length) {
+    alertas.push(`<div class="crit-banner"><span class="crit-ico">🚨</span><div class="crit-txt"><strong>${currentLang==='en'?'DRUG ALLERGIES':'ALERGIAS A MEDICAMENTOS'}</strong>${alergiasMed.join(' · ')}</div></div>`);
+  }
+  if ((pat.alergias_alimentos||[]).length) {
+    alertas.push(`<div class="crit-banner warn"><span class="crit-ico">⚠️</span><div class="crit-txt"><strong>ALERGIAS ALIMENTARIAS</strong>${(pat.alergias_alimentos||[]).join(' · ')}</div></div>`);
+  }
+
+  // Antecedentes heredofamiliares activos
+  const ahfActivos = Object.entries(ahf).filter(([,v])=>v===true||v?.presente).map(([k])=>
+    `<span class="chip orange">${k.replace(/_/g,' ')}</span>`
+  ).join('');
+
+  // Bitácora items
+  const bitaIcos = {amalgama:'🦷',corona:'👑',endodoncia:'🦷',implante_dental:'🦷',diu:'🌀',protesis_rodilla:'🦵',protesis_cadera:'🦴',marcapasos:'❤️',lentes_contacto:'👁️',otro:'⚙️'};
+  const bitaHtml = bita.length ? bita.map(it=>`
+    <div class="bita-item">
+      <span class="bita-ico">${bitaIcos[it.tipo]||'⚙️'}</span>
+      <div>
+        <div class="bita-title">${it.tipo?.replace(/_/g,' ')||'Componente'}</div>
+        <div class="bita-meta">${it.descripcion||''} ${it.fecha_colocacion?'· '+it.fecha_colocacion:''} ${it.vida_util_anos?'· Vida útil: '+it.vida_util_anos+' años':''}</div>
+      </div>
+    </div>`).join('') : '<div style="font-size:.82rem;color:var(--muted)">Sin componentes registrados</div>';
+
+  // Medicamentos
+  const medsHtml = meds.length ? meds.map(m=>`
+    <div class="med-item">
+      <div class="med-pill">💊</div>
+      <div>
+        <div class="med-nombre">${m.nombre_generico}${m.nombre_comercial?' <span style="font-weight:400;color:var(--muted)">('+m.nombre_comercial+')</span>':''}</div>
+        <div class="med-dosis">${m.dosis||''} · ${m.frecuencia||''} · ${m.via_administracion||'oral'}${m.cronico?' · <strong>Crónico</strong>':''}</div>
+      </div>
+    </div>`).join('') : '<div style="padding:.5rem;font-size:.82rem;color:var(--muted)">Sin medicamentos registrados</div>';
+
+  // Vacunas
+  const vacHtml = vacunas.length ? vacunas.map(v=>`
+    <div class="vac-row">
+      <span>💉 ${v.nombre_vacuna}</span>
+      <span style="font-size:.75rem;color:var(--muted)">${v.fecha_aplicacion||'—'}</span>
+    </div>`).join('') : '<div style="font-size:.82rem;color:var(--muted)">Sin vacunas registradas</div>';
+
+  // Hábitos resumen
+  const habitosChips = [];
+  if (hab.tabaquismo?.activo) habitosChips.push('<span class="chip orange">Fumador/a</span>');
+  if (hab.alcoholismo?.frecuencia && hab.alcoholismo.frecuencia!=='no') habitosChips.push('<span class="chip orange">Alcohol</span>');
+  if (!hab.ejercicio?.activo) habitosChips.push('<span class="chip navy">Sedentario/a</span>');
+
+  document.getElementById('root').innerHTML = `
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-top">
+        <div class="logo">LIG<span>IA</span></div>
+        <div class="badge-readonly">🔒 Solo lectura</div>
+      </div>
+      <div class="pac-name">${p.nombre} ${p.apellidos}</div>
+      <div class="pac-meta">
+        <span>🎂 ${edad} años</span>
+        <span>${p.genero==='F'?'♀️ Femenino':'♂️ Masculino'}</span>
+        ${p.tipo_sangre?`<span>🩸 ${p.tipo_sangre}</span>`:''}
+        ${p.curp?`<span>🪪 ${p.curp}</span>`:''}
+      </div>
+      ${p.contacto_emergencia?.nombre?`<div style="margin-top:.75rem;font-size:.78rem;color:rgba(255,255,255,.5)">🚨 Emergencia: ${p.contacto_emergencia.nombre} (${p.contacto_emergencia.parentesco||'—'}) ${p.contacto_emergencia.telefono||''}</div>`:''}
+      <div class="token-expiry">⏱ Este acceso expira en ${expiraEn} minutos · Autorizado por el paciente</div>
+    </div>
+
+    <!-- LANG BAR -->
+    <div class="lang-bar">
+      ${Object.entries(LANGS).map(([k,v])=>`<button class="lang-btn${k===currentLang?' active':''}" onclick="changeLang('${k}')">${v}</button>`).join('')}
+    </div>
+
+    <!-- ALERTAS CRÍTICAS -->
+    ${alertas.join('')}
+
+    <!-- CONTENIDO -->
+    <div class="content">
+      ${isTranslated?`<div class="trans-badge">🌐 Traducido al ${LANGS[currentLang]} por IA · Verificar términos médicos</div>`:''}
+
+      <!-- RESUMEN RÁPIDO -->
+      <div class="section">
+        <div class="sec-header"><span class="sec-ico">⚡</span><span class="sec-title">Resumen clínico rápido</span></div>
+        <div class="sec-body">
+          <div class="field-row">
+            <div class="field-item"><div class="field-label">Tipo de sangre</div><div class="field-value">${p.tipo_sangre||'—'}</div></div>
+            <div class="field-item"><div class="field-label">Edad</div><div class="field-value">${edad} años</div></div>
+          </div>
+          ${alergiasMed?.length?`<div class="field-item"><div class="field-label">⚠️ Alergias a medicamentos</div><div class="chips-wrap">${alergiasMed.map(a=>`<span class="chip red">${a}</span>`).join('')}</div></div>`:''}
+          ${(pat.enfermedades_cronicas||[]).length?`<div class="field-item" style="margin-top:.6rem"><div class="field-label">Enfermedades crónicas</div><div class="chips-wrap">${(pat.enfermedades_cronicas||[]).map(e=>`<span class="chip teal">${e}</span>`).join('')}</div></div>`:''}
+          ${habitosChips.length?`<div class="field-item" style="margin-top:.6rem"><div class="field-label">Hábitos relevantes</div><div class="chips-wrap">${habitosChips.join('')}</div></div>`:''}
+        </div>
+      </div>
+
+      <!-- MEDICAMENTOS -->
+      <div class="section">
+        <div class="sec-header"><span class="sec-ico">💊</span><span class="sec-title">Medicamentos activos (${meds.length})</span></div>
+        ${medsHtml}
+      </div>
+
+      <!-- ANTECEDENTES -->
+      <div class="section">
+        <div class="sec-header"><span class="sec-ico">🧬</span><span class="sec-title">Antecedentes</span></div>
+        <div class="sec-body">
+          ${ahfActivos?`<div class="field-item"><div class="field-label">Heredofamiliares</div><div class="chips-wrap">${ahfActivos}</div></div>`:''}
+          ${(pat.cirugias||[]).length?`<div class="field-item" style="margin-top:.6rem"><div class="field-label">Cirugías previas</div><div class="field-value">${(pat.cirugias||[]).join(', ')}</div></div>`:''}
+          ${(pat.hospitalizaciones||[]).length?`<div class="field-item" style="margin-top:.6rem"><div class="field-label">Hospitalizaciones</div><div class="field-value">${(pat.hospitalizaciones||[]).join(', ')}</div></div>`:''}
+          ${p.genero==='F'&&gin.menarca_edad?`<div class="field-row" style="margin-top:.6rem">
+            <div class="field-item"><div class="field-label">Menarca</div><div class="field-value">${gin.menarca_edad} años</div></div>
+            <div class="field-item"><div class="field-label">FUM</div><div class="field-value">${gin.fecha_ultima_menstruacion||'—'}</div></div>
+          </div>`:''}
+          ${p.genero==='F'&&(gin.embarazos||gin.partos)?`<div class="field-row">
+            <div class="field-item"><div class="field-label">Gestas/Partos/C</div><div class="field-value">G${gin.embarazos||0} P${gin.partos||0} C${gin.cesareas||0}</div></div>
+            <div class="field-item"><div class="field-label">Método anticonceptivo</div><div class="field-value">${gin.metodo_anticonceptivo||'—'}</div></div>
+          </div>`:''}
+        </div>
+      </div>
+
+      <!-- BITÁCORA BIOLÓGICA -->
+      ${bita.length?`<div class="section">
+        <div class="sec-header"><span class="sec-ico">🔧</span><span class="sec-title">Componentes biológicos (${bita.length})</span></div>
+        <div class="sec-body">${bitaHtml}</div>
+      </div>`:''}
+
+      <!-- VACUNAS -->
+      <div class="section">
+        <div class="sec-header"><span class="sec-ico">💉</span><span class="sec-title">Vacunas (${vacunas.length})</span></div>
+        <div class="sec-body">${vacHtml}</div>
+      </div>
+
+      <!-- CTA MÉDICO -->
+      <div class="cta-medico">
+        <h3>¿Quieres acceso permanente a los expedientes de tus pacientes?</h3>
+        <p>Únete a LUISA Pro y tus pacientes podrán enviarte su historial completo antes de cada consulta — sin pedirlo.</p>
+        <a href="/auth?rol=medico" class="cta-btn">Registrarme como médico →</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Expediente generado por <strong>LUISA</strong> · Acceso autorizado por el paciente · Solo lectura<br>
+      Los datos son propiedad del paciente bajo LFPDPPP
+    </div>
+  `;
+}
+
+async function changeLang(lang) {
+  currentLang = lang;
+  if (lang !== 'es') {
+    document.getElementById('root').innerHTML = '<div class="loading"><div class="spinner"></div><div>Traduciendo expediente…</div></div>';
+    await traducirExpediente(lang);
+  } else { translatedData = {}; }
+  // Re-render con nuevo idioma (simulamos el acceso object)
+  renderExpediente({fecha_expiracion: new Date(Date.now()+3600000).toISOString()});
+  // Actualizar URL
+  const url = new URL(location.href);
+  url.searchParams.set('lang', lang);
+  history.replaceState(null,'',url.toString());
+}
+
+function showError(title, msg) {
+  document.getElementById('root').innerHTML = `
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem">
+      <div class="error-box">
+        <div class="error-ico">🔐</div>
+        <div class="error-title">${title}</div>
+        <div class="error-msg">${msg}</div>
+        <div style="margin-top:1.5rem;font-size:.8rem;color:var(--muted)">¿Eres médico? <a href="/auth?rol=medico" style="color:var(--teal)">Ingresa a LUISA</a></div>
+      </div>
+    </div>`;
+}
+
+init();
+</script>
+</body>
+</html>

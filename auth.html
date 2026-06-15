@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>LUISA — Acceso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #050C1A;
+      --navy2: #0A1628;
+      --teal:  #00C9A7;
+      --teal2: #00E5BB;
+      --cyan:  #38BDF8;
+      --blue:  #1B5499;
+      --white: #EEF4FF;
+      --muted: #6B8BAE;
+      --gold:  #C9A84C;
+      --border: rgba(0,201,167,.15);
+      --error: #FF6B6B;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── CANVAS FONDO ── */
+    #bg-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+
+    /* ── LAYOUT ── */
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative; z-index: 1;
+    }
+
+    /* ── LADO IZQUIERDO — HERO ── */
+    .hero-side {
+      display: flex; flex-direction: column;
+      justify-content: center; padding: 4rem 5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .logo-wrap { margin-bottom: 3.5rem; }
+    .logo-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800; font-size: 2rem;
+      letter-spacing: -.03em; line-height: 1;
+    }
+    .logo-text .li { color: var(--blue); }
+    .logo-text .ia { color: var(--teal); }
+    .logo-sub {
+      font-size: .6rem; color: var(--muted);
+      letter-spacing: .2em; text-transform: uppercase; margin-top: .3rem;
+    }
+
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      font-weight: 700; line-height: 1.2;
+      letter-spacing: -.01em; margin-bottom: 1.2rem;
+    }
+    .hero-tagline em { font-style: italic; color: var(--teal); }
+
+    .hero-sub {
+      font-size: .95rem; color: var(--muted);
+      line-height: 1.75; max-width: 420px; margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; flex-wrap: wrap;
+    }
+    .hstat-n {
+      font-size: 1.6rem; font-weight: 800; line-height: 1;
+      background: linear-gradient(135deg, var(--teal2), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hstat-l { font-size: .7rem; color: var(--muted); margin-top: .3rem; }
+
+    /* ── LADO DERECHO — FORM ── */
+    .form-side {
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 4rem;
+    }
+
+    .auth-card {
+      width: 100%; max-width: 420px;
+    }
+
+    .auth-title {
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: -.02em; margin-bottom: .4rem;
+    }
+    .auth-sub { font-size: .85rem; color: var(--muted); margin-bottom: 2rem; }
+
+    /* TABS */
+    .auth-tabs {
+      display: flex; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .auth-tab {
+      flex: 1; padding: .7rem;
+      background: transparent; border: none;
+      color: var(--muted); font-size: .85rem; font-weight: 600;
+      cursor: pointer; transition: all .2s; font-family: inherit;
+    }
+    .auth-tab.active {
+      background: var(--teal); color: #050C1A;
+    }
+
+    /* FORM FIELDS */
+    .field { margin-bottom: 1.1rem; }
+    .field label {
+      display: block; font-size: .72rem; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .5rem;
+    }
+    .field input {
+      width: 100%; padding: .75rem 1rem;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 8px; color: var(--white);
+      font-size: .9rem; font-family: inherit;
+      transition: all .2s;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: var(--teal);
+      background: rgba(0,201,167,.05);
+    }
+    .field input::placeholder { color: var(--muted); opacity: .6; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+    /* BOTÓN PRINCIPAL */
+    .btn-auth {
+      width: 100%; padding: .85rem;
+      background: var(--teal); color: #050C1A;
+      border: none; border-radius: 8px;
+      font-size: .95rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: all .25s; letter-spacing: .01em;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      margin-top: 1.5rem;
+    }
+    .btn-auth:hover {
+      background: var(--teal2);
+      box-shadow: 0 8px 28px rgba(0,201,167,.35);
+      transform: translateY(-1px);
+    }
+    .btn-auth:disabled {
+      opacity: .6; cursor: not-allowed; transform: none;
+    }
+
+    /* DIVIDER */
+    .divider {
+      display: flex; align-items: center; gap: .75rem;
+      margin: 1.5rem 0; color: var(--muted); font-size: .75rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ALERTA */
+    .alert {
+      padding: .75rem 1rem; border-radius: 8px;
+      font-size: .82rem; margin-bottom: 1rem;
+      display: none;
+    }
+    .alert.error {
+      background: rgba(255,107,107,.1);
+      border: 1px solid rgba(255,107,107,.3);
+      color: var(--error); display: block;
+    }
+    .alert.success {
+      background: rgba(0,201,167,.1);
+      border: 1px solid rgba(0,201,167,.3);
+      color: var(--teal); display: block;
+    }
+
+    /* SPINNER */
+    .spin {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(5,12,26,.3);
+      border-top-color: #050C1A;
+      border-radius: 50%;
+      animation: rotate .7s linear infinite;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    /* FOOTER LINK */
+    .auth-footer {
+      text-align: center; margin-top: 1.5rem;
+      font-size: .8rem; color: var(--muted);
+    }
+    .auth-footer a {
+      color: var(--teal); text-decoration: none; font-weight: 600;
+    }
+
+    /* PASSWORD TOGGLE */
+    .pwd-wrap { position: relative; }
+    .pwd-wrap input { padding-right: 2.8rem; }
+    .pwd-toggle {
+      position: absolute; right: .8rem; top: 50%;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 1rem; padding: .2rem;
+    }
+
+    /* PLAN SELECTOR */
+    .plan-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .6rem;
+      margin-bottom: 1rem;
+    }
+    .plan-opt {
+      border: 1.5px solid var(--border);
+      border-radius: 8px; padding: .8rem;
+      cursor: pointer; transition: all .2s; text-align: center;
+    }
+    .plan-opt:hover { border-color: rgba(0,201,167,.4); }
+    .plan-opt.selected { border-color: var(--teal); background: rgba(0,201,167,.06); }
+    .plan-opt-name { font-size: .82rem; font-weight: 700; margin-bottom: .2rem; }
+    .plan-opt-price { font-size: .7rem; color: var(--muted); }
+
+    /* NOM badge */
+    .nom-badge {
+      display: inline-flex; align-items: center; gap: .4rem;
+      font-size: .65rem; color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: .25rem .7rem;
+      margin-top: 1.5rem;
+    }
+    .nom-badge::before { content: '🔒'; font-size: .7rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .page { grid-template-columns: 1fr; }
+      .hero-side { display: none; }
+      .form-side { padding: 2rem 1.5rem; }
+    }
+
+  /* ═══════════════════════════════════════════════════════════
+     LUISA LIGHT THEME — homologado con index.html
+  ═══════════════════════════════════════════════════════════ */
+  html, body { background: #F5F9FF !important; color: #0F1F3D !important; }
+  #bg-canvas { opacity: .06 !important; }
+
+  /* Hero (lado izquierdo) */
+  .hero-side { border-right: 1px solid rgba(27,63,114,.09) !important; }
+  .logo-sub { color: #9FB8CC !important; }
+  .hero-tagline { color: #0F1F3D !important; }
+  .hero-tagline em { color: #00C9A7 !important; }
+  .hero-sub { color: #607D99 !important; }
+  .hstat-n {
+    background: linear-gradient(135deg, #00C9A7, #1B5499) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  .hstat-l { color: #607D99 !important; }
+
+  /* Form (lado derecho) */
+  .auth-title { color: #0F1F3D !important; }
+  .auth-sub { color: #607D99 !important; }
+
+  /* TABS */
+  .auth-tabs { border-color: rgba(27,63,114,.12) !important; }
+  .auth-tab { color: #607D99 !important; }
+  .auth-tab.active { background: #00C9A7 !important; color: #fff !important; }
+
+  /* Form fields */
+  .field label { color: #607D99 !important; }
+  .field input {
+    background: #fff !important;
+    border-color: #E2EBF5 !important;
+    color: #0F1F3D !important;
+  }
+  .field input:focus {
+    border-color: #00C9A7 !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 3px rgba(0,201,167,.08) !important;
+  }
+  .field input::placeholder { color: #B0C4D8 !important; opacity: 1 !important; }
+
+  /* Botones */
+  .btn-primary, button[type="submit"] {
+    background: #00C9A7 !important;
+    color: #fff !important;
+  }
+  .btn-primary:hover { background: #00A88C !important; }
+
+  /* Links */
+  a { color: #00A88C !important; }
+
+  /* Alert */
+  .alert.error { background: #FEE2E2 !important; color: #DC2626 !important; border-color: #FCA5A5 !important; }
+
+  /* Badge */
+  .nom-badge {
+    color: #607D99 !important;
+    border-color: rgba(27,63,114,.15) !important;
+    background: #fff !important;
+  }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <div class="hero-side">
+    <div class="logo-wrap">
+      <svg width="160" height="42" viewBox="0 0 130 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block">
+        <!-- LIG in navy -->
+        <text x="0" y="28" font-family="Inter,sans-serif" font-weight="800" font-size="30" letter-spacing="-1" fill="#1B3F72">LU</text>
+        <!-- IA in teal -->
+        <text x="67" y="28" font-family="Inter,sans-serif" font-weight="800" font-size="30" letter-spacing="-1" fill="#00C9A7">ISA</text>
+        <!-- Caduceus symbol -->
+        <text x="108" y="22" font-family="sans-serif" font-size="16" fill="#00C9A7">⚕</text>
+        <!-- EKG line under text -->
+        <polyline points="0,33 18,33 22,26 26,33 30,33 34,20 38,33 56,33 60,28 64,33 130,33"
+          stroke="#00C9A7" stroke-width="1.5" fill="none" stroke-opacity=".5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="logo-sub" style="margin-top:.3rem">Inteligencia Clínica</div>
+    </div>
+
+    <h1 class="hero-tagline">
+      La consulta médica<br/>
+      <em>que se documenta sola</em>
+    </h1>
+    <p class="hero-sub">
+      6 agentes de IA trabajan en paralelo durante tu consulta.
+      Transcripción, extracción clínica, interacciones medicamentosas
+      y diagnóstico diferencial — todo en 30 segundos.
+    </p>
+
+    <div class="hero-stats">
+      <div>
+        <div class="hstat-n">30 seg</div>
+        <div class="hstat-l">Expediente validado</div>
+      </div>
+      <div>
+        <div class="hstat-n">NOM‑004</div>
+        <div class="hstat-l">Cumplimiento nativo</div>
+      </div>
+      <div>
+        <div class="hstat-n">IMSS</div>
+        <div class="hstat-l">Formato Bienestar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FORM ── -->
+  <div class="form-side">
+    <div class="auth-card">
+
+      <h2 class="auth-title">Bienvenido</h2>
+      <p class="auth-sub">Accede a tu consultorio inteligente</p>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">
+          Iniciar sesión
+        </button>
+        <button class="auth-tab" id="tab-register" onclick="switchTab('register')">
+          Crear cuenta
+        </button>
+      </div>
+
+      <!-- ALERTA -->
+      <div class="alert" id="alert"></div>
+
+      <!-- ── LOGIN FORM ── -->
+      <form id="form-login" onsubmit="handleLogin(event)">
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" id="login-email" placeholder="dr.garcia@hospital.com" required autocomplete="email"/>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <div class="pwd-wrap">
+            <input type="password" id="login-pwd" placeholder="••••••••" required autocomplete="current-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('login-pwd', this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth" id="btn-login">
+          Entrar al consultorio →
+        </button>
+        <div class="auth-footer" style="margin-top:1rem">
+          <a href="#" onclick="showForgot()">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+
+      <!-- ── REGISTER FORM ── -->
+      <form id="form-register" style="display:none" onsubmit="handleRegister(event)">
+        <div class="field-row">
+          <div class="field">
+            <label>Nombre</label>
+            <input type="text" id="reg-nombre" placeholder="Carlos" required/>
+          </div>
+          <div class="field">
+            <label>Apellidos</label>
+            <input type="text" id="reg-apellidos" placeholder="García Ruiz" required/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Correo electrónico</label>
+          <input type="email" id="reg-email" placeholder="dr.garcia@hospital.com" required autocomplete="email"/>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Cédula profesional</label>
+            <input type="text" id="reg-cedula" placeholder="1234567"/>
+          </div>
+          <div class="field">
+            <label>Especialidad</label>
+            <input type="text" id="reg-especialidad" placeholder="Medicina General"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <div class="pwd-wrap">
+            <input type="password" id="reg-pwd" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password"/>
+            <button type="button" class="pwd-toggle" onclick="togglePwd('reg-pwd', this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth" id="btn-register">
+          Crear mi cuenta gratis →
+        </button>
+        <div class="nom-badge">Datos protegidos · NOM-024 · Cifrado AES-256</div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SUPABASE ────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://isxspjlwuzbbtpamkknq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeHNwamx3dXpiYnRwYW1ra25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDYwMjMsImV4cCI6MjA5NTM4MjAyM30.D5iWO9K7137hFW_pBx9xYASHFfnyUcDthi9_A-6pksA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── INIT: si ya hay sesión activa, redirigir al app ─────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) window.location.href = '/app.html';
+})();
+
+// ── TABS ────────────────────────────────────────────────────────
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('form-login').style.display    = isLogin ? 'block' : 'none';
+  document.getElementById('form-register').style.display = isLogin ? 'none' : 'block';
+  document.getElementById('tab-login').classList.toggle('active', isLogin);
+  document.getElementById('tab-register').classList.toggle('active', !isLogin);
+  hideAlert();
+}
+
+// ── ALERT ───────────────────────────────────────────────────────
+function showAlert(msg, type = 'error') {
+  const el = document.getElementById('alert');
+  el.textContent = msg;
+  el.className = `alert ${type}`;
+}
+function hideAlert() {
+  document.getElementById('alert').className = 'alert';
+}
+
+// ── LOADING STATE ────────────────────────────────────────────────
+function setLoading(btnId, loading, text) {
+  const btn = document.getElementById(btnId);
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<div class="spin"></div>'
+    : text;
+}
+
+// ── LOGIN (fetch directo + bcrypt frontend) ──────────────────────
+async function handleLogin(e) {
+  e.preventDefault();
+  hideAlert();
+  const email = document.getElementById('login-email').value.trim();
+  const pwd   = document.getElementById('login-pwd').value;
+
+  if (!email || !pwd) {
+    showAlert('Ingresa email y contraseña.');
+    return;
+  }
+
+  setLoading('btn-login', true);
+
+  try {
+    // Obtener config de Supabase del cliente SB
+    const SUPABASE_URL = sb.supabaseUrl;
+    const SUPABASE_KEY = sb.supabaseKey;
+
+    // 1. Hacer fetch directo al endpoint REST (evita el SDK)
+    const url = `${SUPABASE_URL}/rest/v1/usuarios_ligia?email=eq.${encodeURIComponent(email)}&activo=eq.true&select=id,email,nombre_completo,rol,password_hash`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Prefer': 'return=representation'
+      }
+    });
+
+    if (!response.ok) {
+      setLoading('btn-login', false, 'Entrar al consultorio →');
+      const txt = await response.text();
+      console.error('Error HTTP:', response.status, txt);
+      showAlert(`Error ${response.status}: contacta a soporte.`);
+      return;
+    }
+
+    const users = await response.json();
+
+    if (!users || users.length === 0) {
+      setLoading('btn-login', false, 'Entrar al consultorio →');
+      showAlert('Correo o contraseña incorrectos.');
+      return;
+    }
+
+    const user = users[0];
+
+    // 2. Verificar contraseña con bcrypt en el navegador
+    const matches = dcodeIO.bcrypt.compareSync(pwd, user.password_hash);
+
+    setLoading('btn-login', false, 'Entrar al consultorio →');
+
+    if (!matches) {
+      showAlert('Correo o contraseña incorrectos.');
+      return;
+    }
+
+    // 3. Guardar sesión en localStorage
+    const userData = {
+      id: user.id,
+      email: user.email,
+      nombre_completo: user.nombre_completo,
+      rol: user.rol
+    };
+    localStorage.setItem('ligia_user', JSON.stringify(userData));
+    localStorage.setItem('ligia_session', JSON.stringify({
+      user: userData,
+      timestamp: Date.now()
+    }));
+
+    // 4. Redireccionar según rol
+    if (user.rol === 'medico') {
+      window.location.href = '/app.html';
+    } else if (user.rol === 'paciente' || user.rol === 'admin_familiar') {
+      window.location.href = '/paciente.html';
+    } else {
+      window.location.href = '/app.html';
+    }
+
+  } catch (err) {
+    setLoading('btn-login', false, 'Entrar al consultorio →');
+    showAlert('Error: ' + (err.message || 'Falló el inicio de sesión'));
+    console.error(err);
+  }
+}
+
+// ── REGISTER ─────────────────────────────────────────────────────
+async function handleRegister(e) {
+  e.preventDefault();
+  hideAlert();
+
+  const nombre      = document.getElementById('reg-nombre').value.trim();
+  const apellidos   = document.getElementById('reg-apellidos').value.trim();
+  const email       = document.getElementById('reg-email').value.trim();
+  const cedula      = document.getElementById('reg-cedula').value.trim();
+  const especialidad= document.getElementById('reg-especialidad').value.trim();
+  const pwd         = document.getElementById('reg-pwd').value;
+
+  setLoading('btn-register', true);
+
+  // 1. Crear usuario en Supabase Auth
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password: pwd,
+    options: {
+      data: { nombre, apellidos, cedula, especialidad }
+    }
+  });
+
+  if (error) {
+    setLoading('btn-register', false, 'Crear mi cuenta gratis →');
+    const msgs = {
+      'User already registered': 'Este correo ya tiene una cuenta. Inicia sesión.',
+      'Password should be at least 6 characters': 'La contraseña debe tener al menos 8 caracteres.',
+    };
+    showAlert(msgs[error.message] || error.message);
+    return;
+  }
+
+  // 2. Insertar perfil en tabla medicos
+  if (data.user) {
+    await sb.from('medicos').insert({
+      user_id:      data.user.id,
+      nombre,
+      apellidos,
+      email,
+      cedula,
+      especialidad: especialidad || 'Medicina General',
+      activo:       true,
+    });
+  }
+
+  setLoading('btn-register', false, 'Crear mi cuenta gratis →');
+
+  // Si confirmación de email está desactivada → redirigir directo
+  if (data.session) {
+    window.location.href = '/app.html';
+  } else {
+    showAlert(
+      `✅ Cuenta creada. Revisa tu correo ${email} para confirmar tu cuenta.`,
+      'success'
+    );
+  }
+}
+
+// ── FORGOT PASSWORD ──────────────────────────────────────────────
+async function showForgot() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) {
+    showAlert('Escribe tu correo arriba para recuperar tu contraseña.');
+    return;
+  }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/auth.html'
+  });
+  if (error) { showAlert(error.message); return; }
+  showAlert(`📧 Te enviamos un enlace a ${email}`, 'success');
+}
+
+// ── TOGGLE PASSWORD ──────────────────────────────────────────────
+function togglePwd(inputId, btn) {
+  const input = document.getElementById(inputId);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.textContent = input.type === 'password' ? '👁' : '🙈';
+}
+
+// ── CANVAS FONDO ANIMADO ─────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx    = canvas.getContext('2d');
+  let   W, H, dots = [];
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function init() {
+    dots = Array.from({length: 60}, () => ({
+      x: Math.random() * W, y: Math.random() * H,
+      r: Math.random() * 1.5 + .5,
+      vx: (Math.random() - .5) * .3,
+      vy: (Math.random() - .5) * .3,
+      o: Math.random() * .4 + .1,
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    dots.forEach(d => {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0 || d.x > W) d.vx *= -1;
+      if (d.y < 0 || d.y > H) d.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,201,167,${d.o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', () => { resize(); init(); });
+  resize(); init(); draw();
+})();
+</script>
+</body>
+</html>

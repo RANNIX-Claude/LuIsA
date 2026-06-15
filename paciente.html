@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1"/>
+  <title>Mi Expediente — LUISA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="supabase-client.js"></script>
+  <style>
+    :root {
+      /* Paleta institucional LUISA — alineada con index.html (light theme) */
+      --teal:#00C9A7; --teal-d:#00A88C; --teal-bg:#E6FAF7;
+      --navy:#0F1F3D; --navy-light:#1B3F72;
+      --blue:#1B5499; --cyan:#38BDF8;
+      --bg:#F5F9FF; --white:#fff;
+      --border:#E2EBF5; --muted:#607D99;
+      --red:#DC2626; --red-bg:#FEE2E2;
+      --orange:#D97706; --orange-bg:#FEF3C7;
+      --green:#059669; --green-bg:#D1FAE5;
+      --r:10px; --shadow:0 2px 12px rgba(0,0,0,.07);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--navy);-webkit-font-smoothing:antialiased}
+    button{font-family:inherit;cursor:pointer;border:none}
+    input,textarea,select{font-family:inherit;font-size:.9rem}
+
+    /* ── PANTALLA DE CARGA ── */
+    #splash{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:999}
+    .splash-logo{font-size:2.5rem;font-weight:800;letter-spacing:-.03em}
+    .splash-logo span{color:var(--teal)}
+    .splash-sub{font-size:.8rem;color:rgba(255,255,255,.4);letter-spacing:.15em;text-transform:uppercase}
+    .splash-spinner{width:32px;height:32px;border:3px solid rgba(0,201,167,.2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin-top:.5rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── AUTH ── */
+    #auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+    .auth-box{background:var(--white);border-radius:20px;padding:2.5rem 2rem;width:100%;max-width:380px;box-shadow:0 8px 40px rgba(0,0,0,.1)}
+    .auth-logo{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.25rem}
+    .auth-logo span{color:var(--teal)}
+    .auth-sub{font-size:.8rem;color:var(--muted);margin-bottom:2rem}
+    .auth-tab-row{display:flex;gap:.5rem;margin-bottom:1.5rem}
+    .auth-tab{flex:1;padding:.6rem;border-radius:8px;background:var(--border);color:var(--muted);font-size:.85rem;font-weight:600;transition:all .2s}
+    .auth-tab.active{background:var(--navy);color:#fff}
+    .field{margin-bottom:1rem}
+    .field label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.05em}
+    .field input,.field select{width:100%;padding:.7rem .9rem;border:1.5px solid var(--border);border-radius:8px;outline:none;color:var(--navy);transition:border-color .2s;background:#fff}
+    .field input:focus,.field select:focus{border-color:var(--teal)}
+    .btn-primary{width:100%;padding:.85rem;background:var(--teal);color:#fff;font-weight:700;font-size:.95rem;border-radius:10px;transition:all .2s;margin-top:.5rem}
+    .btn-primary:hover{background:var(--teal-d);transform:translateY(-1px)}
+    .auth-error{background:var(--red-bg);color:var(--red);padding:.7rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1rem}
+
+    /* ── APP SHELL ── */
+    #app{display:none;flex-direction:column;height:100vh}
+    #app.visible{display:flex}
+
+    /* ── HEADER ── */
+    .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.75rem 1.2rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100}
+    .top-logo{font-size:1.2rem;font-weight:800;letter-spacing:-.03em}
+    .top-logo span{color:var(--teal)}
+    .top-user{display:flex;align-items:center;gap:.6rem}
+    .top-avatar{width:34px;height:34px;border-radius:50%;background:var(--teal-bg);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--teal-d)}
+    .top-name{font-size:.82rem;font-weight:600;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .top-logout{font-size:.75rem;color:var(--muted);background:none;padding:.3rem .6rem;border:1px solid var(--border);border-radius:6px}
+
+    /* ── COMPLETITUD BAR ── */
+    .completitud-bar{background:linear-gradient(135deg,var(--navy),var(--navy-light));padding:.8rem 1.2rem;display:flex;align-items:center;gap:1rem;flex-shrink:0}
+    .comp-label{font-size:.72rem;color:rgba(255,255,255,.6);white-space:nowrap}
+    .comp-track{flex:1;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+    .comp-fill{height:100%;background:var(--teal);border-radius:3px;transition:width .6s ease}
+    .comp-pct{font-size:.8rem;font-weight:700;color:var(--teal);white-space:nowrap}
+    .comp-cta{font-size:.7rem;color:var(--teal);background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.3);padding:.25rem .6rem;border-radius:6px;white-space:nowrap}
+
+    /* ── CONTENIDO SCROLLABLE ── */
+    .content{flex:1;overflow-y:auto;padding-bottom:80px}
+
+    /* ── BOTTOM NAV ── */
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);display:flex;z-index:100}
+    .bnav-btn{flex:1;padding:.55rem .2rem .45rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;background:none;color:var(--muted);font-size:.6rem;font-weight:500;transition:color .2s}
+    .bnav-btn .ico{font-size:1.2rem}
+    .bnav-btn.active{color:var(--teal)}
+    .bnav-btn.active .ico{transform:scale(1.1)}
+
+    /* ── CARDS / SECCIONES ── */
+    .page{padding:1rem;display:none}
+    .page.active{display:block}
+    .card{background:var(--white);border-radius:var(--r);border:1px solid var(--border);padding:1.2rem;margin-bottom:.9rem;box-shadow:var(--shadow)}
+    .card-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+    .card-title .ico{font-size:1rem}
+
+    /* ── CAMPO EDITABLE ── */
+    .edit-field{margin-bottom:.8rem}
+    .edit-field label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem}
+    .edit-field input,.edit-field select,.edit-field textarea{width:100%;padding:.6rem .8rem;border:1.5px solid var(--border);border-radius:7px;color:var(--navy);outline:none;background:#fff;transition:border-color .2s}
+    .edit-field input:focus,.edit-field select:focus,.edit-field textarea:focus{border-color:var(--teal)}
+    .edit-field textarea{resize:vertical;min-height:70px}
+    .edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    .btn-save{background:var(--teal);color:#fff;font-weight:700;padding:.7rem 1.5rem;border-radius:8px;font-size:.88rem;transition:all .2s;width:100%;margin-top:.5rem}
+    .btn-save:hover{background:var(--teal-d)}
+    .save-ok{background:var(--green-bg);color:var(--green);padding:.6rem 1rem;border-radius:7px;font-size:.82rem;text-align:center;margin-top:.5rem}
+
+    /* ── DASHBOARD ── */
+    .dash-hero{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:16px;padding:1.5rem;margin-bottom:.9rem;color:#fff}
+    .dash-greeting{font-size:.8rem;color:rgba(255,255,255,.6);margin-bottom:.25rem}
+    .dash-name{font-size:1.4rem;font-weight:800;margin-bottom:.5rem}
+    .dash-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+    .dash-tag{font-size:.7rem;padding:.2rem .65rem;border-radius:100px;background:rgba(0,201,167,.15);color:var(--teal);border:1px solid rgba(0,201,167,.3)}
+    .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:.9rem}
+    .stat-card{background:var(--white);border-radius:12px;padding:1rem;border:1px solid var(--border);text-align:center}
+    .stat-num{font-size:1.6rem;font-weight:800;color:var(--teal)}
+    .stat-lbl{font-size:.7rem;color:var(--muted);margin-top:.2rem}
+    .alert-item{display:flex;align-items:flex-start;gap:.75rem;padding:.8rem;border-radius:9px;margin-bottom:.6rem}
+    .alert-item.warn{background:var(--orange-bg);border:1px solid #FCD34D}
+    .alert-item.info{background:var(--teal-bg);border:1px solid rgba(0,201,167,.3)}
+    .alert-item.ok{background:var(--green-bg);border:1px solid #6EE7B7}
+    .alert-ico{font-size:1.2rem;flex-shrink:0}
+    .alert-txt{font-size:.8rem;line-height:1.4}
+    .alert-txt strong{display:block;font-weight:700;margin-bottom:.1rem}
+
+    /* ── ANTECEDENTES TOGGLE ── */
+    .ant-toggle{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer}
+    .ant-toggle:last-child{border-bottom:none}
+    .ant-label{font-size:.88rem;font-weight:500}
+    .ant-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+    .ant-check.on{background:var(--teal);border-color:var(--teal);color:#fff}
+
+    /* ── BITÁCORA ITEMS ── */
+    .bita-item{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem;background:var(--bg);border-radius:9px;border:1px solid var(--border);margin-bottom:.6rem}
+    .bita-ico{font-size:1.5rem;flex-shrink:0}
+    .bita-info{flex:1}
+    .bita-title{font-size:.88rem;font-weight:700}
+    .bita-meta{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+    .bita-badge{font-size:.7rem;padding:.15rem .5rem;border-radius:100px;font-weight:600}
+    .bita-badge.ok{background:var(--green-bg);color:var(--green)}
+    .bita-badge.warn{background:var(--orange-bg);color:var(--orange)}
+    .bita-badge.venc{background:var(--red-bg);color:var(--red)}
+
+    /* ── MEDICAMENTOS ── */
+    .med-item{display:flex;align-items:flex-start;gap:.8rem;padding:.9rem;background:var(--bg);border-radius:9px;border:1px solid var(--border);margin-bottom:.6rem}
+    .med-ico{width:36px;height:36px;border-radius:8px;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .med-nombre{font-size:.9rem;font-weight:700}
+    .med-dosis{font-size:.78rem;color:var(--muted);margin-top:.1rem}
+    .med-cronico{font-size:.68rem;background:var(--navy);color:var(--teal);padding:.15rem .5rem;border-radius:100px;font-weight:700;display:inline-block;margin-top:.3rem}
+
+    /* ── CHAT SALUD ── */
+    .chat-area{display:flex;flex-direction:column;height:calc(100vh - 200px)}
+    .chat-msgs{flex:1;overflow-y:auto;padding:.5rem;display:flex;flex-direction:column;gap:.6rem}
+    .msg{max-width:85%;padding:.75rem 1rem;border-radius:14px;font-size:.85rem;line-height:1.5}
+    .msg.ia{align-self:flex-start;background:var(--white);border:1px solid var(--border);border-bottom-left-radius:4px}
+    .msg.usr{align-self:flex-end;background:var(--navy);color:#fff;border-bottom-right-radius:4px}
+    .msg-name{font-size:.68rem;font-weight:700;margin-bottom:.3rem;color:var(--teal)}
+    .chat-input-row{display:flex;gap:.5rem;padding:.75rem;background:var(--white);border-top:1px solid var(--border);position:sticky;bottom:80px}
+    .chat-input{flex:1;padding:.65rem .9rem;border:1.5px solid var(--border);border-radius:22px;outline:none;font-size:.88rem}
+    .chat-input:focus{border-color:var(--teal)}
+    .chat-send{background:var(--teal);color:#fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;transition:background .2s}
+    .chat-send:hover{background:var(--teal-d)}
+    .chat-sugs{display:flex;flex-wrap:wrap;gap:.4rem;padding:.5rem .75rem .2rem;background:var(--white)}
+    .chat-sug{font-size:.73rem;padding:.3rem .7rem;border-radius:100px;border:1.5px solid var(--border);color:var(--navy);background:var(--bg);transition:all .2s;cursor:pointer}
+    .chat-sug:hover{border-color:var(--teal);color:var(--teal)}
+    .typing{display:flex;gap:4px;padding:.75rem 1rem;background:var(--white);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;align-self:flex-start;width:fit-content}
+    .typing span{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:bounce .8s ease-in-out infinite}
+    .typing span:nth-child(2){animation-delay:.15s}
+    .typing span:nth-child(3){animation-delay:.3s}
+    @keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+    /* ── COMPARTIR QR ── */
+    .qr-box{text-align:center;padding:1.5rem;background:var(--white);border-radius:14px;border:1px solid var(--border)}
+    .qr-canvas{display:flex;justify-content:center;margin:1rem 0}
+    #qrcode-container canvas,#qrcode-container img{border-radius:10px}
+    .share-btn{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.8rem;border-radius:10px;font-weight:700;font-size:.88rem;margin-bottom:.6rem;transition:all .2s}
+    .share-btn.wa{background:#25D366;color:#fff}
+    .share-btn.copy{background:var(--navy);color:#fff}
+    .share-btn.copy:hover{background:var(--navy-light)}
+    .lang-row{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem}
+    .lang-btn{font-size:.75rem;padding:.3rem .8rem;border-radius:100px;border:1.5px solid var(--border);background:var(--bg);color:var(--navy);transition:all .2s;cursor:pointer}
+    .lang-btn.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+
+    /* ── VACUNAS ── */
+    .vac-item{display:flex;align-items:center;gap:.8rem;padding:.8rem;border-bottom:1px solid var(--border)}
+    .vac-item:last-child{border-bottom:none}
+    .vac-ico{font-size:1.2rem}
+    .vac-nombre{font-size:.88rem;font-weight:600}
+    .vac-fecha{font-size:.75rem;color:var(--muted)}
+
+    /* ── MODAL ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:flex-end}
+    .modal-sheet{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-height:85vh;overflow-y:auto;padding:1.5rem}
+    .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto .8rem}
+    .modal-title{font-size:1rem;font-weight:700;margin-bottom:1rem}
+
+    /* ── UTILS ── */
+    .section-title{font-size:1.1rem;font-weight:800;margin-bottom:.3rem}
+    .section-sub{font-size:.8rem;color:var(--muted);margin-bottom:1rem}
+    .chip{display:inline-block;font-size:.7rem;padding:.2rem .6rem;border-radius:100px;font-weight:600;margin:.15rem}
+    .chip.teal{background:var(--teal-bg);color:var(--teal-d)}
+    .chip.navy{background:var(--navy);color:#fff}
+    .divider{height:1px;background:var(--border);margin:.8rem 0}
+    .empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.85rem}
+    .empty-ico{font-size:2.5rem;display:block;margin-bottom:.5rem}
+  </style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">LU<span>ISA</span></div>
+  <div class="splash-sub">Tu expediente de por vida</div>
+  <div class="splash-spinner"></div>
+</div>
+
+<!-- AUTH -->
+<div id="auth-screen" style="display:none">
+  <div class="auth-box">
+    <div class="auth-logo">LU<span>ISA</span></div>
+    <div class="auth-sub">Tu expediente clínico personal</div>
+    <div class="auth-tab-row">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
+      <button class="auth-tab" id="tab-reg" onclick="switchAuthTab('reg')">Registrarme</button>
+    </div>
+    <div id="auth-error" class="auth-error" style="display:none"></div>
+    <!-- LOGIN -->
+    <div id="form-login">
+      <div class="field"><label>Correo</label><input type="email" id="login-email" placeholder="tu@correo.com"/></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="login-pass" placeholder="••••••••"/></div>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    </div>
+    <!-- REGISTRO -->
+    <div id="form-reg" style="display:none">
+      <div class="field"><label>Nombre completo</label><input type="text" id="reg-nombre" placeholder="María González López"/></div>
+      <div class="field"><label>Correo</label><input type="email" id="reg-email" placeholder="tu@correo.com"/></div>
+      <div class="field"><label>Contraseña</label><input type="password" id="reg-pass" placeholder="Mínimo 8 caracteres"/></div>
+      <div class="field"><label>Fecha de nacimiento</label><input type="date" id="reg-nacimiento"/></div>
+      <div class="field"><label>Sexo</label>
+        <select id="reg-genero"><option value="">Seleccionar</option><option value="F">Femenino</option><option value="M">Masculino</option></select>
+      </div>
+      <button class="btn-primary" onclick="doRegister()">Crear mi expediente</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="top-logo">LU<span>ISA</span></div>
+    <div class="top-user">
+      <div class="top-avatar" id="avatar-initials">?</div>
+      <div class="top-name" id="top-name-display">Cargando…</div>
+      <button class="top-logout" onclick="window.location.href='/'">← Inicio</button>
+      <button class="top-logout" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <!-- Barra de completitud -->
+  <div class="completitud-bar">
+    <div class="comp-label">Perfil</div>
+    <div class="comp-track"><div class="comp-fill" id="comp-fill" style="width:0%"></div></div>
+    <div class="comp-pct" id="comp-pct">0%</div>
+    <button class="comp-cta" onclick="goTab('perfil')">Completar ›</button>
+  </div>
+
+  <div class="content" id="main-content">
+
+    <!-- ── PÁGINA: INICIO ── -->
+    <div class="page active" id="page-inicio">
+      <div style="padding:1rem">
+        <div class="dash-hero" id="dash-hero">
+          <div class="dash-greeting">¡Hola,</div>
+          <div class="dash-name" id="dash-name">—</div>
+          <div class="dash-tags" id="dash-tags"></div>
+        </div>
+        <div class="stat-row" id="stat-row"></div>
+        <div class="card-title"><span class="ico">🔔</span> Alertas y recordatorios</div>
+        <div id="alertas-list"><div class="alert-item info"><span class="alert-ico">ℹ️</span><div class="alert-txt"><strong>Completa tu perfil</strong>Agrega antecedentes y medicamentos para activar las alertas automáticas.</div></div></div>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: PERFIL ── -->
+    <div class="page" id="page-perfil">
+      <div style="padding:1rem">
+        <div class="section-title">Datos personales</div>
+        <div class="section-sub">Tu información básica de identificación</div>
+
+        <div class="card">
+          <div class="card-title"><span class="ico">🪪</span> Identificación</div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Nombre</label><input type="text" id="p-nombre" placeholder="María"/></div>
+            <div class="edit-field"><label>Apellidos</label><input type="text" id="p-apellidos" placeholder="González López"/></div>
+          </div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Fecha de nacimiento</label><input type="date" id="p-nacimiento"/></div>
+            <div class="edit-field"><label>Sexo</label>
+              <select id="p-genero"><option value="">—</option><option value="F">Femenino</option><option value="M">Masculino</option></select>
+            </div>
+          </div>
+          <div class="edit-field"><label>CURP</label><input type="text" id="p-curp" placeholder="GOML901203MDFNZR01" maxlength="18" style="text-transform:uppercase"/></div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Tipo de sangre</label>
+              <select id="p-sangre"><option value="">—</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+            </div>
+            <div class="edit-field"><label>Estado civil</label>
+              <select id="p-estado-civil"><option value="">—</option><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option><option>Unión libre</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ico">📞</span> Contacto</div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Teléfono</label><input type="tel" id="p-telefono" placeholder="+52 55 0000 0000"/></div>
+            <div class="edit-field"><label>WhatsApp</label><input type="tel" id="p-whatsapp" placeholder="+52 55 0000 0000"/></div>
+          </div>
+          <div class="edit-field"><label>Correo electrónico</label><input type="email" id="p-email" placeholder="tu@correo.com"/></div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Ciudad</label><input type="text" id="p-ciudad" placeholder="Ciudad de México"/></div>
+            <div class="edit-field"><label>Estado</label>
+              <select id="p-estado">
+                <option value="">—</option>
+                <option>Aguascalientes</option><option>Baja California</option><option>Baja California Sur</option>
+                <option>Campeche</option><option>Chiapas</option><option>Chihuahua</option>
+                <option>Ciudad de México</option><option>Coahuila</option><option>Colima</option>
+                <option>Durango</option><option>Guanajuato</option><option>Guerrero</option>
+                <option>Hidalgo</option><option>Jalisco</option><option>México</option>
+                <option>Michoacán</option><option>Morelos</option><option>Nayarit</option>
+                <option>Nuevo León</option><option>Oaxaca</option><option>Puebla</option>
+                <option>Querétaro</option><option>Quintana Roo</option><option>San Luis Potosí</option>
+                <option>Sinaloa</option><option>Sonora</option><option>Tabasco</option>
+                <option>Tamaulipas</option><option>Tlaxcala</option><option>Veracruz</option>
+                <option>Yucatán</option><option>Zacatecas</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ico">🚨</span> Contacto de emergencia</div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Nombre</label><input type="text" id="p-emer-nombre" placeholder="Carlos González"/></div>
+            <div class="edit-field"><label>Parentesco</label><input type="text" id="p-emer-parentesco" placeholder="Esposo, hijo, madre…"/></div>
+          </div>
+          <div class="edit-field"><label>Teléfono</label><input type="tel" id="p-emer-tel" placeholder="+52 55 0000 0000"/></div>
+        </div>
+
+        <button class="btn-save" onclick="guardarPerfil()">💾 Guardar perfil</button>
+        <div id="perfil-ok" style="display:none" class="save-ok">✅ Perfil guardado</div>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: ANTECEDENTES ── -->
+    <div class="page" id="page-antecedentes">
+      <div style="padding:1rem">
+        <div class="section-title">Antecedentes médicos</div>
+        <div class="section-sub">Esta información ayuda a cualquier médico a entenderte mejor</div>
+
+        <!-- Heredofamiliares -->
+        <div class="card">
+          <div class="card-title"><span class="ico">🧬</span> Antecedentes heredofamiliares</div>
+          <div id="ahf-toggles"></div>
+        </div>
+
+        <!-- Patológicos -->
+        <div class="card">
+          <div class="card-title"><span class="ico">🏥</span> Enfermedades y cirugías previas</div>
+          <div class="edit-field"><label>Enfermedades crónicas</label><textarea id="p-enf-cronicas" placeholder="Diabetes tipo 2 (desde 2018), Hipertensión…"></textarea></div>
+          <div class="edit-field"><label>Cirugías</label><textarea id="p-cirugias" placeholder="Apendicectomía (2015), Cesárea (2020)…"></textarea></div>
+          <div class="edit-field"><label>Hospitalizaciones</label><textarea id="p-hospitalizaciones" placeholder="Ingreso por neumonía (2022, 5 días)…"></textarea></div>
+        </div>
+
+        <!-- Alergias -->
+        <div class="card">
+          <div class="card-title"><span class="ico">⚠️</span> Alergias</div>
+          <div class="edit-field"><label>Medicamentos</label><input type="text" id="p-alergia-med" placeholder="Penicilina, Aspirina…"/></div>
+          <div class="edit-field"><label>Alimentos</label><input type="text" id="p-alergia-ali" placeholder="Mariscos, Nueces…"/></div>
+          <div class="edit-field"><label>Ambientales / otras</label><input type="text" id="p-alergia-amb" placeholder="Polen, Látex…"/></div>
+        </div>
+
+        <!-- Gineco-obstétrico -->
+        <div class="card" id="card-gineco">
+          <div class="card-title"><span class="ico">🌸</span> Antecedentes gineco-obstétricos</div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Edad de menarca</label><input type="number" id="p-menarca" min="8" max="20" placeholder="12"/></div>
+            <div class="edit-field"><label>Último período</label><input type="date" id="p-fum"/></div>
+          </div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Embarazos</label><input type="number" id="p-embarazos" min="0" placeholder="0"/></div>
+            <div class="edit-field"><label>Partos</label><input type="number" id="p-partos" min="0" placeholder="0"/></div>
+          </div>
+          <div class="edit-grid">
+            <div class="edit-field"><label>Cesáreas</label><input type="number" id="p-cesareas" min="0" placeholder="0"/></div>
+            <div class="edit-field"><label>Abortos</label><input type="number" id="p-abortos" min="0" placeholder="0"/></div>
+          </div>
+          <div class="edit-field"><label>Método anticonceptivo actual</label>
+            <select id="p-mac"><option value="">Ninguno</option><option>DIU</option><option>Pastillas</option><option>Condón</option><option>Implante subdérmico</option><option>Ligadura</option><option>Vasectomía (pareja)</option><option>Otro</option></select>
+          </div>
+          <div class="edit-field"><label>Último Papanicolaou</label><input type="date" id="p-pap"/></div>
+          <div class="edit-field"><label>Última mamografía</label><input type="date" id="p-mama"/></div>
+        </div>
+
+        <!-- Hábitos -->
+        <div class="card">
+          <div class="card-title"><span class="ico">🏃</span> Hábitos</div>
+          <div class="edit-field"><label>Tabaquismo</label>
+            <select id="p-tabaco"><option value="no">No fumo</option><option value="ex">Exfumador/a</option><option value="si">Sí fumo</option></select>
+          </div>
+          <div class="edit-field"><label>Alcohol</label>
+            <select id="p-alcohol"><option value="no">No consumo</option><option value="oc">Ocasional</option><option value="mo">Moderado (fin de semana)</option><option value="fr">Frecuente (varios días/semana)</option></select>
+          </div>
+          <div class="edit-field"><label>Actividad física</label>
+            <select id="p-ejercicio"><option value="no">Sedentario/a</option><option value="leve">Leve (caminar ocasional)</option><option value="mod">Moderada (3 días/semana)</option><option value="int">Intensa (5+ días/semana)</option></select>
+          </div>
+        </div>
+
+        <button class="btn-save" onclick="guardarAntecedentes()">💾 Guardar antecedentes</button>
+        <div id="ant-ok" style="display:none" class="save-ok">✅ Antecedentes guardados</div>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: MEDICAMENTOS ── -->
+    <div class="page" id="page-medicamentos">
+      <div style="padding:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <div>
+            <div class="section-title">Medicamentos</div>
+            <div class="section-sub">Activos y tratamientos de por vida</div>
+          </div>
+          <button onclick="showModalMed()" style="background:var(--teal);color:#fff;padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:700">+ Agregar</button>
+        </div>
+        <div id="meds-list"><div class="empty"><span class="empty-ico">💊</span>Aún no tienes medicamentos registrados</div></div>
+
+        <div class="divider"></div>
+        <div class="card-title" style="margin-top:.8rem"><span class="ico">💉</span> Vacunas</div>
+        <div id="vacunas-list"><div class="empty"><span class="empty-ico">🩺</span>Sin vacunas registradas</div></div>
+        <button onclick="showModalVac()" style="width:100%;padding:.65rem;border-radius:8px;border:1.5px dashed var(--border);color:var(--muted);font-size:.85rem;margin-top:.5rem">+ Agregar vacuna</button>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: MANTENIMIENTO ── -->
+    <div class="page" id="page-mantenimiento">
+      <div style="padding:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+          <div>
+            <div class="section-title">Bitácora biológica</div>
+            <div class="section-sub">Prótesis, amalgamas, implantes y más</div>
+          </div>
+          <button onclick="showModalBita()" style="background:var(--teal);color:#fff;padding:.5rem 1rem;border-radius:8px;font-size:.8rem;font-weight:700">+ Agregar</button>
+        </div>
+        <div id="bita-list"><div class="empty"><span class="empty-ico">🔧</span>Tu bitácora está vacía. Agrega amalgamas, prótesis, DIU, lentes…</div></div>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: CHAT SALUD ── -->
+    <div class="page" id="page-chat" style="padding:0;display:none">
+      <div class="chat-area">
+        <div class="chat-sugs" id="chat-sugs">
+          <button class="chat-sug" onclick="sendSug(this)">💊 ¿Qué medicamentos tomo?</button>
+          <button class="chat-sug" onclick="sendSug(this)">🩸 ¿Cuál es mi tipo de sangre?</button>
+          <button class="chat-sug" onclick="sendSug(this)">⚠️ ¿Tengo alergias?</button>
+          <button class="chat-sug" onclick="sendSug(this)">🔧 ¿Qué revisiones tengo pendientes?</button>
+          <button class="chat-sug" onclick="sendSug(this)">📅 ¿Cuándo fue mi última consulta?</button>
+        </div>
+        <div class="chat-msgs" id="chat-msgs">
+          <div class="msg ia"><div class="msg-name">LUISA · Tu asistente personal</div>Hola 👋 Soy tu asistente de salud. Tengo acceso a todo tu expediente y puedo responder cualquier pregunta sobre tu historial médico. ¿En qué te ayudo?</div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" id="chat-input" placeholder="Pregunta sobre tu salud…" onkeydown="if(event.key==='Enter')sendChat()"/>
+          <button class="chat-send" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PÁGINA: COMPARTIR ── -->
+    <div class="page" id="page-compartir">
+      <div style="padding:1rem">
+        <div class="section-title">Compartir expediente</div>
+        <div class="section-sub">El médico solo podrá leer — no modificar</div>
+
+        <div class="card">
+          <div class="card-title"><span class="ico">🌍</span> Idioma del expediente</div>
+          <div class="lang-row" id="lang-row">
+            <button class="lang-btn active" data-lang="es" onclick="setLang(this)">🇲🇽 Español</button>
+            <button class="lang-btn" data-lang="en" onclick="setLang(this)">🇺🇸 English</button>
+            <button class="lang-btn" data-lang="de" onclick="setLang(this)">🇩🇪 Deutsch</button>
+            <button class="lang-btn" data-lang="fr" onclick="setLang(this)">🇫🇷 Français</button>
+            <button class="lang-btn" data-lang="pt" onclick="setLang(this)">🇧🇷 Português</button>
+          </div>
+          <div style="font-size:.78rem;color:var(--muted);text-align:center">LUISA traducirá tu expediente automáticamente con IA</div>
+        </div>
+
+        <div class="qr-box">
+          <div style="font-size:.85rem;color:var(--muted);margin-bottom:.5rem">Código QR para mostrar al médico</div>
+          <div class="qr-canvas"><div id="qrcode-container"></div></div>
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:1rem">Válido por 24 horas · Solo lectura</div>
+          <button class="share-btn wa" onclick="shareWA()">📱 Enviar por WhatsApp</button>
+          <button class="share-btn copy" onclick="copyLink()">🔗 Copiar enlace</button>
+          <button onclick="regenerarQR()" style="width:100%;padding:.65rem;border-radius:8px;border:1.5px dashed var(--border);color:var(--muted);font-size:.82rem;margin-top:.4rem">🔄 Generar nuevo código</button>
+        </div>
+
+        <div class="card" style="margin-top:.8rem">
+          <div class="card-title"><span class="ico">🔒</span> Accesos recientes</div>
+          <div id="accesos-list"><div style="font-size:.82rem;color:var(--muted)">Sin accesos recientes registrados</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="bnav-btn active" id="nav-inicio" onclick="goTab('inicio')"><span class="ico">🏠</span>Inicio</button>
+    <button class="bnav-btn" id="nav-perfil" onclick="goTab('perfil')"><span class="ico">👤</span>Perfil</button>
+    <button class="bnav-btn" id="nav-antecedentes" onclick="goTab('antecedentes')"><span class="ico">🧬</span>Historial</button>
+    <button class="bnav-btn" id="nav-medicamentos" onclick="goTab('medicamentos')"><span class="ico">💊</span>Medicamentos</button>
+    <button class="bnav-btn" id="nav-chat" onclick="goTab('chat')"><span class="ico">💬</span>Chat</button>
+    <button class="bnav-btn" id="nav-compartir" onclick="goTab('compartir')"><span class="ico">📤</span>Compartir</button>
+  </div>
+</div>
+
+<!-- MODAL: AGREGAR MEDICAMENTO -->
+<div class="modal-overlay" id="modal-med" style="display:none" onclick="closeModal('modal-med')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💊 Agregar medicamento</div>
+    <div class="edit-field"><label>Nombre genérico *</label><input type="text" id="m-generico" placeholder="Metformina, Telmisartán…"/></div>
+    <div class="edit-field"><label>Nombre comercial</label><input type="text" id="m-comercial" placeholder="Glucophage, Micardis…"/></div>
+    <div class="edit-grid">
+      <div class="edit-field"><label>Dosis</label><input type="text" id="m-dosis" placeholder="500mg"/></div>
+      <div class="edit-field"><label>Frecuencia</label><input type="text" id="m-frecuencia" placeholder="Cada 12 horas"/></div>
+    </div>
+    <div class="edit-field"><label>Vía</label>
+      <select id="m-via"><option value="oral">Oral</option><option value="sublingual">Sublingual</option><option value="topica">Tópica</option><option value="inyectada">Inyectada</option><option value="inhalada">Inhalada</option></select>
+    </div>
+    <div class="edit-field"><label>Fecha de inicio</label><input type="date" id="m-inicio"/></div>
+    <div class="ant-toggle" style="padding:.8rem 0;border-bottom:none">
+      <span class="ant-label">Tratamiento crónico (de por vida)</span>
+      <div class="ant-check" id="m-cronico-btn" onclick="toggleCronico()"></div>
+    </div>
+    <input type="hidden" id="m-cronico-val" value="false"/>
+    <div class="edit-field" id="m-tabletas-wrap"><label>Tabletas por empaque</label><input type="number" id="m-tabletas" placeholder="30" min="1"/></div>
+    <button class="btn-save" onclick="guardarMed()">Guardar medicamento</button>
+  </div>
+</div>
+
+<!-- MODAL: AGREGAR VACUNA -->
+<div class="modal-overlay" id="modal-vac" style="display:none" onclick="closeModal('modal-vac')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">💉 Agregar vacuna</div>
+    <div class="edit-field"><label>Nombre de la vacuna *</label>
+      <select id="v-nombre">
+        <option value="">Seleccionar…</option>
+        <option>Influenza</option><option>COVID-19</option><option>Hepatitis B</option>
+        <option>Tétanos (Td)</option><option>Sarampión-Rubéola (SR)</option>
+        <option>Neumococo</option><option>Varicela</option><option>VPH</option>
+        <option>Fiebre amarilla</option><option>Otra</option>
+      </select>
+    </div>
+    <div class="edit-field" id="v-otra-wrap" style="display:none"><label>Especificar vacuna</label><input type="text" id="v-otra-txt" placeholder="Nombre de la vacuna"/></div>
+    <div class="edit-grid">
+      <div class="edit-field"><label>Fecha aplicación</label><input type="date" id="v-fecha"/></div>
+      <div class="edit-field"><label>Próxima dosis</label><input type="date" id="v-proxima"/></div>
+    </div>
+    <div class="edit-field"><label>Lugar</label><input type="text" id="v-lugar" placeholder="Centro de salud, farmacia…"/></div>
+    <button class="btn-save" onclick="guardarVac()">Guardar vacuna</button>
+  </div>
+</div>
+
+<!-- MODAL: AGENDAR CITA desde triage -->
+<div class="modal-overlay" id="modal-cita" style="display:none" onclick="closeModal('modal-cita')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📅 Agendar cita</div>
+    <div id="cita-medico-info" style="display:flex;align-items:center;gap:.8rem;padding:.8rem;background:var(--bg);border-radius:10px;margin-bottom:1rem;border:1px solid var(--border)">
+      <div id="cita-avatar" style="width:42px;height:42px;border-radius:50%;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal);font-size:.9rem;flex-shrink:0"></div>
+      <div>
+        <div id="cita-nombre" style="font-size:.9rem;font-weight:700"></div>
+        <div id="cita-esp" style="font-size:.75rem;color:var(--muted)"></div>
+      </div>
+    </div>
+    <div class="edit-field"><label>Fecha y hora *</label><input type="datetime-local" id="cita-fecha"/></div>
+    <div class="edit-field"><label>Motivo de consulta</label><textarea id="cita-motivo" placeholder="Describe brevemente tus síntomas o motivo de consulta…" rows="3"></textarea></div>
+    <div class="edit-field"><label>Duración estimada</label>
+      <select id="cita-duracion">
+        <option value="30">30 minutos</option>
+        <option value="45">45 minutos</option>
+        <option value="60" selected>1 hora</option>
+      </select>
+    </div>
+    <button class="btn-save" onclick="confirmarCita()">✅ Confirmar cita</button>
+    <div id="cita-ok" style="display:none;background:var(--green-bg);color:var(--green);padding:.8rem;border-radius:8px;text-align:center;font-size:.85rem;font-weight:600;margin-top:.8rem"></div>
+  </div>
+</div>
+
+<!-- MODAL: AGREGAR BITÁCORA -->
+<div class="modal-overlay" id="modal-bita" style="display:none" onclick="closeModal('modal-bita')">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">🔧 Agregar componente biológico</div>
+    <div class="edit-field"><label>Tipo *</label>
+      <select id="b-tipo" onchange="updateBitaIco()">
+        <option value="">Seleccionar…</option>
+        <option value="amalgama">🦷 Amalgama dental</option>
+        <option value="corona">👑 Corona dental</option>
+        <option value="endodoncia">🦷 Endodoncia</option>
+        <option value="implante_dental">🦷 Implante dental</option>
+        <option value="diu">🌀 DIU / Dispositivo intrauterino</option>
+        <option value="protesis_rodilla">🦵 Prótesis de rodilla</option>
+        <option value="protesis_cadera">🦴 Prótesis de cadera</option>
+        <option value="marcapasos">❤️ Marcapasos</option>
+        <option value="lentes_contacto">👁️ Lentes de contacto</option>
+        <option value="lentes_intraoculares">👁️ Lentes intraoculares</option>
+        <option value="cateter">🩺 Catéter/Puerto venoso</option>
+        <option value="otro">⚙️ Otro dispositivo</option>
+      </select>
+    </div>
+    <div class="edit-field"><label>Descripción / ubicación</label><input type="text" id="b-desc" placeholder="Ej: molar inferior derecho #36, rodilla izquierda…"/></div>
+    <div class="edit-grid">
+      <div class="edit-field"><label>Fecha de colocación</label><input type="date" id="b-fecha"/></div>
+      <div class="edit-field"><label>Vida útil estimada (años)</label><input type="number" id="b-vida" min="1" max="50" placeholder="10"/></div>
+    </div>
+    <div class="edit-field"><label>Médico que lo colocó</label><input type="text" id="b-medico" placeholder="Dr. García"/></div>
+    <div class="edit-field"><label>Notas</label><textarea id="b-notas" placeholder="Material, marca, observaciones…"></textarea></div>
+    <button class="btn-save" onclick="guardarBita()">Guardar en bitácora</button>
+  </div>
+</div>
+
+<script>
+// ── CONFIG SUPABASE ──
+// Supabase client ya inicializado en supabase-client.js
+// Reutilizamos: sb, checkSession(), getCurrentPaciente(), logout(), etc.
+
+let currentUser = null;
+let pacienteData = null;
+let currentLang  = 'es';
+let chatHistory  = [];
+let currentQRToken = null;
+
+// ────────────────────────────────────────────
+// INIT
+// ────────────────────────────────────────────
+async function init() {
+  document.getElementById('splash').style.display = 'none';
+
+  try {
+    // Usar localStorage (sesión LUISA propia) en vez de Supabase Auth
+    const sessionStr = localStorage.getItem('ligia_session');
+    if (!sessionStr) {
+      document.getElementById('auth-screen').style.display = 'flex';
+      return;
+    }
+
+    const session = JSON.parse(sessionStr);
+
+    // Verificar expiración 24h
+    if (Date.now() - session.timestamp > 24*60*60*1000) {
+      localStorage.removeItem('ligia_user');
+      localStorage.removeItem('ligia_session');
+      document.getElementById('auth-screen').style.display = 'flex';
+      return;
+    }
+
+    currentUser = session.user;
+    await loadPaciente();
+    showApp();
+  } catch (err) {
+    console.error('Error en init:', err);
+    document.getElementById('auth-screen').style.display = 'flex';
+  }
+}
+
+async function loadPaciente() {
+  // Usar getCurrentPaciente() de supabase-client.js
+  const pacienteFromDb = await getCurrentPaciente();
+  if (pacienteFromDb) {
+    pacienteData = pacienteFromDb;
+    fillAllForms();
+  } else {
+    // Si no hay perfil de paciente, mostrar mensaje amigable
+    console.warn('Perfil de paciente no encontrado en la base de datos');
+    showAuthError('Perfil no encontrado. Por favor, completa tu registro.');
+  }
+}
+
+function showApp() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  const nombre = pacienteData?.nombre || currentUser.email.split('@')[0];
+  document.getElementById('top-name-display').textContent = nombre;
+  document.getElementById('avatar-initials').textContent = nombre[0].toUpperCase();
+  document.getElementById('dash-name').textContent = nombre + '!';
+  renderDashboard();
+  renderAHFToggles();
+  renderMeds();
+  renderVacunas();
+  renderBitacora();
+  updateCompletitud();
+}
+
+// ────────────────────────────────────────────
+// AUTH
+// ────────────────────────────────────────────
+function switchAuthTab(tab) {
+  document.getElementById('form-login').style.display = tab==='login'?'block':'none';
+  document.getElementById('form-reg').style.display   = tab==='reg'  ?'block':'none';
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-reg').classList.toggle('active',   tab==='reg');
+  document.getElementById('auth-error').style.display = 'none';
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const {error} = await sb.auth.signInWithPassword({email, password: pass});
+  if (error) { showAuthError(error.message); return; }
+  const { data:{session} } = await sb.auth.getSession();
+  currentUser = session.user;
+  await loadPaciente();
+  document.getElementById('auth-screen').style.display = 'none';
+  showApp();
+}
+
+async function doRegister() {
+  const nombre    = document.getElementById('reg-nombre').value.trim();
+  const email     = document.getElementById('reg-email').value.trim();
+  const pass      = document.getElementById('reg-pass').value;
+  const nacimiento= document.getElementById('reg-nacimiento').value;
+  const genero    = document.getElementById('reg-genero').value;
+  if (!nombre || !email || !pass) { showAuthError('Nombre, correo y contraseña son obligatorios'); return; }
+  const {data, error} = await sb.auth.signUp({email, password: pass});
+  if (error) { showAuthError(error.message); return; }
+  currentUser = data.user;
+  // Crear perfil del paciente
+  const parts = nombre.split(' ');
+  const pnombre = parts[0];
+  const papellidos = parts.slice(1).join(' ');
+  const {error: perr} = await sb.from('perfiles_pacientes').insert({
+    id_usuario: currentUser.id,
+    nombre: pnombre,
+    apellidos: papellidos,
+    fecha_nacimiento: nacimiento || '1990-01-01',
+    genero: genero || null,
+    email: email
+  });
+  if (perr) console.error('Error perfil:', perr.message);
+  await loadPaciente();
+  document.getElementById('auth-screen').style.display = 'none';
+  showApp();
+}
+
+async function doLogout() {
+  // Usar logout() de supabase-client.js
+  await logout();
+  // logout() redirige automáticamente a /auth.html
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ────────────────────────────────────────────
+// NAVEGACIÓN
+// ────────────────────────────────────────────
+function goTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  const pageEl = document.getElementById('page-'+tab);
+  if (pageEl) { pageEl.style.display = tab==='chat'?'block':'block'; pageEl.classList.add('active'); }
+  const navEl = document.getElementById('nav-'+tab);
+  if (navEl) navEl.classList.add('active');
+  if (tab === 'compartir') renderQR();
+  if (tab === 'mantenimiento') renderBitacora();
+}
+
+// ────────────────────────────────────────────
+// COMPLETITUD
+// ────────────────────────────────────────────
+function updateCompletitud() {
+  let pct = 0;
+  const p = pacienteData || {};
+  if (p.nombre)                                  pct += 5;
+  if (p.apellidos)                               pct += 5;
+  if (p.fecha_nacimiento)                        pct += 5;
+  if (p.curp)                                    pct += 10;
+  if (p.tipo_sangre)                             pct += 5;
+  if (p.telefono || p.whatsapp)                  pct += 5;
+  if (p.antecedentes_heredofamiliares && Object.keys(p.antecedentes_heredofamiliares||{}).length > 0) pct += 10;
+  if (p.antecedentes_patologicos && JSON.stringify(p.antecedentes_patologicos||{}) !== '{}')          pct += 15;
+  if (p.bitacora_mantenimiento && (p.bitacora_mantenimiento||[]).length > 0)                          pct += 10;
+  if (p.habitos && JSON.stringify(p.habitos||{}) !== '{}')                                            pct += 10;
+  if (p.contacto_emergencia && p.contacto_emergencia?.nombre)                                        pct += 10;
+  if (p.genero)                                  pct += 5;
+  if (p.email)                                   pct += 5;
+  if (p.ciudad)                                  pct += 5;
+  pct = Math.min(pct, 100);
+  document.getElementById('comp-fill').style.width = pct + '%';
+  document.getElementById('comp-pct').textContent  = pct + '%';
+}
+
+// ────────────────────────────────────────────
+// DASHBOARD
+// ────────────────────────────────────────────
+function renderDashboard() {
+  const p = pacienteData || {};
+  // Tags resumen
+  const tags = [];
+  if (p.tipo_sangre) tags.push('🩸 ' + p.tipo_sangre);
+  if (p.genero === 'F') tags.push('♀️ Femenino');
+  if (p.genero === 'M') tags.push('♂️ Masculino');
+  if (p.fecha_nacimiento) {
+    const edad = Math.floor((Date.now() - new Date(p.fecha_nacimiento)) / 31557600000);
+    tags.push('🎂 ' + edad + ' años');
+  }
+  const alergias = p.antecedentes_patologicos?.alergias_medicamentos;
+  if (alergias && alergias.length) tags.push('⚠️ Alergia: ' + alergias[0]);
+  document.getElementById('dash-tags').innerHTML = tags.map(t=>`<span class="dash-tag">${t}</span>`).join('');
+
+  // Stats
+  document.getElementById('stat-row').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${(p.bitacora_mantenimiento||[]).length}</div><div class="stat-lbl">Componentes biológicos</div></div>
+    <div class="stat-card"><div class="stat-num">—</div><div class="stat-lbl">Consultas registradas</div></div>
+  `;
+
+  // Alertas de bitácora
+  const alertas = [];
+  const hoy = new Date();
+  (p.bitacora_mantenimiento||[]).forEach(item => {
+    if (item.fecha_colocacion && item.vida_util_anos) {
+      const vence = new Date(item.fecha_colocacion);
+      vence.setFullYear(vence.getFullYear() + item.vida_util_anos);
+      const diasRestantes = Math.ceil((vence - hoy) / 86400000);
+      if (diasRestantes < 0) {
+        alertas.push(`<div class="alert-item warn"><span class="alert-ico">⚠️</span><div class="alert-txt"><strong>${item.tipo} vencido</strong>${item.descripcion || ''} — Requiere revisión urgente.</div></div>`);
+      } else if (diasRestantes < 90) {
+        alertas.push(`<div class="alert-item warn"><span class="alert-ico">🔔</span><div class="alert-txt"><strong>${item.tipo} próximo a vencer</strong>Quedan ${diasRestantes} días. ${item.descripcion || ''}</div></div>`);
+      }
+    }
+  });
+  if (!alertas.length) alertas.push(`<div class="alert-item ok"><span class="alert-ico">✅</span><div class="alert-txt"><strong>Todo al día</strong>Sin alertas de mantenimiento pendientes.</div></div>`);
+  document.getElementById('alertas-list').innerHTML = alertas.join('');
+}
+
+// ────────────────────────────────────────────
+// ANTECEDENTES HEREDOFAMILIARES
+// ────────────────────────────────────────────
+const ahfItems = [
+  {key:'diabetes', label:'Diabetes'},
+  {key:'hipertension', label:'Hipertensión arterial'},
+  {key:'cancer', label:'Cáncer (algún tipo)'},
+  {key:'cardiopatias', label:'Enfermedades cardíacas'},
+  {key:'enfermedades_renales', label:'Enfermedades renales'},
+  {key:'enfermedades_mentales', label:'Enfermedades mentales'},
+];
+
+function renderAHFToggles() {
+  const ahf = pacienteData?.antecedentes_heredofamiliares || {};
+  document.getElementById('ahf-toggles').innerHTML = ahfItems.map(it => {
+    const on = ahf[it.key] === true || (typeof ahf[it.key]==='object' && ahf[it.key]?.presente);
+    return `<div class="ant-toggle" onclick="toggleAHF('${it.key}')">
+      <span class="ant-label">${it.label}</span>
+      <div class="ant-check ${on?'on':''}" id="ahf-${it.key}">${on?'✓':''}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleAHF(key) {
+  const el = document.getElementById('ahf-'+key);
+  const isOn = el.classList.contains('on');
+  el.classList.toggle('on', !isOn);
+  el.textContent = !isOn ? '✓' : '';
+}
+
+// ────────────────────────────────────────────
+// FILL FORMS desde pacienteData
+// ────────────────────────────────────────────
+function fillAllForms() {
+  const p = pacienteData;
+  if (!p) return;
+  // Perfil
+  setVal('p-nombre', p.nombre);
+  setVal('p-apellidos', p.apellidos);
+  setVal('p-nacimiento', p.fecha_nacimiento);
+  setVal('p-genero', p.genero);
+  setVal('p-curp', p.curp);
+  setVal('p-sangre', p.tipo_sangre);
+  setVal('p-estado-civil', p.estado_civil);
+  setVal('p-telefono', p.telefono);
+  setVal('p-whatsapp', p.whatsapp);
+  setVal('p-email', p.email);
+  setVal('p-ciudad', p.ciudad);
+  setVal('p-estado', p.estado_republica);
+  setVal('p-emer-nombre', p.contacto_emergencia?.nombre);
+  setVal('p-emer-parentesco', p.contacto_emergencia?.parentesco);
+  setVal('p-emer-tel', p.contacto_emergencia?.telefono);
+  // Patológicos
+  const pat = p.antecedentes_patologicos || {};
+  setVal('p-enf-cronicas', (pat.enfermedades_cronicas||[]).join(', '));
+  setVal('p-cirugias', (pat.cirugias||[]).join(', '));
+  setVal('p-hospitalizaciones', (pat.hospitalizaciones||[]).join(', '));
+  setVal('p-alergia-med', (pat.alergias_medicamentos||[]).join(', '));
+  setVal('p-alergia-ali', (pat.alergias_alimentos||[]).join(', '));
+  setVal('p-alergia-amb', (pat.alergias_ambientales||[]).join(', '));
+  // Gineco
+  const g = p.antecedentes_gineco || {};
+  setVal('p-menarca', g.menarca_edad);
+  setVal('p-fum', g.fecha_ultima_menstruacion);
+  setVal('p-embarazos', g.embarazos);
+  setVal('p-partos', g.partos);
+  setVal('p-cesareas', g.cesareas);
+  setVal('p-abortos', g.abortos);
+  setVal('p-mac', g.metodo_anticonceptivo);
+  setVal('p-pap', g.fecha_ultimo_papanicolaou);
+  setVal('p-mama', g.fecha_ultima_mamografia);
+  // Ocultar gineco si es hombre
+  if (p.genero === 'M') document.getElementById('card-gineco').style.display = 'none';
+  // Hábitos
+  const h = p.habitos || {};
+  setVal('p-tabaco', h.tabaquismo?.activo ? 'si' : 'no');
+  setVal('p-alcohol', h.alcoholismo?.frecuencia || 'no');
+  setVal('p-ejercicio', h.ejercicio?.activo ? 'mod' : 'no');
+}
+
+function setVal(id, val) {
+  const el = document.getElementById(id);
+  if (el && val != null && val !== '') el.value = val;
+}
+
+// ────────────────────────────────────────────
+// GUARDAR PERFIL
+// ────────────────────────────────────────────
+async function guardarPerfil() {
+  const payload = {
+    nombre:        document.getElementById('p-nombre').value.trim(),
+    apellidos:     document.getElementById('p-apellidos').value.trim(),
+    fecha_nacimiento: document.getElementById('p-nacimiento').value || null,
+    genero:        document.getElementById('p-genero').value || null,
+    curp:          document.getElementById('p-curp').value.toUpperCase().trim() || null,
+    tipo_sangre:   document.getElementById('p-sangre').value || null,
+    estado_civil:  document.getElementById('p-estado-civil').value || null,
+    telefono:      document.getElementById('p-telefono').value.trim() || null,
+    whatsapp:      document.getElementById('p-whatsapp').value.trim() || null,
+    email:         document.getElementById('p-email').value.trim() || null,
+    ciudad:        document.getElementById('p-ciudad').value.trim() || null,
+    estado_republica: document.getElementById('p-estado').value || null,
+    contacto_emergencia: {
+      nombre:      document.getElementById('p-emer-nombre').value.trim(),
+      parentesco:  document.getElementById('p-emer-parentesco').value.trim(),
+      telefono:    document.getElementById('p-emer-tel').value.trim(),
+    },
+    id_usuario: currentUser.id,
+  };
+
+  let error;
+  if (pacienteData?.id) {
+    ({error} = await sb.from('perfiles_pacientes').update(payload).eq('id', pacienteData.id));
+  } else {
+    ({error} = await sb.from('perfiles_pacientes').insert(payload));
+  }
+
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadPaciente();
+  updateCompletitud();
+  renderDashboard();
+  const ok = document.getElementById('perfil-ok');
+  ok.style.display = 'block';
+  setTimeout(() => ok.style.display='none', 2500);
+}
+
+// ────────────────────────────────────────────
+// GUARDAR ANTECEDENTES
+// ────────────────────────────────────────────
+async function guardarAntecedentes() {
+  // AHF
+  const ahf = {};
+  ahfItems.forEach(it => {
+    ahf[it.key] = document.getElementById('ahf-'+it.key).classList.contains('on');
+  });
+  // Patológicos
+  const toArr = id => document.getElementById(id).value.split(',').map(s=>s.trim()).filter(Boolean);
+  const pat = {
+    enfermedades_cronicas:   toArr('p-enf-cronicas'),
+    cirugias:                toArr('p-cirugias'),
+    hospitalizaciones:       toArr('p-hospitalizaciones'),
+    alergias_medicamentos:   toArr('p-alergia-med'),
+    alergias_alimentos:      toArr('p-alergia-ali'),
+    alergias_ambientales:    toArr('p-alergia-amb'),
+  };
+  // Gineco
+  const gineco = {
+    menarca_edad:                parseInt(document.getElementById('p-menarca').value) || null,
+    fecha_ultima_menstruacion:   document.getElementById('p-fum').value || null,
+    embarazos:                   parseInt(document.getElementById('p-embarazos').value)||0,
+    partos:                      parseInt(document.getElementById('p-partos').value)||0,
+    cesareas:                    parseInt(document.getElementById('p-cesareas').value)||0,
+    abortos:                     parseInt(document.getElementById('p-abortos').value)||0,
+    metodo_anticonceptivo:       document.getElementById('p-mac').value,
+    fecha_ultimo_papanicolaou:   document.getElementById('p-pap').value || null,
+    fecha_ultima_mamografia:     document.getElementById('p-mama').value || null,
+  };
+  // Hábitos
+  const habitos = {
+    tabaquismo: { activo: document.getElementById('p-tabaco').value === 'si' },
+    alcoholismo: { frecuencia: document.getElementById('p-alcohol').value },
+    ejercicio: { activo: ['mod','int'].includes(document.getElementById('p-ejercicio').value) },
+  };
+
+  const {error} = await sb.from('perfiles_pacientes').update({
+    antecedentes_heredofamiliares: ahf,
+    antecedentes_patologicos:      pat,
+    antecedentes_gineco:           gineco,
+    habitos:                       habitos,
+  }).eq('id', pacienteData.id);
+
+  if (error) { alert('Error: ' + error.message); return; }
+  await loadPaciente();
+  updateCompletitud();
+  renderDashboard();
+  const ok = document.getElementById('ant-ok');
+  ok.style.display = 'block';
+  setTimeout(()=>ok.style.display='none', 2500);
+}
+
+// ────────────────────────────────────────────
+// MEDICAMENTOS
+// ────────────────────────────────────────────
+async function renderMeds() {
+  if (!pacienteData?.id) return;
+  const {data} = await sb.from('medicamentos_paciente')
+    .select('*').eq('id_paciente', pacienteData.id).eq('activo', true)
+    .order('created_at', {ascending:false});
+  const list = document.getElementById('meds-list');
+  if (!data || !data.length) {
+    list.innerHTML = '<div class="empty"><span class="empty-ico">💊</span>Aún no tienes medicamentos registrados</div>';
+    return;
+  }
+  list.innerHTML = data.map(m => `
+    <div class="med-item">
+      <div class="med-ico">💊</div>
+      <div>
+        <div class="med-nombre">${m.nombre_generico}${m.nombre_comercial?' <span style="font-weight:400;color:var(--muted)">('+m.nombre_comercial+')</span>':''}</div>
+        <div class="med-dosis">${m.dosis||''} · ${m.frecuencia||''} · ${m.via_administracion||'oral'}</div>
+        ${m.cronico?'<span class="med-cronico">Tratamiento crónico</span>':''}
+      </div>
+    </div>`).join('');
+}
+
+function showModalMed() { document.getElementById('modal-med').style.display='flex'; }
+
+function toggleCronico() {
+  const btn = document.getElementById('m-cronico-btn');
+  const val = document.getElementById('m-cronico-val');
+  const isOn = btn.classList.toggle('on');
+  btn.textContent = isOn ? '✓' : '';
+  val.value = isOn ? 'true' : 'false';
+}
+
+async function guardarMed() {
+  const gen = document.getElementById('m-generico').value.trim();
+  if (!gen) { alert('El nombre genérico es obligatorio'); return; }
+  const {error} = await sb.from('medicamentos_paciente').insert({
+    id_paciente:       pacienteData.id,
+    nombre_generico:   gen,
+    nombre_comercial:  document.getElementById('m-comercial').value.trim()||null,
+    dosis:             document.getElementById('m-dosis').value.trim()||null,
+    frecuencia:        document.getElementById('m-frecuencia').value.trim()||null,
+    via_administracion:document.getElementById('m-via').value,
+    fecha_inicio:      document.getElementById('m-inicio').value||null,
+    cronico:           document.getElementById('m-cronico-val').value === 'true',
+    tabletas_por_empaque: parseInt(document.getElementById('m-tabletas').value)||30,
+  });
+  if (error) { alert('Error: '+error.message); return; }
+  closeModal('modal-med');
+  renderMeds();
+}
+
+// ────────────────────────────────────────────
+// VACUNAS
+// ────────────────────────────────────────────
+async function renderVacunas() {
+  if (!pacienteData?.id) return;
+  const {data} = await sb.from('vacunas_paciente')
+    .select('*').eq('id_paciente', pacienteData.id)
+    .order('fecha_aplicacion', {ascending:false});
+  const list = document.getElementById('vacunas-list');
+  if (!data||!data.length) {
+    list.innerHTML='<div class="empty"><span class="empty-ico">💉</span>Sin vacunas registradas</div>';
+    return;
+  }
+  list.innerHTML = data.map(v=>`
+    <div class="vac-item">
+      <span class="vac-ico">💉</span>
+      <div>
+        <div class="vac-nombre">${v.nombre_vacuna}</div>
+        <div class="vac-fecha">${v.fecha_aplicacion||'—'} ${v.proxima_dosis?'· Próxima: '+v.proxima_dosis:''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function showModalVac() {
+  document.getElementById('modal-vac').style.display='flex';
+  document.getElementById('v-nombre').onchange = function() {
+    document.getElementById('v-otra-wrap').style.display = this.value==='Otra'?'block':'none';
+  };
+}
+
+async function guardarVac() {
+  const nom = document.getElementById('v-nombre').value;
+  const nomFinal = nom==='Otra' ? document.getElementById('v-otra-txt').value.trim() : nom;
+  if (!nomFinal) { alert('Selecciona una vacuna'); return; }
+  const {error} = await sb.from('vacunas_paciente').insert({
+    id_paciente:      pacienteData.id,
+    nombre_vacuna:    nomFinal,
+    fecha_aplicacion: document.getElementById('v-fecha').value||null,
+    proxima_dosis:    document.getElementById('v-proxima').value||null,
+    lugar:            document.getElementById('v-lugar').value.trim()||null,
+  });
+  if (error) { alert('Error: '+error.message); return; }
+  closeModal('modal-vac');
+  renderVacunas();
+}
+
+// ────────────────────────────────────────────
+// BITÁCORA BIOLÓGICA
+// ────────────────────────────────────────────
+const bitaIcos = {amalgama:'🦷',corona:'👑',endodoncia:'🦷',implante_dental:'🦷',diu:'🌀',protesis_rodilla:'🦵',protesis_cadera:'🦴',marcapasos:'❤️',lentes_contacto:'👁️',lentes_intraoculares:'👁️',cateter:'🩺',otro:'⚙️'};
+
+function renderBitacora() {
+  const items = pacienteData?.bitacora_mantenimiento || [];
+  const list = document.getElementById('bita-list');
+  if (!items.length) {
+    list.innerHTML='<div class="empty"><span class="empty-ico">🔧</span>Tu bitácora está vacía. Agrega amalgamas, prótesis, DIU, lentes…</div>';
+    return;
+  }
+  const hoy = new Date();
+  list.innerHTML = items.map((it,i) => {
+    let badge = '<span class="bita-badge ok">✅ Vigente</span>';
+    if (it.fecha_colocacion && it.vida_util_anos) {
+      const vence = new Date(it.fecha_colocacion);
+      vence.setFullYear(vence.getFullYear() + it.vida_util_anos);
+      const dias = Math.ceil((vence - hoy)/86400000);
+      if (dias < 0)   badge = '<span class="bita-badge venc">❌ Vencido</span>';
+      else if (dias < 90) badge = `<span class="bita-badge warn">⚠️ Vence en ${dias} días</span>`;
+    }
+    return `<div class="bita-item">
+      <span class="bita-ico">${bitaIcos[it.tipo]||'⚙️'}</span>
+      <div class="bita-info">
+        <div class="bita-title">${it.tipo?.replace(/_/g,' ')||'Componente'} ${badge}</div>
+        <div class="bita-meta">${it.descripcion||''} ${it.fecha_colocacion?' · Colocado: '+it.fecha_colocacion:''}</div>
+        ${it.medico?`<div class="bita-meta">Dr/a: ${it.medico}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showModalBita() { document.getElementById('modal-bita').style.display='flex'; }
+
+async function guardarBita() {
+  const tipo = document.getElementById('b-tipo').value;
+  if (!tipo) { alert('Selecciona el tipo de componente'); return; }
+  const item = {
+    tipo:              tipo,
+    descripcion:       document.getElementById('b-desc').value.trim(),
+    fecha_colocacion:  document.getElementById('b-fecha').value||null,
+    vida_util_anos:    parseInt(document.getElementById('b-vida').value)||null,
+    medico:            document.getElementById('b-medico').value.trim()||null,
+    notas:             document.getElementById('b-notas').value.trim()||null,
+    created_at:        new Date().toISOString(),
+  };
+  const bita = [...(pacienteData.bitacora_mantenimiento||[]), item];
+  const {error} = await sb.from('perfiles_pacientes').update({bitacora_mantenimiento: bita}).eq('id', pacienteData.id);
+  if (error) { alert('Error: '+error.message); return; }
+  await loadPaciente();
+  closeModal('modal-bita');
+  renderBitacora();
+  renderDashboard();
+  updateCompletitud();
+}
+
+// ────────────────────────────────────────────
+// QR COMPARTIR
+// ────────────────────────────────────────────
+async function renderQR() {
+  if (!pacienteData?.id) return;
+  // Generar token si no existe
+  if (!currentQRToken) await regenerarQR();
+}
+
+async function regenerarQR() {
+  const token = crypto.randomUUID().replace(/-/g,'').substring(0,32);
+  const expira = new Date(Date.now() + 86400000).toISOString();
+  await sb.from('accesos_expediente').insert({
+    id_paciente:      pacienteData.id,
+    token:            token,
+    tipo:             'qr',
+    nivel_acceso:     'lectura',
+    fecha_expiracion: expira,
+  });
+  currentQRToken = token;
+  dibujarQR(token);
+}
+
+function dibujarQR(token) {
+  const url = `${location.origin}/expediente?token=${token}&lang=${currentLang}`;
+  const container = document.getElementById('qrcode-container');
+  container.innerHTML = '';
+  new QRCode(container, { text: url, width: 200, height: 200, colorDark:'#0F1F3D', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M });
+}
+
+function setLang(btn) {
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentLang = btn.dataset.lang;
+  if (currentQRToken) dibujarQR(currentQRToken);
+}
+
+function shareWA() {
+  if (!currentQRToken) return;
+  const url = `${location.origin}/expediente?token=${currentQRToken}&lang=${currentLang}`;
+  const msg = encodeURIComponent(`🏥 Mi expediente médico LUISA:\n${url}\n\n_Válido 24 horas. Solo lectura._`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+}
+
+function copyLink() {
+  if (!currentQRToken) return;
+  const url = `${location.origin}/expediente?token=${currentQRToken}&lang=${currentLang}`;
+  navigator.clipboard.writeText(url).then(()=>alert('Enlace copiado'));
+}
+
+// ────────────────────────────────────────────
+// CHAT SALUD (ChatPaciente)
+// ────────────────────────────────────────────
+function buildPatientContext() {
+  const p = pacienteData || {};
+  const edad = p.fecha_nacimiento ? Math.floor((Date.now()-new Date(p.fecha_nacimiento))/31557600000) : '?';
+  const pat  = p.antecedentes_patologicos || {};
+  const gin  = p.antecedentes_gineco || {};
+  const ahf  = p.antecedentes_heredofamiliares || {};
+  const hab  = p.habitos || {};
+
+  let ctx = `Eres LUISA, el asistente personal de salud de ${p.nombre||'este paciente'}, ${edad} años, ${p.genero==='F'?'femenino':'masculino'}.
+Tienes acceso a su expediente médico completo. Responde en el idioma del usuario. Sé empático, claro y útil.
+
+SOBRE LUISA:
+LUISA es una plataforma médica mexicana con su propio directorio de médicos verificados. Cuando el paciente necesita un especialista, LUISA busca en su directorio y puede agendar la cita directamente desde la app.
+NUNCA recomiendes plataformas externas como Doctoralia, Top Doctors, Savia u otras. LUISA ES la alternativa a esas plataformas — somos su competencia directa.
+Si el paciente pregunta por médicos cerca de una zona o colonia, dile que el sistema mostrará los médicos del directorio LUISA disponibles y que puede agendar directamente.
+Si no hay médicos registrados en esa especialidad aún, di que el directorio está creciendo y que puede invitar a su médico de confianza a unirse a LUISA.
+
+INSTRUCCIONES DE TRIAGE:
+Si el paciente describe síntomas o molestias físicas, debes:
+1. Escuchar con empatía
+2. Identificar qué tipo de especialista necesita (cardiólogo, ginecólogo, dermatólogo, urólogo, etc.)
+3. Al final de tu respuesta, incluir EXACTAMENTE este bloque en formato JSON entre marcadores <<<TRIAGE>>> y <<<END_TRIAGE>>>:
+   {"especialidad": "Cardiología", "urgencia": "normal|urgente|emergencia", "razon": "Por los síntomas que describes..."}
+4. Si no hay síntomas, no incluyas el bloque TRIAGE.
+5. Cuando se muestre el directorio, el paciente podrá tocar "Agendar" para hacer su cita directamente en LUISA.
+
+No diagnostiques enfermedades específicas. Solo orienta sobre qué tipo de médico debe consultar.
+
+EXPEDIENTE PERSONAL:
+- Nombre: ${p.nombre||''} ${p.apellidos||''}
+- Edad: ${edad} años
+- Tipo de sangre: ${p.tipo_sangre||'No registrado'}
+- CURP: ${p.curp||'No registrado'}`;
+
+  if (pat.alergias_medicamentos?.length) ctx += `\n- ALERGIAS A MEDICAMENTOS: ${pat.alergias_medicamentos.join(', ')}`;
+  if (pat.alergias_alimentos?.length)    ctx += `\n- ALERGIAS ALIMENTARIAS: ${pat.alergias_alimentos.join(', ')}`;
+  if (pat.enfermedades_cronicas?.length) ctx += `\n- ENFERMEDADES CRÓNICAS: ${pat.enfermedades_cronicas.join(', ')}`;
+  if (pat.cirugias?.length)              ctx += `\n- CIRUGÍAS PREVIAS: ${pat.cirugias.join(', ')}`;
+
+  const ahfActivos = Object.entries(ahf).filter(([,v])=>v===true||v?.presente).map(([k])=>k.replace(/_/g,' '));
+  if (ahfActivos.length) ctx += `\n- ANTECEDENTES FAMILIARES: ${ahfActivos.join(', ')}`;
+
+  if (p.genero==='F' && gin.menarca_edad) ctx += `\n- MENARCA: ${gin.menarca_edad} años`;
+  if (p.genero==='F' && gin.metodo_anticonceptivo) ctx += `\n- MÉTODO ANTICONCEPTIVO: ${gin.metodo_anticonceptivo}`;
+
+  // Bitácora
+  const bita = (p.bitacora_mantenimiento||[]);
+  if (bita.length) ctx += `\n- COMPONENTES BIOLÓGICOS: ${bita.map(b=>b.tipo+(b.descripcion?' ('+b.descripcion+')':'')).join(', ')}`;
+
+  // Hábitos
+  if (hab.tabaquismo?.activo) ctx += '\n- TABAQUISMO: activo';
+  if (hab.alcoholismo?.frecuencia && hab.alcoholismo.frecuencia !== 'no') ctx += `\n- ALCOHOL: ${hab.alcoholismo.frecuencia}`;
+
+  ctx += '\n\nSi el paciente pregunta sobre algo que no está en el expediente, dile amablemente que esa información no está registrada aún y sugiérele completar su perfil.';
+  return ctx;
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  document.getElementById('chat-sugs').style.display = 'none';
+
+  appendMsg(text, 'usr');
+  chatHistory.push({ role:'user', content: text });
+
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  document.getElementById('chat-msgs').appendChild(typing);
+  scrollChat();
+
+  try {
+    const resp = await fetch('/.netlify/functions/claude', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1024,
+        system: buildPatientContext(),
+        messages: chatHistory,
+      })
+    });
+    const data = await resp.json();
+    typing.remove();
+    let reply = data.content?.[0]?.text || 'Lo siento, no pude procesar tu pregunta.';
+
+    // Detectar bloque TRIAGE
+    const triageMatch = reply.match(/<<<TRIAGE>>>([\s\S]*?)<<<END_TRIAGE>>>/);
+    if (triageMatch) {
+      reply = reply.replace(/<<<TRIAGE>>>[\s\S]*?<<<END_TRIAGE>>>/, '').trim();
+      try {
+        const triage = JSON.parse(triageMatch[1].trim());
+        appendMsg(reply, 'ia');
+        await showDirectorio(triage);
+      } catch(e) { appendMsg(reply, 'ia'); }
+    } else {
+      appendMsg(reply, 'ia');
+    }
+    chatHistory.push({ role:'assistant', content: reply });
+  } catch(e) {
+    typing.remove();
+    appendMsg('Error de conexión. Inténtalo de nuevo.', 'ia');
+  }
+}
+
+async function showDirectorio(triage) {
+  // Buscar médicos de esa especialidad en el directorio
+  const { data: doctores } = await sb
+    .from('medicos')
+    .select('id, nombre, apellidos, especialidad, reputacion_score, ciudad')
+    .ilike('especialidad', `%${triage.especialidad.split('/')[0].trim()}%`)
+    .eq('activo', true)
+    .limit(4);
+
+  const urgColor = triage.urgencia === 'emergencia' ? 'var(--red)' :
+                   triage.urgencia === 'urgente'    ? 'var(--orange)' : 'var(--teal)';
+
+  const div = document.createElement('div');
+  div.className = 'msg ia';
+
+  let html = `<div class="msg-name">LUISA · Directorio Médico</div>`;
+
+  if (triage.urgencia === 'emergencia') {
+    html += `<div style="background:var(--red-bg);border:1px solid var(--red);border-radius:8px;padding:.6rem .8rem;margin-bottom:.6rem;font-size:.82rem;font-weight:700;color:var(--red)">🚨 Emergencia — Ve a urgencias inmediatamente</div>`;
+  }
+
+  html += `<div style="font-size:.82rem;margin-bottom:.7rem">${triage.razon}</div>`;
+  html += `<div style="font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:.5rem">🩺 ${triage.especialidad} en LUISA</div>`;
+
+  if (doctores && doctores.length) {
+    html += doctores.map(d => `
+      <div style="display:flex;align-items:center;gap:.7rem;padding:.65rem;background:var(--bg);border-radius:9px;border:1px solid var(--border);margin-bottom:.4rem">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-bg);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--teal);font-size:.85rem;flex-shrink:0">${d.nombre[0]}${d.apellidos[0]}</div>
+        <div style="flex:1">
+          <div style="font-size:.85rem;font-weight:700">Dr. ${d.nombre} ${d.apellidos}</div>
+          <div style="font-size:.72rem;color:var(--muted)">${d.especialidad||''} ${d.ciudad?'· '+d.ciudad:''} ${d.reputacion_score?'⭐ '+d.reputacion_score:''}</div>
+        </div>
+        <button onclick="abrirModalCita('${d.id}','${d.nombre}','${d.apellidos}','${d.especialidad||''}')" style="font-size:.72rem;background:var(--teal);color:#fff;padding:.3rem .7rem;border-radius:7px;font-weight:700;border:none;cursor:pointer">Agendar</button>
+      </div>`).join('');
+  } else {
+    html += `<div style="font-size:.82rem;color:var(--muted);padding:.6rem;text-align:center">Aún no hay ${triage.especialidad.toLowerCase()} registrados en tu zona.<br>¿Conoces uno? Invítalo a LUISA 😊</div>`;
+  }
+
+  div.innerHTML = html;
+  document.getElementById('chat-msgs').appendChild(div);
+  scrollChat();
+}
+
+// ── MODAL AGENDAR CITA ──────────────────────────────────────────
+let citaMedicoId = null;
+
+function abrirModalCita(medicoId, nombre, apellidos, especialidad) {
+  citaMedicoId = medicoId;
+  document.getElementById('cita-avatar').textContent = nombre[0] + apellidos[0];
+  document.getElementById('cita-nombre').textContent = 'Dr. ' + nombre + ' ' + apellidos;
+  document.getElementById('cita-esp').textContent    = especialidad;
+  // Prefill fecha con mañana 10am
+  const manana = new Date(); manana.setDate(manana.getDate()+1); manana.setHours(10,0,0,0);
+  document.getElementById('cita-fecha').value = manana.toISOString().slice(0,16);
+  // Prefill motivo con el último mensaje del chat
+  const msgs = document.querySelectorAll('.msg.user');
+  if (msgs.length) document.getElementById('cita-motivo').value = msgs[msgs.length-1].textContent;
+  document.getElementById('cita-ok').style.display = 'none';
+  document.getElementById('modal-cita').style.display = 'flex';
+}
+
+async function confirmarCita() {
+  if (!pacienteData) { alert('Guarda tu perfil primero'); return; }
+  const fecha   = document.getElementById('cita-fecha').value;
+  const motivo  = document.getElementById('cita-motivo').value.trim();
+  const dur     = parseInt(document.getElementById('cita-duracion').value);
+  if (!fecha) { alert('Selecciona fecha y hora'); return; }
+
+  const { error } = await sb.from('citas').insert({
+    id_paciente:       pacienteData.id,
+    id_medico:         citaMedicoId,
+    fecha_hora:        new Date(fecha).toISOString(),
+    duracion_minutos:  dur,
+    motivo_preliminar: motivo || 'Consulta general',
+    estado:            'pendiente',
+    confirmada:        false
+  });
+
+  if (error) { alert('Error al agendar: ' + error.message); return; }
+
+  const ok = document.getElementById('cita-ok');
+  ok.textContent = '✅ ¡Cita agendada! El médico recibirá tu solicitud y te confirmará.';
+  ok.style.display = 'block';
+  setTimeout(() => closeModal('modal-cita'), 3000);
+
+  // Mensaje en el chat confirmando la cita
+  appendMsg(`✅ Cita agendada con ${document.getElementById('cita-nombre').textContent} el ${new Date(fecha).toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})} a las ${new Date(fecha).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}. El médico recibirá tu solicitud.`, 'ia');
+}
+
+function sendSug(btn) { document.getElementById('chat-input').value = btn.textContent.slice(2).trim(); sendChat(); }
+
+function appendMsg(text, type) {
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+  if (type==='ia') div.innerHTML = `<div class="msg-name">LUISA · Asistente personal</div>${text.replace(/\n/g,'<br>')}`;
+  else div.textContent = text;
+  document.getElementById('chat-msgs').appendChild(div);
+  scrollChat();
+}
+
+function scrollChat() {
+  const msgs = document.getElementById('chat-msgs');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ────────────────────────────────────────────
+// UTILS
+// ────────────────────────────────────────────
+function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+// ────────────────────────────────────────────
+// START
+// ────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
