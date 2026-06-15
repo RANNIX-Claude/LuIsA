@@ -1,5 +1,5 @@
--- ============================================================================
--- RPC PARA AUTENTICACIÓN CON TABLA usuarios_ligia
+﻿-- ============================================================================
+-- RPC PARA AUTENTICACIÓN CON TABLA usuarios_luisa
 -- ============================================================================
 
 CREATE OR REPLACE FUNCTION auth_usuario(
@@ -15,12 +15,12 @@ RETURNS TABLE (
   mensaje VARCHAR
 ) AS $$
 DECLARE
-  v_usuario usuarios_ligia%ROWTYPE;
+  v_usuario usuarios_luisa%ROWTYPE;
   v_hash_coincide BOOLEAN;
 BEGIN
   -- Buscar usuario por email
   SELECT * INTO v_usuario
-  FROM usuarios_ligia
+  FROM usuarios_luisa
   WHERE email = p_email AND activo = true
   LIMIT 1;
 

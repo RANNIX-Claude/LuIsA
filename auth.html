@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
@@ -511,7 +511,7 @@ async function handleLogin(e) {
     const SUPABASE_KEY = sb.supabaseKey;
 
     // 1. Hacer fetch directo al endpoint REST (evita el SDK)
-    const url = `${SUPABASE_URL}/rest/v1/usuarios_ligia?email=eq.${encodeURIComponent(email)}&activo=eq.true&select=id,email,nombre_completo,rol,password_hash`;
+    const url = `${SUPABASE_URL}/rest/v1/usuarios_luisa?email=eq.${encodeURIComponent(email)}&activo=eq.true&select=id,email,nombre_completo,rol,password_hash`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -559,8 +559,8 @@ async function handleLogin(e) {
       nombre_completo: user.nombre_completo,
       rol: user.rol
     };
-    localStorage.setItem('ligia_user', JSON.stringify(userData));
-    localStorage.setItem('ligia_session', JSON.stringify({
+    localStorage.setItem('luisa_user', JSON.stringify(userData));
+    localStorage.setItem('luisa_session', JSON.stringify({
       user: userData,
       timestamp: Date.now()
     }));

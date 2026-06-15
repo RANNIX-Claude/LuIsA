@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - DATOS RICOS Y REALISTAS PARA DEMO
+﻿-- ============================================================================
+-- LUISA v2.0 - DATOS RICOS Y REALISTAS PARA DEMO
 -- 20 médicos + 100 pacientes con nombres mexicanos reales + datos clínicos completos
 -- ============================================================================
 
@@ -21,13 +21,13 @@ DELETE FROM auditoria_acciones;
 DELETE FROM firma_electronica;
 DELETE FROM perfiles_pacientes;
 DELETE FROM medicos;
-DELETE FROM usuarios_ligia;
+DELETE FROM usuarios_luisa;
 
 -- ============================================================================
 -- 20 MÉDICOS CON NOMBRES Y ESPECIALIDADES REALES
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 VALUES
 ('medico001@hospital.mx', crypt('medico1', gen_salt('bf')), 'Dr. Carlos García Moreno', 'MED-001', 'cedula_profesional', 'medico', true),
 ('medico002@hospital.mx', crypt('medico2', gen_salt('bf')), 'Dra. María Rodríguez López', 'MED-002', 'cedula_profesional', 'medico', true),
@@ -62,13 +62,13 @@ SELECT
   FLOOR(RANDOM() * 80 + 30)::integer,
   30,
   true
-FROM usuarios_ligia ul WHERE ul.rol = 'medico';
+FROM usuarios_luisa ul WHERE ul.rol = 'medico';
 
 -- ============================================================================
 -- 100 PACIENTES CON NOMBRES MEXICANOS REALES
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 VALUES
 ('paciente001@email.com', crypt('paciente1', gen_salt('bf')), 'Juan Pérez García', 'PAC-001', 'cedula', 'paciente', true),
 ('paciente002@email.com', crypt('paciente2', gen_salt('bf')), 'María López Hernández', 'PAC-002', 'cedula', 'paciente', true),
@@ -141,7 +141,7 @@ BEGIN
     || ' ' || apellidos1[1 + FLOOR(RANDOM() * array_length(apellidos1, 1))]
     || ' ' || apellidos2[1 + FLOOR(RANDOM() * array_length(apellidos2, 1))];
 
-    INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+    INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
     VALUES (
       CONCAT('paciente', LPAD(i::text, 3, '0'), '@email.com'),
       crypt(CONCAT('paciente', i), gen_salt('bf')),
@@ -190,14 +190,14 @@ SELECT
   (SELECT id FROM cat_niveles_socioeconomicos ORDER BY RANDOM() LIMIT 1),
   (SELECT id FROM cat_tipos_vivienda ORDER BY RANDOM() LIMIT 1),
   FLOOR(RANDOM() * 30 + 70)::integer
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'paciente';
 
 -- ============================================================================
 -- 10 ADMINISTRADORES FAMILIARES
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 VALUES
 ('mama01@email.com', crypt('mama1', gen_salt('bf')), 'Elena Vargas de Pérez', 'MAMA-01', 'cedula', 'admin_familiar', true),
 ('mama02@email.com', crypt('mama2', gen_salt('bf')), 'María Esther Ramírez', 'MAMA-02', 'cedula', 'admin_familiar', true),
@@ -236,7 +236,7 @@ SELECT
   (SELECT id FROM cat_niveles_socioeconomicos ORDER BY RANDOM() LIMIT 1),
   (SELECT id FROM cat_tipos_vivienda ORDER BY RANDOM() LIMIT 1),
   85
-FROM usuarios_ligia ul WHERE ul.rol = 'admin_familiar';
+FROM usuarios_luisa ul WHERE ul.rol = 'admin_familiar';
 
 -- ============================================================================
 -- RELACIONES FAMILIARES (cada mamá cuida 10 hijos)
@@ -247,12 +247,12 @@ SELECT mama.id, hijo.id, 'madre', true
 FROM (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at DESC) as seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'admin_familiar')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'admin_familiar')
 ) mama
 CROSS JOIN (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at ASC) as seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'paciente')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'paciente')
 ) hijo
 WHERE hijo.seq <= (mama.seq * 10) AND hijo.seq > ((mama.seq - 1) * 10);
 
@@ -370,7 +370,7 @@ SELECT
   true,
   NOW() - (RANDOM() * 90)::int * INTERVAL '1 day'
 FROM perfiles_pacientes pp
-WHERE pp.id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'paciente')
+WHERE pp.id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'paciente')
 ORDER BY RANDOM()
 LIMIT 100;
 
@@ -391,7 +391,7 @@ SELECT
   CURRENT_DATE - (RANDOM() * 365)::int,
   RANDOM() > 0.2
 FROM perfiles_pacientes pp, generate_series(1, 2)
-WHERE pp.id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'paciente')
+WHERE pp.id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'paciente')
 LIMIT 200;
 
 -- ============================================================================
@@ -449,7 +449,7 @@ SELECT 'DATOS RICOS Y REALISTAS CARGADOS' as resultado;
 SELECT
   'Médicos (con especialidades)' as entidad, COUNT(*) as total FROM medicos
 UNION ALL SELECT 'Pacientes (nombres reales)', COUNT(*) FROM perfiles_pacientes
-UNION ALL SELECT 'Usuarios totales', COUNT(*) FROM usuarios_ligia
+UNION ALL SELECT 'Usuarios totales', COUNT(*) FROM usuarios_luisa
 UNION ALL SELECT 'Citas', COUNT(*) FROM citas
 UNION ALL SELECT 'Historias Clínicas detalladas', COUNT(*) FROM historias_clinicas
 UNION ALL SELECT 'Medicamentos prescritos', COUNT(*) FROM medicamentos_paciente

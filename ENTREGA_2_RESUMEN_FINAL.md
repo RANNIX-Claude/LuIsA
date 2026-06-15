@@ -1,6 +1,6 @@
-# 🎉 ENTREGA 2: COMPLETADA
+﻿# 🎉 ENTREGA 2: COMPLETADA
 
-**Triggers + Auditoría Automática para LIGIA v2.0**
+**Triggers + Auditoría Automática para LUISA v2.0**
 
 **Fecha:** 2026-05-24  
 **Status:** ✅ COMPLETADO Y LISTO PARA EJECUTAR  
@@ -11,13 +11,13 @@
 
 ### 2 Archivos SQL (3,500+ líneas)
 
-#### 1. ligia_v2_0_triggers_auditoria_automatica.sql (1,800 líneas)
+#### 1. luisa_v2_0_triggers_auditoria_automatica.sql (1,800 líneas)
 - ✅ 28 triggers de auditoría automática
 - ✅ 4 funciones base (auditoría, firma, timestamps)
 - ✅ 2 vistas para consultas de auditoría
 - ✅ 4 índices para performance
 
-#### 2. ligia_v2_0_triggers_validaciones_bloqueos.sql (1,700 líneas)
+#### 2. luisa_v2_0_triggers_validaciones_bloqueos.sql (1,700 líneas)
 - ✅ 11 triggers de validación
 - ✅ 9 funciones de validación de datos
 - ✅ 1 vista de expedientes incompletos
@@ -78,14 +78,14 @@ Validaciones:       9 tipos de validación
 
 ```
 PASO 1 (90 seg):
-1. Abre: ligia_v2_0_triggers_auditoria_automatica.sql
+1. Abre: luisa_v2_0_triggers_auditoria_automatica.sql
 2. Copia TODO el contenido
 3. Pega en Supabase SQL Editor
 4. Click RUN
 5. ✅ Listo
 
 PASO 2 (90 seg):
-1. Abre: ligia_v2_0_triggers_validaciones_bloqueos.sql
+1. Abre: luisa_v2_0_triggers_validaciones_bloqueos.sql
 2. Copia TODO el contenido
 3. Pega en Supabase SQL Editor
 4. Click RUN

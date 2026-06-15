@@ -1,5 +1,5 @@
-// ============================================================================
-// LIGIA v2.0 - Supabase Client & Helpers
+﻿// ============================================================================
+// LUISA v2.0 - Supabase Client & Helpers
 // Compartido entre app.html (médico) e index.html (paciente)
 // ============================================================================
 
@@ -14,7 +14,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function checkSession() {
   // Usar nuestra propia sesión en localStorage (no Supabase Auth)
-  const sessionStr = localStorage.getItem('ligia_session');
+  const sessionStr = localStorage.getItem('luisa_session');
   if (!sessionStr) {
     window.location.href = '/auth.html';
     return null;
@@ -26,8 +26,8 @@ async function checkSession() {
     // Verificar que la sesión no esté expirada (24 horas)
     const SESSION_DURATION = 24 * 60 * 60 * 1000;
     if (Date.now() - session.timestamp > SESSION_DURATION) {
-      localStorage.removeItem('ligia_user');
-      localStorage.removeItem('ligia_session');
+      localStorage.removeItem('luisa_user');
+      localStorage.removeItem('luisa_session');
       window.location.href = '/auth.html';
       return null;
     }
@@ -44,14 +44,14 @@ async function checkSession() {
 }
 
 async function logout() {
-  localStorage.removeItem('ligia_user');
-  localStorage.removeItem('ligia_session');
+  localStorage.removeItem('luisa_user');
+  localStorage.removeItem('luisa_session');
   window.location.href = '/auth.html';
 }
 
 // Obtener usuario actual de localStorage
 function getCurrentUser() {
-  const userStr = localStorage.getItem('ligia_user');
+  const userStr = localStorage.getItem('luisa_user');
   if (!userStr) return null;
   try {
     return JSON.parse(userStr);
@@ -68,12 +68,12 @@ async function getCurrentMedico() {
   const session = await checkSession();
   if (!session) return null;
 
-  // JOIN: medicos + usuarios_ligia + cat_especialidades
+  // JOIN: medicos + usuarios_luisa + cat_especialidades
   const { data, error } = await sb
     .from('medicos')
     .select(`
       *,
-      usuarios_ligia:id_usuario (
+      usuarios_luisa:id_usuario (
         nombre_completo,
         email,
         documento_identidad
@@ -93,8 +93,8 @@ async function getCurrentMedico() {
 
   // Aplanar la estructura para que el frontend la pueda usar
   if (data) {
-    data.nombre_completo = data.usuarios_ligia?.nombre_completo || session.user.nombre_completo;
-    data.email = data.usuarios_ligia?.email || session.user.email;
+    data.nombre_completo = data.usuarios_luisa?.nombre_completo || session.user.nombre_completo;
+    data.email = data.usuarios_luisa?.email || session.user.email;
     data.especialidad_nombre = data.cat_especialidades?.nombre || 'Medicina General';
     // Los campos foto_url, firma_digital, telefono, consultorio_* ya vienen de data.*
   }

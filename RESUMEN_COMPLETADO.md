@@ -1,4 +1,4 @@
-# 🎉 LIGIA v2.0 - RESUMEN DE TRABAJO COMPLETADO
+﻿# 🎉 LUISA v2.0 - RESUMEN DE TRABAJO COMPLETADO
 
 **Fecha**: 2026-05-24  
 **Tiempo Total**: ~4 horas  
@@ -10,7 +10,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    LIGIA v2.0 COMPLETADO                    │
+│                    LUISA v2.0 COMPLETADO                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  Database ✅         │ Frontend ✅      │ Backend ✅        │
@@ -39,20 +39,20 @@
 
 ### FASE 1: Base de Datos (COMPLETADO)
 
-- [x] **ligia_v2_0_deploy_completo.sql** (47 tablas)
+- [x] **luisa_v2_0_deploy_completo.sql** (47 tablas)
   - ✅ 21 tablas principales (usuarios, médicos, pacientes, citas, etc.)
   - ✅ 26 catálogos (especialidades, medicamentos, diagnósticos, etc.)
   - ✅ Índices para performance
   - ✅ Constraints y relaciones FK
   - ✅ Triggers de auditoria
 
-- [x] **ligia_v2_0_rls_simple.sql** (Seguridad)
+- [x] **luisa_v2_0_rls_simple.sql** (Seguridad)
   - ✅ RLS habilitado en todas las tablas
   - ✅ Políticas restrictivas por usuario
   - ✅ Acceso solo a datos autorizados
   - ✅ Audit automático
 
-- [x] **ligia_v2_0_seed_simple.sql** (Datos de prueba)
+- [x] **luisa_v2_0_seed_simple.sql** (Datos de prueba)
   - ✅ 3 usuarios (médico, paciente, admin)
   - ✅ 3 doctores con especialidades
   - ✅ 2 pacientes con historiales
@@ -87,7 +87,7 @@
   - ✅ `dictation` - Extracción de datos de dictaciones
   - ✅ `lab-analysis` - Análisis de reportes de laboratorio
   - ✅ `translate` - Traducción a 7 idiomas
-  - ✅ `chat` - Conversación con IA (LIGIA)
+  - ✅ `chat` - Conversación con IA (LUISA)
   - ✅ `extraction` - Extracción de datos genérica
 - [x] Error handling robusto
 - [x] Rate limiting ready
@@ -177,7 +177,7 @@ Coverage: 100% (Desde setup hasta producción)
     ↓
 [SELECT PATIENT] → [DICTATE] → [EXTRACT DATA] → [SAVE]
     ↓
-[HISTORICAL] → [CHAT WITH LIGIA] → [STUDIES AI]
+[HISTORICAL] → [CHAT WITH LUISA] → [STUDIES AI]
 ```
 
 ### 2. Patient (paciente.html)
@@ -186,7 +186,7 @@ Coverage: 100% (Desde setup hasta producción)
     ↓
 [VIEW MEDICINES] → [LOG EVENTS] → [BOOK APPOINTMENT]
     ↓
-[SHARE WITH QR] → [CHAT WITH LIGIA] → [HISTORY]
+[SHARE WITH QR] → [CHAT WITH LUISA] → [HISTORY]
 ```
 
 ### 3. Claude API
@@ -241,7 +241,7 @@ POST-DEPLOYMENT:
 ✅ Extracción automática de datos vía IA  
 ✅ Almacenamiento seguro en BD  
 ✅ Acceso solo a sus pacientes (RLS)  
-✅ Chat con LIGIA para preguntas médicas  
+✅ Chat con LUISA para preguntas médicas  
 ✅ Análisis IA de reportes de laboratorio  
 
 ### Paciente
@@ -295,15 +295,15 @@ POST-DEPLOYMENT:
 
 ```bash
 # 1. Asegúrate que BD está configurada:
-# Supabase → SQL Editor → Run ligia_v2_0_deploy_completo.sql
-# Supabase → SQL Editor → Run ligia_v2_0_rls_simple.sql
-# Supabase → SQL Editor → Run ligia_v2_0_seed_simple.sql
+# Supabase → SQL Editor → Run luisa_v2_0_deploy_completo.sql
+# Supabase → SQL Editor → Run luisa_v2_0_rls_simple.sql
+# Supabase → SQL Editor → Run luisa_v2_0_seed_simple.sql
 
 # 2. Obtén tu Anthropic API Key:
 # https://console.anthropic.com/account/keys
 
 # 3. Opción A: Drag & Drop (Más fácil)
-# - Zip tu carpeta: zip -r ligia-v2.zip .
+# - Zip tu carpeta: zip -r luisa-v2.zip .
 # - Ve a https://app.netlify.com/drop
 # - Arrastra el ZIP
 # - En site settings, agrega ANTHROPIC_API_KEY
@@ -361,7 +361,7 @@ Mensual:
 
 ## 🏆 Conclusión
 
-**LIGIA v2.0 está 100% lista para producción.**
+**LUISA v2.0 está 100% lista para producción.**
 
 - ✅ Backend funcional
 - ✅ Frontend integrado

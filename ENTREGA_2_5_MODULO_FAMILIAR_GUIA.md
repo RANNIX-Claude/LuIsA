@@ -1,4 +1,4 @@
-# 👨‍👩‍👧‍👦 ENTREGA 2.5: Módulo Administrativo Familiar
+﻿# 👨‍👩‍👧‍👦 ENTREGA 2.5: Módulo Administrativo Familiar
 
 **Estado:** ✅ Completado y listo para deploy  
 **Fecha:** Mayo 2026  
@@ -157,7 +157,7 @@ Campos principales:
 │  → Cuándo entra en vigencia el permiso
 ├─ fecha_vencimiento (TIMESTAMP nullable)
 │  → Cuándo expira (NULL = sin vencimiento)
-├─ otorgado_por (FK usuarios_ligia)
+├─ otorgado_por (FK usuarios_luisa)
 │  → Quién autorizó el permiso (médico o paciente mayor)
 ├─ codigo_acceso_temporal (VARCHAR)
 │  → OTP para validar en dispositivo nuevo
@@ -405,7 +405,7 @@ USO: Auditoría - Revisar acciones recientes de administradores familiares
 En Supabase SQL Editor:
 
 ```sql
--- Copiar y ejecutar: ligia_v2_0_entrega_2_5_modulo_familiar.sql
+-- Copiar y ejecutar: luisa_v2_0_entrega_2_5_modulo_familiar.sql
 -- Tiempo: ~2 minutos
 -- Errores esperados: NINGUNO (sin conflictos)
 ```
@@ -520,7 +520,7 @@ PASO 1: Crear relación
   - documento_legal_tipo: "Sentencia de Tutela"
   - documento_legal_numero: "S-2024-00123"
   - documento_legal_fecha: 2024-06-15
-  - documento_legal_url: "s3://ligia/sentencias/s-2024-00123.pdf"
+  - documento_legal_url: "s3://luisa/sentencias/s-2024-00123.pdf"
   - relacion_verificada: true
   - verificado_por: Dr. López (médico)
 
@@ -553,7 +553,7 @@ PASO 1: Crear relación
   - documento_legal_tipo: "Poder Notarial"
   - documento_legal_numero: "PN-2024-001"
   - documento_legal_fecha: 2024-01-15
-  - documento_legal_url: "s3://ligia/poderes/pn-2024-001.pdf"
+  - documento_legal_url: "s3://luisa/poderes/pn-2024-001.pdf"
 
 PASO 2: Otorgar permisos limitados
   INSERT permisos_expediente_familiar:
@@ -721,7 +721,7 @@ exports.handler = async (event) => {
 ## 🎓 Documentación Adicional
 
 Para implementación avanzada, revisar:
-- `ligia_v2_0_entrega_2_5_modulo_familiar.sql` - Código SQL completo
+- `luisa_v2_0_entrega_2_5_modulo_familiar.sql` - Código SQL completo
 - `ENTREGA_1_REDESIGN_GUIA.md` - Estructura de BD base
 - `ENTREGA_2_GUIA_EJECUCION_TRIGGERS.md` - Sistema de triggers
 

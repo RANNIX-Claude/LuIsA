@@ -1,6 +1,6 @@
-# 📦 ENTREGA 1: CONTENIDO COMPLETO
+﻿# 📦 ENTREGA 1: CONTENIDO COMPLETO
 
-**LIGIA v2.0 - Rediseño NOM-004 + NOM-024**  
+**LUISA v2.0 - Rediseño NOM-004 + NOM-024**  
 **Fecha:** 2026-05-24  
 **Status:** ✅ COMPLETADO  
 
@@ -8,15 +8,15 @@
 
 ## 📋 ARCHIVOS GENERADOS (7 TOTAL)
 
-### Directorio: `C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\`
+### Directorio: `C:\Users\asus\OneDrive\work\Luisa\frontend\otra version\`
 
 ```
 entrega-1-rediseno-nom-004-nom-024/
 │
 ├── 📄 ARCHIVOS SQL (3)
-│   ├─ ligia_v2_0_schema_redesign_nom004_nom024.sql (2,500 líneas)
-│   ├─ ligia_v2_0_rls_audit_nom024.sql (1,200 líneas)
-│   └─ ligia_v2_0_seed_catalogs_completo.sql (500 líneas)
+│   ├─ luisa_v2_0_schema_redesign_nom004_nom024.sql (2,500 líneas)
+│   ├─ luisa_v2_0_rls_audit_nom024.sql (1,200 líneas)
+│   └─ luisa_v2_0_seed_catalogs_completo.sql (500 líneas)
 │
 ├── 📖 DOCUMENTACIÓN (4)
 │   ├─ ENTREGA_1_EJECUCION_PASO_A_PASO.md ⭐ LEER PRIMERO
@@ -34,7 +34,7 @@ entrega-1-rediseno-nom-004-nom-024/
 
 ---
 
-## 🔹 ARCHIVO 1: ligia_v2_0_schema_redesign_nom004_nom024.sql
+## 🔹 ARCHIVO 1: luisa_v2_0_schema_redesign_nom004_nom024.sql
 
 ### Contenido Principal
 
@@ -127,7 +127,7 @@ PARTE 6: DOCUMENTACIÓN SQL (Comentarios)
 
 ---
 
-## 🔹 ARCHIVO 2: ligia_v2_0_rls_audit_nom024.sql
+## 🔹 ARCHIVO 2: luisa_v2_0_rls_audit_nom024.sql
 
 ### Contenido Principal
 
@@ -233,7 +233,7 @@ PARTE 3: 40+ POLÍTICAS RLS
 
 ---
 
-## 🔹 ARCHIVO 3: ligia_v2_0_seed_catalogs_completo.sql
+## 🔹 ARCHIVO 3: luisa_v2_0_seed_catalogs_completo.sql
 
 ### Contenido Principal
 
@@ -421,9 +421,9 @@ Referencia de todo lo que recibiste.
 ### Líneas de Código
 
 ```
-ligia_v2_0_schema_redesign_nom004_nom024.sql       2,500 líneas
-ligia_v2_0_rls_audit_nom024.sql                    1,200 líneas
-ligia_v2_0_seed_catalogs_completo.sql              500 líneas
+luisa_v2_0_schema_redesign_nom004_nom024.sql       2,500 líneas
+luisa_v2_0_rls_audit_nom024.sql                    1,200 líneas
+luisa_v2_0_seed_catalogs_completo.sql              500 líneas
 ────────────────────────────────────────────────────────────────
 TOTAL CÓDIGO SQL                                   4,200 líneas
 ```
@@ -511,7 +511,7 @@ DESPUÉS
 ### Escenario 1: Necesito implementar YA
 
 1. Lee: **ENTREGA_1_EJECUCION_PASO_A_PASO.md** (5 min)
-2. Abre SQL: **ligia_v2_0_schema_redesign_nom004_nom024.sql**
+2. Abre SQL: **luisa_v2_0_schema_redesign_nom004_nom024.sql**
 3. Ejecuta en Supabase
 4. Repite con otros 2 SQL
 5. Valida con las queries
@@ -573,12 +573,12 @@ DESPUÉS
 
 ```
 Todos los archivos están en:
-C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\
+C:\Users\asus\OneDrive\work\Luisa\frontend\otra version\
 
 📂 Carpeta
-├─ 📄 ligia_v2_0_schema_redesign_nom004_nom024.sql
-├─ 📄 ligia_v2_0_rls_audit_nom024.sql
-├─ 📄 ligia_v2_0_seed_catalogs_completo.sql
+├─ 📄 luisa_v2_0_schema_redesign_nom004_nom024.sql
+├─ 📄 luisa_v2_0_rls_audit_nom024.sql
+├─ 📄 luisa_v2_0_seed_catalogs_completo.sql
 ├─ 📖 ENTREGA_1_EJECUCION_PASO_A_PASO.md
 ├─ 📖 ENTREGA_1_REDESIGN_GUIA.md
 ├─ 📖 ENTREGA_1_INDICE_MAESTRO.md

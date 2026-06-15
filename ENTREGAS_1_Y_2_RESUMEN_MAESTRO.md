@@ -1,6 +1,6 @@
-# 🏆 ENTREGAS 1 + 2: RESUMEN MAESTRO
+﻿# 🏆 ENTREGAS 1 + 2: RESUMEN MAESTRO
 
-**LIGIA v2.0 - Rediseño Completo NOM-004 + NOM-024**
+**LUISA v2.0 - Rediseño Completo NOM-004 + NOM-024**
 
 **Fecha:** 2026-05-24  
 **Status:** ✅ AMBAS COMPLETADAS  
@@ -90,9 +90,9 @@
 
 ```
 Archivos SQL:
-├─ ligia_v2_0_schema_redesign_nom004_nom024.sql (2,500 líneas)
-├─ ligia_v2_0_rls_audit_nom024.sql (1,200 líneas)
-└─ ligia_v2_0_seed_catalogs_completo.sql (500 líneas)
+├─ luisa_v2_0_schema_redesign_nom004_nom024.sql (2,500 líneas)
+├─ luisa_v2_0_rls_audit_nom024.sql (1,200 líneas)
+└─ luisa_v2_0_seed_catalogs_completo.sql (500 líneas)
 
 Documentación:
 ├─ ENTREGA_1_EJECUCION_PASO_A_PASO.md
@@ -105,8 +105,8 @@ Documentación:
 
 ```
 Archivos SQL:
-├─ ligia_v2_0_triggers_auditoria_automatica.sql (1,800 líneas)
-└─ ligia_v2_0_triggers_validaciones_bloqueos.sql (1,700 líneas)
+├─ luisa_v2_0_triggers_auditoria_automatica.sql (1,800 líneas)
+└─ luisa_v2_0_triggers_validaciones_bloqueos.sql (1,700 líneas)
 
 Documentación:
 ├─ ENTREGA_2_GUIA_EJECUCION_TRIGGERS.md
@@ -120,20 +120,20 @@ Documentación:
 ### ENTREGA 1: Schema Redesign
 
 ```
-[ ] Ejecutar: ligia_v2_0_schema_redesign_nom004_nom024.sql
+[ ] Ejecutar: luisa_v2_0_schema_redesign_nom004_nom024.sql
     - 2,500 líneas
     - Crea 47 tablas
     - Tiempo: ~2 segundos
     - Riesgo: CERO
 
-[ ] Ejecutar: ligia_v2_0_rls_audit_nom024.sql
+[ ] Ejecutar: luisa_v2_0_rls_audit_nom024.sql
     - 1,200 líneas
     - Habilita RLS en 15 tablas
     - 40+ políticas
     - Tiempo: ~1 segundo
     - Riesgo: BAJO
 
-[ ] Ejecutar: ligia_v2_0_seed_catalogs_completo.sql
+[ ] Ejecutar: luisa_v2_0_seed_catalogs_completo.sql
     - 500 líneas
     - Puebla 26 catálogos
     - Tiempo: ~2 segundos
@@ -149,14 +149,14 @@ Documentación:
 ### ENTREGA 2: Triggers + Auditoría
 
 ```
-[ ] Ejecutar: ligia_v2_0_triggers_auditoria_automatica.sql
+[ ] Ejecutar: luisa_v2_0_triggers_auditoria_automatica.sql
     - 1,800 líneas
     - 28 triggers de auditoría
     - 4 funciones base
     - Tiempo: ~1 segundo
     - Riesgo: BAJO
 
-[ ] Ejecutar: ligia_v2_0_triggers_validaciones_bloqueos.sql
+[ ] Ejecutar: luisa_v2_0_triggers_validaciones_bloqueos.sql
     - 1,700 líneas
     - 11 triggers de validación
     - 9 funciones de validación
@@ -184,7 +184,7 @@ Documentación:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│               LIGIA v2.0 FINAL                  │
+│               LUISA v2.0 FINAL                  │
 ├─────────────────────────────────────────────────┤
 │                                                 │
 │  FRONTEND (HTML Apps)                           │
@@ -262,7 +262,7 @@ FINAL:      Deploy a Producción + Monitoreo
 
 ## 🔐 SEGURIDAD LOGRADA
 
-### Antes de LIGIA v2.0
+### Antes de LUISA v2.0
 
 ```
 ❌ No hay auditoría de cambios
@@ -419,7 +419,7 @@ Objetivos:
 └─ Compliance total
 
 Entregables:
-├─ ligia_v2_0_firma_electronica.sql
+├─ luisa_v2_0_firma_electronica.sql
 ├─ Funciones de hash y firma
 ├─ Validaciones de integridad
 └─ Documentación

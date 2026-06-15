@@ -1,4 +1,4 @@
-# 🚀 ENTREGA 2.5: Guía de Implementación Rápida
+﻿# 🚀 ENTREGA 2.5: Guía de Implementación Rápida
 
 **Tiempo estimado:** 5 minutos  
 **Complejidad:** Baja  
@@ -13,7 +13,7 @@
 1. Ir a: **Supabase Dashboard → SQL Editor → New Query**
 2. Copiar contenido de:
    ```
-   ligia_v2_0_entrega_2_5_modulo_familiar.sql
+   luisa_v2_0_entrega_2_5_modulo_familiar.sql
    ```
 3. **Click: RUN**
 

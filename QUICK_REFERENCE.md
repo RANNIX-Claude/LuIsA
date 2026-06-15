@@ -1,4 +1,4 @@
-# ⚡ LIGIA v2.0 - Quick Reference Card
+﻿# ⚡ LUISA v2.0 - Quick Reference Card
 
 **Imprime esto o márcalo en tu teléfono** 📱
 
@@ -10,9 +10,9 @@
 ```sql
 1. Ve a https://supabase.com → Dashboard
 2. SQL Editor → Copia y ejecuta:
-   • ligia_v2_0_deploy_completo.sql
-   • ligia_v2_0_rls_simple.sql
-   • ligia_v2_0_seed_simple.sql
+   • luisa_v2_0_deploy_completo.sql
+   • luisa_v2_0_rls_simple.sql
+   • luisa_v2_0_seed_simple.sql
 3. ✅ Listo
 ```
 
@@ -49,7 +49,7 @@ Opción B (Con Git):
 ```
 [ ] Accede a https://tu-sitio.netlify.app
 [ ] Click en "Ir al Panel" o "Acceder"
-[ ] Login con: elena.garcia@ligia.mx (si creaste usuario)
+[ ] Login con: elena.garcia@luisa.mx (si creaste usuario)
 [ ] Verifica que carga el app correctamente
 [ ] Ve a https://tu-sitio.netlify.app/.netlify/functions/claude
     (debe devolver algo así: {"error": "missing type"})
@@ -91,15 +91,15 @@ Netlify: https://app.netlify.com
 
 ```
 Doctor:
-  Email: pedro.garcia@ligia.mx
+  Email: pedro.garcia@luisa.mx
   ID: 550e8400-a29b-41d4-a716-446655440003
   
 Patient 1:
-  Email: elena.garcia@ligia.mx
+  Email: elena.garcia@luisa.mx
   ID: 550e8400-a29b-41d4-a716-446655440001
   
 Patient 2:
-  Email: pedro.garcia@ligia.mx
+  Email: pedro.garcia@luisa.mx
   ID: 550e8400-a29b-41d4-a716-446655440002
 ```
 
@@ -165,7 +165,7 @@ Anthropic: console.anthropic.com → Usage
 **Base de datos no carga:**
 ```
 1. Verificar tablas existen: Supabase → Database
-2. Verificar seed data: SELECT COUNT(*) FROM usuarios_ligia;
+2. Verificar seed data: SELECT COUNT(*) FROM usuarios_luisa;
 3. Verificar RLS: Supabase → Auth → Row Level Security
 ```
 
@@ -177,14 +177,14 @@ Anthropic: console.anthropic.com → Usage
 Problemas Supabase:    → https://supabase.com/support
 Problemas Anthropic:   → https://support.anthropic.com
 Problemas Netlify:     → https://netlify.com/support
-Comunidad:             → https://ligia.slack.com
+Comunidad:             → https://luisa.slack.com
 ```
 
 ---
 
 ## 🎉 ¡Lo Hiciste!
 
-Tu LIGIA v2.0 está en producción. 🚀
+Tu LUISA v2.0 está en producción. 🚀
 
 **Ahora:**
 1. Comparte el link con médicos

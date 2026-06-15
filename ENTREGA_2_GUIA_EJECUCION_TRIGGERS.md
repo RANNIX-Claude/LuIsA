@@ -1,4 +1,4 @@
-# ⚡ ENTREGA 2: TRIGGERS + AUDITORÍA AUTOMÁTICA
+﻿# ⚡ ENTREGA 2: TRIGGERS + AUDITORÍA AUTOMÁTICA
 
 **Automatización completa de auditoria y validaciones**
 
@@ -33,7 +33,7 @@ AHORA (ENTREGA 2):
 
 ### 2 Archivos SQL (3,500+ líneas)
 
-#### 1️⃣ **ligia_v2_0_triggers_auditoria_automatica.sql** (1,800 líneas)
+#### 1️⃣ **luisa_v2_0_triggers_auditoria_automatica.sql** (1,800 líneas)
 
 Qué hace:
 - ✅ Registra automáticamente TODOS los cambios (INSERT, UPDATE, DELETE)
@@ -45,7 +45,7 @@ Qué hace:
 - ✅ Crea 4 funciones base
 - ✅ Crea 2 vistas para auditoría
 
-#### 2️⃣ **ligia_v2_0_triggers_validaciones_bloqueos.sql** (1,700 líneas)
+#### 2️⃣ **luisa_v2_0_triggers_validaciones_bloqueos.sql** (1,700 líneas)
 
 Qué hace:
 - ✅ Valida estructura de datos JSONB
@@ -66,7 +66,7 @@ Qué hace:
 1. Ve a **Supabase → SQL Editor**
 2. Copia TODO de:
    ```
-   ligia_v2_0_triggers_auditoria_automatica.sql
+   luisa_v2_0_triggers_auditoria_automatica.sql
    ```
 3. Pega en el editor
 4. Click **RUN** (Cmd+Enter)
@@ -85,7 +85,7 @@ Qué hace:
 1. Sigue en **SQL Editor**
 2. Copia TODO de:
    ```
-   ligia_v2_0_triggers_validaciones_bloqueos.sql
+   luisa_v2_0_triggers_validaciones_bloqueos.sql
    ```
 3. Pega en el editor
 4. Click **RUN**

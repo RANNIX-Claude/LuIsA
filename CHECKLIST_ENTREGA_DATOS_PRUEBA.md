@@ -1,35 +1,35 @@
-# ✅ CHECKLIST: ENTREGA DE DATOS DE PRUEBA PARA LIGIA v2.0
+﻿# ✅ CHECKLIST: ENTREGA DE DATOS DE PRUEBA PARA LUISA v2.0
 
 ## 📦 Archivos Entregados
 
 ### Scripts SQL (5 archivos - 1,500+ líneas de código)
 
-- [x] **ligia_v2_0_seed_test_data_medicos.sql** (277 líneas)
+- [x] **luisa_v2_0_seed_test_data_medicos.sql** (277 líneas)
   - 20 médicos con especialidades
   - Cédulas profesionales (MED-001 a MED-020)
   - Certificaciones e idiomas
   - Disponibilidad telesalud
 
-- [x] **ligia_v2_0_seed_test_data_pacientes.sql** (1,100+ líneas)
+- [x] **luisa_v2_0_seed_test_data_pacientes.sql** (1,100+ líneas)
   - 51 pacientes (EXP-00001 a EXP-00051)
   - Perfiles demográficos completos
   - Antecedentes heredofamiliares
   - Medicamentos actuales
   - Alergias documentadas
 
-- [x] **ligia_v2_0_seed_test_data_pacientes_52_a_100.sql** (450+ líneas)
+- [x] **luisa_v2_0_seed_test_data_pacientes_52_a_100.sql** (450+ líneas)
   - 49 pacientes adicionales (EXP-00052 a EXP-00100)
   - Completar cohorte a 100
   - Variedad de patologías
   - Datos clínicamente realistas
 
-- [x] **ligia_v2_0_seed_test_data_consultas_historias.sql** (350+ líneas)
+- [x] **luisa_v2_0_seed_test_data_consultas_historias.sql** (350+ líneas)
   - 5 historias clínicas detalladas (NOM-004)
   - 5 consultas vinculadas
   - Generador automático de 50+ consultas
   - Interrogatorio, exploración, diagnósticos
 
-- [x] **ligia_v2_0_seed_test_data_estudios_laboratorio.sql** (350+ líneas)
+- [x] **luisa_v2_0_seed_test_data_estudios_laboratorio.sql** (350+ líneas)
   - 5 reportes de laboratorio
   - 4 estudios de imagenología
   - Generador automático de 30+ estudios
@@ -222,7 +222,7 @@
 ## 🚀 Instrucciones de Uso
 
 ### Requisitos Previos
-- [x] LIGIA v2.0 base de datos creada (ENTREGA 1)
+- [x] LUISA v2.0 base de datos creada (ENTREGA 1)
 - [x] Tablas principales existentes
 - [x] Catálogos poblados (ENTREGA 2)
 - [x] Acceso a Supabase SQL Editor
@@ -274,13 +274,13 @@
 ## 📁 Estructura de Archivos
 
 ```
-C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\
+C:\Users\asus\OneDrive\work\Luisa\frontend\otra version\
 │
-├── ligia_v2_0_seed_test_data_medicos.sql (277 líneas)
-├── ligia_v2_0_seed_test_data_pacientes.sql (1,100+ líneas)
-├── ligia_v2_0_seed_test_data_pacientes_52_a_100.sql (450+ líneas)
-├── ligia_v2_0_seed_test_data_consultas_historias.sql (350+ líneas)
-├── ligia_v2_0_seed_test_data_estudios_laboratorio.sql (350+ líneas)
+├── luisa_v2_0_seed_test_data_medicos.sql (277 líneas)
+├── luisa_v2_0_seed_test_data_pacientes.sql (1,100+ líneas)
+├── luisa_v2_0_seed_test_data_pacientes_52_a_100.sql (450+ líneas)
+├── luisa_v2_0_seed_test_data_consultas_historias.sql (350+ líneas)
+├── luisa_v2_0_seed_test_data_estudios_laboratorio.sql (350+ líneas)
 │
 ├── IMPLEMENTACION_DATOS_PRUEBA_COMPLETA.md (850+ líneas)
 ├── RESUMEN_DATOS_PRUEBA.md (600+ líneas)
@@ -421,7 +421,7 @@ Después de cargar, verifica que:
 
 ## 🏆 Conclusión
 
-Esta entrega incluye **todo lo necesario para probar LIGIA v2.0 con datos realistas**:
+Esta entrega incluye **todo lo necesario para probar LUISA v2.0 con datos realistas**:
 
 ✅ **Scripts SQL completos** (1,500+ líneas)
 ✅ **100 pacientes** con perfiles clínicos
@@ -454,7 +454,7 @@ Esta entrega incluye **todo lo necesario para probar LIGIA v2.0 con datos realis
 
 ---
 
-*LIGIA v2.0 - Sistema de Expediente Clínico Electrónico*
+*LUISA v2.0 - Sistema de Expediente Clínico Electrónico*
 *Generado: 25 de mayo, 2026*
 *Estado: Listo para Producción*
 

@@ -1,4 +1,4 @@
-# 🏥 LIGIA v2.0 - Electronic Medical Record System
+﻿# 🏥 LUISA v2.0 - Electronic Medical Record System
 
 **Sistema de Expediente Clínico Electrónico conforme NOM-004-SSA3-2012 & NOM-024-SSA3-2010**
 
@@ -8,9 +8,9 @@
 
 ---
 
-## 🚀 ¿Qué es LIGIA v2.0?
+## 🚀 ¿Qué es LUISA v2.0?
 
-**LIGIA** es una plataforma inteligente de expediente clínico electrónico para hospitales, clínicas y consultorios en México que:
+**LUISA** es una plataforma inteligente de expediente clínico electrónico para hospitales, clínicas y consultorios en México que:
 
 ✅ **Cumple 100% NOM-004 & NOM-024** - Regulaciones mexicanas para ECE  
 ✅ **Integración con IA** - Claude Opus para análisis y dictaciones  
@@ -23,7 +23,7 @@
 ## 📁 Estructura del Proyecto
 
 ```
-ligia-v2.0/
+luisa-v2.0/
 ├── 📱 APLICACIONES FRONTEND
 │   ├── app.html              ← App del DOCTOR (consultas, diagnósticos)
 │   ├── paciente.html         ← App del PACIENTE (expediente, seguimiento)
@@ -94,8 +94,8 @@ ligia-v2.0/
 ### 1. Clonar repositorio
 
 ```bash
-git clone https://github.com/tuusuario/ligia-v2.git
-cd ligia-v2
+git clone https://github.com/tuusuario/luisa-v2.git
+cd luisa-v2
 ```
 
 ### 2. Configurar Supabase
@@ -104,15 +104,15 @@ cd ligia-v2
 -- En https://supabase.com dashboard, ejecutar en SQL Editor:
 
 -- 1. Crea el schema:
--- Copia contenido de: database/ligia_v2_0_deploy_completo.sql
+-- Copia contenido de: database/luisa_v2_0_deploy_completo.sql
 -- Pega y ejecuta
 
 -- 2. Aplica RLS:
--- Copia: database/ligia_v2_0_rls_simple.sql
+-- Copia: database/luisa_v2_0_rls_simple.sql
 -- Pega y ejecuta
 
 -- 3. Carga datos de test:
--- Copia: database/ligia_v2_0_seed_simple.sql
+-- Copia: database/luisa_v2_0_seed_simple.sql
 -- Pega y ejecuta
 ```
 
@@ -132,11 +132,11 @@ npx http-server -p 8000
 
 ```
 Doctor:
-  Email: pedro.garcia@ligia.mx
+  Email: pedro.garcia@luisa.mx
   Password: (crear en auth.html)
 
 Paciente:
-  Email: elena.garcia@ligia.mx
+  Email: elena.garcia@luisa.mx
   Password: (crear en auth.html)
 ```
 
@@ -148,11 +148,11 @@ Paciente:
 
 ```bash
 # 1. Zip los archivos:
-zip -r ligia-v2.zip .
+zip -r luisa-v2.zip .
 
 # 2. Ve a: https://app.netlify.com/drop
 # 3. Arrastra el ZIP
-# 4. ¡Listo! URL: ligia-v2.netlify.app
+# 4. ¡Listo! URL: luisa-v2.netlify.app
 ```
 
 ### Opción B: Con Git (Recomendado)
@@ -203,7 +203,7 @@ Auth (auth.html) ← Login / Register
 │ • Citas           │ • Medicinas   │
 │ • Dictar Consulta │ • Diario      │
 │ • Estudios IA     │ • Citas       │
-│ • Chat (LIGIA)    │ • Compartir   │
+│ • Chat (LUISA)    │ • Compartir   │
 └───────────────────────────────────┘
 ```
 
@@ -289,18 +289,18 @@ npm run cy:open
 
 ## 📞 Soporte
 
-**Issues**: [GitHub Issues](https://github.com/tuusuario/ligia-v2/issues)  
-**Email**: soporte@ligia.mx  
+**Issues**: [GitHub Issues](https://github.com/tuusuario/luisa-v2/issues)  
+**Email**: soporte@luisa.mx  
 **WhatsApp**: +52 55 XXXX XXXX  
-**Slack**: [Comunidad LIGIA](https://ligia.slack.com)  
+**Slack**: [Comunidad LUISA](https://luisa.slack.com)  
 
 ---
 
 ## 📄 Licencia
 
-Propietario © 2025 LIGIA Inc. - México
+Propietario © 2025 LUISA Inc. - México
 
-Uso comercial requiere licencia. Contacta a: legal@ligia.mx
+Uso comercial requiere licencia. Contacta a: legal@luisa.mx
 
 ---
 

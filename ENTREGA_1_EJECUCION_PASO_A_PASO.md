@@ -1,4 +1,4 @@
-# ⚡ ENTREGA 1: EJECUCIÓN EN 5 MINUTOS
+﻿# ⚡ ENTREGA 1: EJECUCIÓN EN 5 MINUTOS
 
 **Tiempo total:** 5 minutos  
 **Riesgo:** 0 - No elimina datos existentes  
@@ -11,11 +11,11 @@
 ### PASO 1️⃣: Ejecutar Schema Redesign (2 min)
 
 1. Ve a **Supabase Dashboard**
-2. Selecciona tu proyecto LIGIA
+2. Selecciona tu proyecto LUISA
 3. Abre **SQL Editor**
 4. Copia TODO el contenido de:
    ```
-   ligia_v2_0_schema_redesign_nom004_nom024.sql
+   luisa_v2_0_schema_redesign_nom004_nom024.sql
    ```
 5. Pega en el editor SQL
 6. Click **RUN** (o Cmd+Enter)
@@ -35,7 +35,7 @@
 1. Sigue en **SQL Editor** (misma ventana)
 2. Copia TODO el contenido de:
    ```
-   ligia_v2_0_rls_audit_nom024.sql
+   luisa_v2_0_rls_audit_nom024.sql
    ```
 3. Pega en el editor SQL
 4. Click **RUN**
@@ -54,7 +54,7 @@
 1. Sigue en **SQL Editor**
 2. Copia TODO el contenido de:
    ```
-   ligia_v2_0_seed_catalogs_completo.sql
+   luisa_v2_0_seed_catalogs_completo.sql
    ```
 3. Pega en el editor SQL
 4. Click **RUN**

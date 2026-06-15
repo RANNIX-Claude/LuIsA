@@ -1,12 +1,12 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA MASTER (VERSIÓN SIMPLIFICADA)
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA MASTER (VERSIÓN SIMPLIFICADA)
 -- UN ARCHIVO ÚNICO - 20 MÉDICOS + 100 PACIENTES + 300+ REGISTROS
 -- ============================================================================
 
 -- PASO 1: INSERTAR 20 MÉDICOS
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
 ('a0000001-0000-0000-0000-000000000001'::uuid, 'carlos.garcia@hospital.mx', 'hash', 'Carlos García', 'MED-001', 'medico', true, NOW(), NOW()),
 ('a0000002-0000-0000-0000-000000000002'::uuid, 'maria.rodriguez@hospital.mx', 'hash', 'María Rodríguez', 'MED-002', 'medico', true, NOW(), NOW()),
 ('a0000003-0000-0000-0000-000000000003'::uuid, 'juan.martinez@hospital.mx', 'hash', 'Juan Martínez', 'MED-003', 'medico', true, NOW(), NOW()),
@@ -41,14 +41,14 @@ SELECT
   true,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'medico';
 
 -- ============================================================================
 -- PASO 2: INSERTAR 100 PACIENTES
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
 ('b0000001-0000-0000-0000-000000000001'::uuid, 'paciente001@email.com', 'hash', 'Juan Pérez García', 'PAC-001', 'paciente', true, NOW(), NOW()),
 ('b0000002-0000-0000-0000-000000000002'::uuid, 'paciente002@email.com', 'hash', 'María López Hernández', 'PAC-002', 'paciente', true, NOW(), NOW()),
 ('b0000003-0000-0000-0000-000000000003'::uuid, 'paciente003@email.com', 'hash', 'Carlos Martínez Rodríguez', 'PAC-003', 'paciente', true, NOW(), NOW()),
@@ -76,7 +76,7 @@ DECLARE
   v_count INT := 21;
 BEGIN
   WHILE v_count <= 100 LOOP
-    INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
+    INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
     VALUES (
       gen_random_uuid(),
       'paciente' || LPAD(v_count::text, 3, '0') || '@email.com',
@@ -106,7 +106,7 @@ SELECT
   80,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'paciente';
 
 -- ============================================================================

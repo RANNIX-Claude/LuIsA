@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA COMPLETO CON USUARIOS AUTENTICABLES
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA COMPLETO CON USUARIOS AUTENTICABLES
 -- 20 MÉDICOS + 100 PACIENTES + 10 ADMINISTRADORES FAMILIARES
 -- TODO CON CONTRASEÑAS QUE FUNCIONAN (bcrypt)
 -- ============================================================================
@@ -13,7 +13,7 @@
 -- PASO 1: INSERTAR 20 MÉDICOS CON USUARIOS AUTENTICABLES
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
 ('a0000001-0000-0000-0000-000000000001'::uuid, 'medico001@hospital.mx', crypt('medico123', gen_salt('bf')), 'Carlos García Moreno', 'MED-001', 'medico', true, NOW(), NOW()),
 ('a0000002-0000-0000-0000-000000000002'::uuid, 'medico002@hospital.mx', crypt('medico123', gen_salt('bf')), 'María Rodríguez Pérez', 'MED-002', 'medico', true, NOW(), NOW()),
 ('a0000003-0000-0000-0000-000000000003'::uuid, 'medico003@hospital.mx', crypt('medico123', gen_salt('bf')), 'Juan Martínez López', 'MED-003', 'medico', true, NOW(), NOW()),
@@ -48,7 +48,7 @@ SELECT
   true,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'medico';
 
 -- ============================================================================
@@ -56,7 +56,7 @@ WHERE u.rol = 'medico';
 -- ============================================================================
 
 -- Primeros 20 pacientes (nombres específicos)
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
 ('b0000001-0000-0000-0000-000000000001'::uuid, 'paciente001@email.com', crypt('paciente123', gen_salt('bf')), 'Juan Pérez García', 'PAC-001', 'paciente', true, NOW(), NOW()),
 ('b0000002-0000-0000-0000-000000000002'::uuid, 'paciente002@email.com', crypt('paciente123', gen_salt('bf')), 'María López Hernández', 'PAC-002', 'paciente', true, NOW(), NOW()),
 ('b0000003-0000-0000-0000-000000000003'::uuid, 'paciente003@email.com', crypt('paciente123', gen_salt('bf')), 'Carlos Martínez Rodríguez', 'PAC-003', 'paciente', true, NOW(), NOW()),
@@ -84,7 +84,7 @@ DECLARE
   v_count INT := 21;
 BEGIN
   WHILE v_count <= 100 LOOP
-    INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
+    INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
     VALUES (
       gen_random_uuid(),
       'paciente' || LPAD(v_count::text, 3, '0') || '@email.com',
@@ -114,14 +114,14 @@ SELECT
   85,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'paciente';
 
 -- ============================================================================
 -- PASO 3: INSERTAR 10 ADMINISTRADORES FAMILIARES (MAMÁS)
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at) VALUES
 ('c0000001-0000-0000-0000-000000000001'::uuid, 'mama001@email.com', crypt('admin123', gen_salt('bf')), 'Rosa García (Mamá de Pacientes)', 'ADM-001', 'admin_familiar', true, NOW(), NOW()),
 ('c0000002-0000-0000-0000-000000000002'::uuid, 'mama002@email.com', crypt('admin123', gen_salt('bf')), 'María López (Mamá de Pacientes)', 'ADM-002', 'admin_familiar', true, NOW(), NOW()),
 ('c0000003-0000-0000-0000-000000000003'::uuid, 'mama003@email.com', crypt('admin123', gen_salt('bf')), 'Carmen Rodríguez (Mamá de Pacientes)', 'ADM-003', 'admin_familiar', true, NOW(), NOW()),
@@ -141,36 +141,36 @@ INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, docume
 INSERT INTO family_relationships (id, parent_id, child_id, tipo_relacion, puede_acceder, created_at)
 SELECT
   gen_random_uuid(),
-  (SELECT id FROM usuarios_ligia WHERE email = 'mama001@email.com' LIMIT 1),
+  (SELECT id FROM usuarios_luisa WHERE email = 'mama001@email.com' LIMIT 1),
   u.id,
   'madre',
   true,
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.email IN ('paciente001@email.com', 'paciente002@email.com', 'paciente003@email.com', 'paciente004@email.com', 'paciente005@email.com');
 
 -- Mamá 2 (María López) autorizada para ver a pacientes 6-10
 INSERT INTO family_relationships (id, parent_id, child_id, tipo_relacion, puede_acceder, created_at)
 SELECT
   gen_random_uuid(),
-  (SELECT id FROM usuarios_ligia WHERE email = 'mama002@email.com' LIMIT 1),
+  (SELECT id FROM usuarios_luisa WHERE email = 'mama002@email.com' LIMIT 1),
   u.id,
   'madre',
   true,
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.email IN ('paciente006@email.com', 'paciente007@email.com', 'paciente008@email.com', 'paciente009@email.com', 'paciente010@email.com');
 
 -- Mamá 3 (Carmen Rodríguez) autorizada para ver a pacientes 11-15
 INSERT INTO family_relationships (id, parent_id, child_id, tipo_relacion, puede_acceder, created_at)
 SELECT
   gen_random_uuid(),
-  (SELECT id FROM usuarios_ligia WHERE email = 'mama003@email.com' LIMIT 1),
+  (SELECT id FROM usuarios_luisa WHERE email = 'mama003@email.com' LIMIT 1),
   u.id,
   'madre',
   true,
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.email IN ('paciente011@email.com', 'paciente012@email.com', 'paciente013@email.com', 'paciente014@email.com', 'paciente015@email.com');
 
 -- ============================================================================
@@ -285,19 +285,19 @@ SELECT
   'MÉDICOS autenticables' as "ENTIDAD",
   COUNT(*) as "TOTAL",
   'medico001-020@hospital.mx / medico123' as "ACCESO"
-FROM usuarios_ligia WHERE rol = 'medico'
+FROM usuarios_luisa WHERE rol = 'medico'
 UNION ALL
 SELECT
   'PACIENTES autenticables',
   COUNT(*),
   'paciente001-100@email.com / paciente123'
-FROM usuarios_ligia WHERE rol = 'paciente'
+FROM usuarios_luisa WHERE rol = 'paciente'
 UNION ALL
 SELECT
   'ADMINISTRADORES FAMILIARES',
   COUNT(*),
   'mama001-010@email.com / admin123'
-FROM usuarios_ligia WHERE rol = 'admin_familiar'
+FROM usuarios_luisa WHERE rol = 'admin_familiar'
 UNION ALL
 SELECT
   'RELACIONES FAMILIARES (mamá-hijo)',

@@ -1,4 +1,4 @@
-# 📑 ENTREGA 2.5: Índice Completo de Archivos
+﻿# 📑 ENTREGA 2.5: Índice Completo de Archivos
 
 **Total de archivos creados:** 6  
 **Total de líneas de código:** ~2,500  
@@ -10,7 +10,7 @@
 ## 📂 Estructura de Archivos
 
 ```
-C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\
+C:\Users\asus\OneDrive\work\Luisa\frontend\otra version\
 
 ├── 📋 ENTREGA_2_5_*.md (documentación)
 │   ├── ENTREGA_2_5_RESUMEN_MAESTRO.md ........................ QUÉ ES (inicio aquí)
@@ -21,7 +21,7 @@ C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\
 │   └── ENTREGA_2_5_ÍNDICE_COMPLETO.md ← ESTE ARCHIVO
 │
 └── 🗄️ SQL CODE
-    └── ligia_v2_0_entrega_2_5_modulo_familiar.sql ........... IMPLEMENTACIÓN (BD)
+    └── luisa_v2_0_entrega_2_5_modulo_familiar.sql ........... IMPLEMENTACIÓN (BD)
 ```
 
 ---
@@ -186,7 +186,7 @@ Lee todo, incluido el código de Netlify Functions
 
 ---
 
-## 💾 ARCHIVO 6: `ligia_v2_0_entrega_2_5_modulo_familiar.sql`
+## 💾 ARCHIVO 6: `luisa_v2_0_entrega_2_5_modulo_familiar.sql`
 
 **Propósito:** Código SQL para ejecutar en Supabase  
 **Extensión:** 850 líneas  
@@ -248,7 +248,7 @@ Lee todo, incluido el código de Netlify Functions
 1. Lee: RESUMEN_MAESTRO (15 min)
    └─ Sección: "Cómo usarlo" + "Lo que obtiene"
 
-2. Ejecuta: ligia_v2_0_entrega_2_5_modulo_familiar.sql (2 min)
+2. Ejecuta: luisa_v2_0_entrega_2_5_modulo_familiar.sql (2 min)
    └─ En Supabase SQL Editor
 
 3. Verifica: IMPLEMENTACIÓN_RÁPIDA → Paso 2 (1 min)
@@ -309,7 +309,7 @@ TOTAL: 3 horas
 - [ ] Netlify Functions (si integras frontend)
 
 ### Implementación SQL (2 min)
-- [ ] Copiar SQL completo de `ligia_v2_0_entrega_2_5_modulo_familiar.sql`
+- [ ] Copiar SQL completo de `luisa_v2_0_entrega_2_5_modulo_familiar.sql`
 - [ ] Pegar en Supabase SQL Editor
 - [ ] Ejecutar (RUN button)
 - [ ] Verificar sin errores

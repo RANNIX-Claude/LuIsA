@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SCRIPT 3: DATOS DE PRUEBA (ejecutar después del SCRIPT 2)
+﻿-- ============================================================================
+-- LUISA v2.0 - SCRIPT 3: DATOS DE PRUEBA (ejecutar después del SCRIPT 2)
 -- 20 médicos + 100 pacientes + 10 mamás + datos clínicos
 -- IMPORTANTE: Usa "password_hash" (sin ñ)
 -- Idempotente: limpia datos previos automáticamente
@@ -23,13 +23,13 @@ DELETE FROM auditoria_acciones;
 DELETE FROM firma_electronica;
 DELETE FROM perfiles_pacientes;
 DELETE FROM medicos;
-DELETE FROM usuarios_ligia;
+DELETE FROM usuarios_luisa;
 
 -- ============================================================================
 -- PASO 1: 20 MÉDICOS con autenticación
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 SELECT
   CONCAT('medico', LPAD(seq::text, 3, '0'), '@hospital.mx') as email,
   crypt(CONCAT('medico', seq), gen_salt('bf')) as password_hash,
@@ -71,14 +71,14 @@ SELECT
   FLOOR(RANDOM() * 50 + 10)::integer,
   30,
   true
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'medico';
 
 -- ============================================================================
 -- PASO 2: 100 PACIENTES con autenticación
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 SELECT
   CONCAT('paciente', LPAD(seq::text, 3, '0'), '@email.com'),
   crypt(CONCAT('paciente', seq), gen_salt('bf')),
@@ -112,14 +112,14 @@ SELECT
   (SELECT id FROM cat_niveles_socioeconomicos ORDER BY RANDOM() LIMIT 1),
   (SELECT id FROM cat_tipos_vivienda ORDER BY RANDOM() LIMIT 1),
   75
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'paciente';
 
 -- ============================================================================
 -- PASO 3: 10 ADMINISTRADORES FAMILIARES (Madres)
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
+INSERT INTO usuarios_luisa (email, password_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo)
 SELECT
   CONCAT('mama', LPAD(seq::text, 2, '0'), '@email.com'),
   crypt(CONCAT('mama', seq), gen_salt('bf')),
@@ -153,7 +153,7 @@ SELECT
   (SELECT id FROM cat_niveles_socioeconomicos ORDER BY RANDOM() LIMIT 1),
   (SELECT id FROM cat_tipos_vivienda ORDER BY RANDOM() LIMIT 1),
   80
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'admin_familiar';
 
 -- ============================================================================
@@ -169,12 +169,12 @@ SELECT
 FROM (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at DESC) as seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'admin_familiar')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'admin_familiar')
 ) mama
 CROSS JOIN (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at ASC) as seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'paciente')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'paciente')
 ) hijo
 WHERE hijo.seq <= (mama.seq * 10)
   AND hijo.seq > ((mama.seq - 1) * 10);
@@ -269,7 +269,7 @@ SELECT 'DATOS CARGADOS' as resultado;
 SELECT
   'Médicos' as entidad, COUNT(*) as total FROM medicos
 UNION ALL SELECT 'Pacientes', COUNT(*) FROM perfiles_pacientes
-UNION ALL SELECT 'Usuarios', COUNT(*) FROM usuarios_ligia
+UNION ALL SELECT 'Usuarios', COUNT(*) FROM usuarios_luisa
 UNION ALL SELECT 'Citas', COUNT(*) FROM citas
 UNION ALL SELECT 'Historias Clínicas', COUNT(*) FROM historias_clinicas
 UNION ALL SELECT 'Medicamentos', COUNT(*) FROM medicamentos_paciente

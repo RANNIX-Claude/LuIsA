@@ -1,4 +1,4 @@
-# 🚀 RE-DEPLOY CON FIX
+﻿# 🚀 RE-DEPLOY CON FIX
 
 **Problema anterior:** Error de permisos en node_modules
 
@@ -40,7 +40,7 @@
 ### Opción A: Git (Recomendado)
 
 ```bash
-cd C:\Users\asus\OneDrive\work\Ligia\frontend\otra version
+cd C:\Users\asus\OneDrive\work\Luisa\frontend\otra version
 
 git add netlify.toml package.json .netlify/functions/package.json
 git commit -m "Fix: Simplify npm install for Netlify deploy"
@@ -55,12 +55,12 @@ git push origin main
 
 ```bash
 # PowerShell:
-Compress-Archive -Path "C:\Users\asus\OneDrive\work\Ligia\frontend\otra version\*" `
-  -DestinationPath "C:\ligia-v2-fixed.zip" -Force
+Compress-Archive -Path "C:\Users\asus\OneDrive\work\Luisa\frontend\otra version\*" `
+  -DestinationPath "C:\luisa-v2-fixed.zip" -Force
 
 # Luego:
 # 1. Ve a https://app.netlify.com/drop
-# 2. Drag & drop "ligia-v2-fixed.zip"
+# 2. Drag & drop "luisa-v2-fixed.zip"
 # 3. Espera 1-2 minutos
 ```
 

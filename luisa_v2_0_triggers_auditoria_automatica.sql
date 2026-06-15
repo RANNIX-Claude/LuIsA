@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - TRIGGERS PARA AUDITORÍA AUTOMÁTICA
+﻿-- ============================================================================
+-- LUISA v2.0 - TRIGGERS PARA AUDITORÍA AUTOMÁTICA
 -- Automatiza el registro de TODAS las acciones en auditoria_acciones
 -- ============================================================================
 -- Cada INSERT, UPDATE, DELETE es registrado automáticamente
@@ -360,7 +360,7 @@ SELECT
   MAX(a.fecha_evento) as ultima_accion,
   MIN(a.fecha_evento) as primera_accion
 FROM auditoria_acciones a
-LEFT JOIN usuarios_ligia u ON a.usuario_id = u.id
+LEFT JOIN usuarios_luisa u ON a.usuario_id = u.id
 GROUP BY a.usuario_id, u.email, a.tipo_evento, a.tabla_afectada, a.accion
 ORDER BY a.fecha_evento DESC;
 
@@ -421,7 +421,7 @@ SELECT
   a.fecha_evento,
   ROW_NUMBER() OVER (PARTITION BY a.tabla_afectada, a.id_registro ORDER BY a.fecha_evento ASC) as version_numero
 FROM auditoria_acciones a
-LEFT JOIN usuarios_ligia u ON a.usuario_id = u.id
+LEFT JOIN usuarios_luisa u ON a.usuario_id = u.id
 ORDER BY a.tabla_afectada, a.id_registro, a.fecha_evento;
 
 -- ============================================================================

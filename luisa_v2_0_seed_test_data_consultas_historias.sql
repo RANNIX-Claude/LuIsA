@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: CONSULTAS E HISTORIAS CLÍNICAS
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: CONSULTAS E HISTORIAS CLÍNICAS
 -- ============================================================================
 -- Script para cargar consultas y historias clínicas con datos variados
 -- Simula múltiples visitas por paciente (2-5 consultas por paciente)

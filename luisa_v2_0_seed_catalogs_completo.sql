@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: 26 CATÁLOGOS NOM-024 + DATOS DE PRUEBA
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: 26 CATÁLOGOS NOM-024 + DATOS DE PRUEBA
 -- ============================================================================
 -- Esto puebla TODOS los catálogos obligatorios de NOM-024
 -- + 10 médicos de ejemplo
@@ -406,17 +406,17 @@ ON CONFLICT DO NOTHING;
 -- DATOS DE PRUEBA: 10 MÉDICOS DE EJEMPLO
 -- ============================================================================
 
--- Nota: Asumiendo que estos usuarios ya existen en usuarios_ligia
+-- Nota: Asumiendo que estos usuarios ya existen en usuarios_luisa
 -- Si no existen, crear primero:
--- INSERT INTO usuarios_ligia (email, contraseña_hash) VALUES
--- ('medico1@ligia.mx', 'hash'), etc.
+-- INSERT INTO usuarios_luisa (email, contraseña_hash) VALUES
+-- ('medico1@luisa.mx', 'hash'), etc.
 
 INSERT INTO medicos (
   id_usuario, nombre_completo, cedula_profesional, especialidad_id,
   numero_pacientes, telefono
 )
 VALUES (
-  (SELECT id FROM usuarios_ligia WHERE email = 'pedro.garcia@ligia.mx' LIMIT 1),
+  (SELECT id FROM usuarios_luisa WHERE email = 'pedro.garcia@luisa.mx' LIMIT 1),
   'Dr. Pedro García López',
   'REG1234567',
   (SELECT id FROM cat_especialidades WHERE codigo = '001' LIMIT 1),
@@ -433,7 +433,7 @@ ON CONFLICT DO NOTHING;
 -- ============================================================================
 
 -- Estos serían los perfiles de pacientes
--- (Asumiendo usuarios_ligia creados previamente)
+-- (Asumiendo usuarios_luisa creados previamente)
 
 -- ============================================================================
 -- ✅ FIN DE SEED DATA

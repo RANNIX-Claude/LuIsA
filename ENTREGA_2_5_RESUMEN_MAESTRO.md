@@ -1,4 +1,4 @@
-# 👨‍👩‍👧‍👦 ENTREGA 2.5 RESUMEN MAESTRO: Módulo Administrativo Familiar
+﻿# 👨‍👩‍👧‍👦 ENTREGA 2.5 RESUMEN MAESTRO: Módulo Administrativo Familiar
 
 **Estado:** ✅ Completada y lista para deploy  
 **Fecha:** Mayo 2026  
@@ -26,7 +26,7 @@ Tu sistema médico anterior tenía esto, pero se perdió en el rediseño:
 
 ### Archivos Creados (4 archivos)
 
-#### 1. `ligia_v2_0_entrega_2_5_modulo_familiar.sql` (850 líneas)
+#### 1. `luisa_v2_0_entrega_2_5_modulo_familiar.sql` (850 líneas)
 
 El SQL principal con:
 - ✅ 4 tablas nuevas
@@ -96,7 +96,7 @@ Cómo encaja con ENTREGA 1 + ENTREGA 2:
 1. Lee: `ENTREGA_2_5_MODULO_FAMILIAR_GUIA.md` (30 min)
 2. Lee: `ENTREGA_2_5_INTEGRACION_CON_ENTREGAS_ANTERIORES.md` (15 min)
 3. Ejecuta: SQL + tests (8 min)
-4. Revisa: Código SQL en `ligia_v2_0_entrega_2_5_modulo_familiar.sql`
+4. Revisa: Código SQL en `luisa_v2_0_entrega_2_5_modulo_familiar.sql`
 5. **Total: 60 minutos de comprensión profunda**
 
 ### Escenario 3: "Quiero integrarlo en mi app"
@@ -258,7 +258,7 @@ NOM-004: Es voluntario, revocable en cualquier momento
 
 ## 📋 Datos de Ejemplo Incluidos
 
-El script `ligia_v2_0_entrega_2_5_modulo_familiar.sql` incluye:
+El script `luisa_v2_0_entrega_2_5_modulo_familiar.sql` incluye:
 
 **Catálogo poblado (9 relaciones):**
 ```
@@ -388,7 +388,7 @@ TOTAL: 12 minutos para todo
 
 **ENTREGA 2.5:**
 ```
-ligia_v2_0_entrega_2_5_modulo_familiar.sql
+luisa_v2_0_entrega_2_5_modulo_familiar.sql
     └─ SQL principal (850 líneas)
 
 ENTREGA_2_5_MODULO_FAMILIAR_GUIA.md
@@ -406,15 +406,15 @@ ENTREGA_2_5_RESUMEN_MAESTRO.md ← ESTE ARCHIVO
 
 **ENTREGA 1 (prerequisito):**
 ```
-ligia_v2_0_schema_redesign_nom004_nom024.sql
+luisa_v2_0_schema_redesign_nom004_nom024.sql
 ENTREGA_1_REDESIGN_GUIA.md
 ```
 
 **ENTREGA 2 (prerequisito):**
 ```
-ligia_v2_0_rls_audit_nom024.sql
-ligia_v2_0_triggers_auditoria_automatica.sql
-ligia_v2_0_triggers_validaciones_bloqueos.sql
+luisa_v2_0_rls_audit_nom024.sql
+luisa_v2_0_triggers_auditoria_automatica.sql
+luisa_v2_0_triggers_validaciones_bloqueos.sql
 ENTREGA_2_GUIA_EJECUCION_TRIGGERS.md
 ```
 
@@ -513,7 +513,7 @@ Si hay dudas sobre la implementación, revisar:
 
 1. `ENTREGA_2_5_IMPLEMENTACION_RÁPIDA.md` - Paso a paso
 2. `ENTREGA_2_5_MODULO_FAMILIAR_GUIA.md` - Detalles técnicos
-3. `ligia_v2_0_entrega_2_5_modulo_familiar.sql` - Código exacto
+3. `luisa_v2_0_entrega_2_5_modulo_familiar.sql` - Código exacto
 
 **El módulo está LISTO para usar.**
 

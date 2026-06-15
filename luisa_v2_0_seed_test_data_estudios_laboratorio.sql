@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: ESTUDIOS DE LABORATORIO E IMAGENOLOGÍA
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: ESTUDIOS DE LABORATORIO E IMAGENOLOGÍA
 -- ============================================================================
 -- Script para cargar reportes de laboratorio, estudios de imagen y análisis clínicos
 -- Total estimado: 150-200 reportes
@@ -258,8 +258,8 @@ END $$;
 -- 3. Generador PL/pgSQL para crear reportes masivamente
 --
 -- PRÓXIMOS PASOS:
--- 1. Ejecutar ligia_v2_0_seed_test_data_notas_evolucion.sql
--- 2. Ejecutar ligia_v2_0_seed_test_data_medicamentos.sql
+-- 1. Ejecutar luisa_v2_0_seed_test_data_notas_evolucion.sql
+-- 2. Ejecutar luisa_v2_0_seed_test_data_medicamentos.sql
 -- 3. Validar carga completa e integridad de datos
 -- 4. Probar visualización en app.html y paciente.html
 

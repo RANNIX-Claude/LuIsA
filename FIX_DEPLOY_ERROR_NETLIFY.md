@@ -1,4 +1,4 @@
-# 🔧 FIX: Error de Deploy en Netlify
+﻿# 🔧 FIX: Error de Deploy en Netlify
 
 **Problema:** `Cannot find module '@anthropic-ai/sdk'`
 
@@ -149,4 +149,4 @@ Simplemente:
 
 ---
 
-**LIGIA v2.0 está en producción con API funcionando.**
+**LUISA v2.0 está en producción con API funcionando.**

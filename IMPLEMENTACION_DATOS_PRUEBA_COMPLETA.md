@@ -1,8 +1,8 @@
-# LIGIA v2.0 - GUÍA COMPLETA: Implementación de Datos de Prueba
+﻿# LUISA v2.0 - GUÍA COMPLETA: Implementación de Datos de Prueba
 
 ## 📋 Introducción
 
-Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y estudios clínicos** en LIGIA v2.0 para comenzar a probar el sistema con datos realistas.
+Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y estudios clínicos** en LUISA v2.0 para comenzar a probar el sistema con datos realistas.
 
 **Tiempo total estimado:** 10-15 minutos
 **Datos que se cargarán:**
@@ -25,7 +25,7 @@ Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y est
 
 ## 🏥 PASO 2: Carga el Script de 20 Médicos
 
-### Archivo: `ligia_v2_0_seed_test_data_medicos.sql`
+### Archivo: `luisa_v2_0_seed_test_data_medicos.sql`
 
 1. **Copia todo el contenido** del archivo de médicos
 2. **Pégalo en el SQL Editor de Supabase**
@@ -48,7 +48,7 @@ Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y est
 
 ### Parte A: Pacientes 1-51
 
-1. **Archivo:** `ligia_v2_0_seed_test_data_pacientes.sql`
+1. **Archivo:** `luisa_v2_0_seed_test_data_pacientes.sql`
 2. **Nueva Query** en Supabase
 3. **Copia el contenido completo** y pégalo
 4. **Presiona Run**
@@ -63,7 +63,7 @@ Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y est
 
 ### Parte B: Pacientes 52-100
 
-1. **Archivo:** `ligia_v2_0_seed_test_data_pacientes_52_a_100.sql`
+1. **Archivo:** `luisa_v2_0_seed_test_data_pacientes_52_a_100.sql`
 2. **Nueva Query** en Supabase
 3. **Copia y pega el contenido**
 4. **Presiona Run**
@@ -78,7 +78,7 @@ Esta guía te ayuda a cargar **100+ pacientes, 20 médicos, 200+ consultas y est
 
 ## 📋 PASO 4: Carga Consultas e Historias Clínicas
 
-### Archivo: `ligia_v2_0_seed_test_data_consultas_historias.sql`
+### Archivo: `luisa_v2_0_seed_test_data_consultas_historias.sql`
 
 Este script crea:
 - 5+ **historias clínicas detalladas** (Sección 6.1 NOM-004)
@@ -110,7 +110,7 @@ Este script crea:
 
 ## 🔬 PASO 5: Carga Estudios de Laboratorio e Imagenología
 
-### Archivo: `ligia_v2_0_seed_test_data_estudios_laboratorio.sql`
+### Archivo: `luisa_v2_0_seed_test_data_estudios_laboratorio.sql`
 
 Carga:
 - **5 reportes de laboratorio** (glucosa, perfiles lipídicos, electrolitos, etc.)
@@ -236,7 +236,7 @@ Una vez cargados todos los datos, accede a tu aplicación:
 ## 📊 ESTRUCTURA DE DATOS CARGADA
 
 ```
-LIGIA v2.0 - TEST DATA OVERVIEW
+LUISA v2.0 - TEST DATA OVERVIEW
 ════════════════════════════════════════════════════════════════
 
 MÉDICOS (20)
@@ -310,7 +310,7 @@ MEDICAMENTOS
 SELECT id, nombre FROM cat_especialidades LIMIT 5;
 
 -- Si no hay, carga primero:
--- ligia_v2_0_seed_catalogs.sql (de ENTREGA 2)
+-- luisa_v2_0_seed_catalogs.sql (de ENTREGA 2)
 ```
 
 ---
@@ -336,7 +336,7 @@ DELETE FROM medicos WHERE cedula_profesional LIKE 'MED-%';
 **Causa:** Las tablas de ENTREGA 1 no están creadas
 
 **Solución:**
-1. Ejecuta primero: `ligia_v2_0_schema_redesign.sql` (de ENTREGA 1)
+1. Ejecuta primero: `luisa_v2_0_schema_redesign.sql` (de ENTREGA 1)
 2. Luego ejecuta los scripts de test data
 
 ---
@@ -375,22 +375,22 @@ DELETE FROM medicos WHERE cedula_profesional LIKE 'MED-%';
 ## 📂 Archivos Entregados
 
 ```
-ligia_v2_0/ (SEED DATA SCRIPTS)
-├── ligia_v2_0_seed_test_data_medicos.sql
+luisa_v2_0/ (SEED DATA SCRIPTS)
+├── luisa_v2_0_seed_test_data_medicos.sql
 │   └── 20 médicos con especialidades, certificaciones, idiomas
 │
-├── ligia_v2_0_seed_test_data_pacientes.sql
+├── luisa_v2_0_seed_test_data_pacientes.sql
 │   └── Pacientes 1-51 con perfiles completos
 │
-├── ligia_v2_0_seed_test_data_pacientes_52_a_100.sql
+├── luisa_v2_0_seed_test_data_pacientes_52_a_100.sql
 │   └── Pacientes 52-100 (continuación)
 │
-├── ligia_v2_0_seed_test_data_consultas_historias.sql
+├── luisa_v2_0_seed_test_data_consultas_historias.sql
 │   └── 5+ historias clínicas detalladas
 │   └── 5+ consultas
 │   └── Generador de 50+ consultas adicionales
 │
-├── ligia_v2_0_seed_test_data_estudios_laboratorio.sql
+├── luisa_v2_0_seed_test_data_estudios_laboratorio.sql
 │   └── 5 reportes de laboratorio
 │   └── 4 estudios de imagen
 │   └── Generador de 30+ estudios adicionales
@@ -441,7 +441,7 @@ Si tienes dudas:
 
 ## ✨ Conclusión
 
-Con esta guía y los scripts proporcionados, **LIGIA v2.0 tendrá datos realistas listos para pruebas completas**:
+Con esta guía y los scripts proporcionados, **LUISA v2.0 tendrá datos realistas listos para pruebas completas**:
 
 - ✅ Sistema totalmente poblado
 - ✅ Datos clínicamente realistas
@@ -454,5 +454,5 @@ Con esta guía y los scripts proporcionados, **LIGIA v2.0 tendrá datos realista
 ---
 
 *Última actualización: 25 de mayo, 2026*
-*LIGIA v2.0 - Sistema de Expediente Clínico Electrónico*
+*LUISA v2.0 - Sistema de Expediente Clínico Electrónico*
 

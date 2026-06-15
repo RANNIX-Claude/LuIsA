@@ -1,6 +1,6 @@
-// netlify/functions/claude.js
+﻿// netlify/functions/claude.js
 // Proxy seguro — Claude API
-// LIGIA v2.0
+// LUISA v2.0
 
 const CORS = {
   "Access-Control-Allow-Origin":  "*",

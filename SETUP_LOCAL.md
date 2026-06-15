@@ -1,4 +1,4 @@
-# 🏠 LIGIA v2.0 - Setup Local & Testing
+﻿# 🏠 LUISA v2.0 - Setup Local & Testing
 
 ## 📦 Instalación en tu máquina
 
@@ -6,10 +6,10 @@
 
 ```bash
 # Clona o descarga estos archivos en una carpeta:
-C:\proyectos\ligia-v2\
+C:\proyectos\luisa-v2\
 
 # Estructura necesaria:
-ligia-v2/
+luisa-v2/
 ├── app.html                          # ✅ App del doctor
 ├── paciente.html                     # ✅ App del paciente
 ├── auth.html                         # Login/Register
@@ -31,15 +31,15 @@ ligia-v2/
 -- 2. Ve a SQL Editor y ejecuta estos scripts EN ORDEN:
 
 -- A. Crear schema completo:
--- Copia todo el contenido de: ligia_v2_0_deploy_completo.sql
+-- Copia todo el contenido de: luisa_v2_0_deploy_completo.sql
 -- Pega en SQL Editor y ejecuta
 
 -- B. Aplicar RLS:
--- Copia: ligia_v2_0_rls_simple.sql
+-- Copia: luisa_v2_0_rls_simple.sql
 -- Ejecuta en SQL Editor
 
 -- C. Cargar datos de prueba:
--- Copia: ligia_v2_0_seed_simple.sql
+-- Copia: luisa_v2_0_seed_simple.sql
 -- Ejecuta en SQL Editor
 ```
 
@@ -48,7 +48,7 @@ ligia-v2/
 En Supabase, ve a **Auth > Users** y confirma:
 
 ```
-Email: elena.garcia@ligia.mx
+Email: elena.garcia@luisa.mx
 Rol: administrador_familiar (puede ser cualquiera de los 3 creados)
 ```
 
@@ -62,7 +62,7 @@ Si no aparecen, ejecuta el seed nuevamente.
 
 ```bash
 # Navega a tu carpeta
-cd C:\proyectos\ligia-v2
+cd C:\proyectos\luisa-v2
 
 # En Windows PowerShell:
 python -m http.server 8000
@@ -106,7 +106,7 @@ netlify dev
 
 ```
 URL: http://localhost:8000/auth.html
-Email: pedro.garcia@ligia.mx (crear nuevo o usar test)
+Email: pedro.garcia@luisa.mx (crear nuevo o usar test)
 Password: TuPassword123
 
 Expected: Redirige a /app.html
@@ -184,7 +184,7 @@ console.log(pacienteData)
 console.log(medico)
 
 // Verificar conexión a Supabase:
-sb.from('usuarios_ligia').select('count', {count: 'exact'})
+sb.from('usuarios_luisa').select('count', {count: 'exact'})
   .then(r => console.log('Users:', r.data))
 ```
 
@@ -238,7 +238,7 @@ NETLIFY FUNCTIONS:
 [ ] Dictation extraction funciona
 [ ] Lab analysis funciona
 [ ] Translation funciona
-[ ] Chat con LIGIA funciona
+[ ] Chat con LUISA funciona
 
 DATABASE:
 [ ] puedo ver datos en Supabase
@@ -255,7 +255,7 @@ DATABASE:
 |-------|-------|----------|
 | `cors error on localhost` | CORS headers | Usar `http://localhost` no `127.0.0.1` |
 | `session is null` | No hay usuario | Login primero, luego accede a /app.html |
-| `table does not exist` | Seed no se ejecutó | Ejecutar ligia_v2_0_deploy_completo.sql |
+| `table does not exist` | Seed no se ejecutó | Ejecutar luisa_v2_0_deploy_completo.sql |
 | `RLS policy violation` | Usuario intenta acceder datos de otro | Normal, significa RLS funciona ✓ |
 | `Claude API timeout` | API lenta o key inválida | Verificar ANTHROPIC_API_KEY |
 | `medicamentos no cargan` | FK faltante | Verificar que el medicamento existe en cat_medicamentos |
@@ -285,4 +285,4 @@ git push origin main
 # Netlify se entera automáticamente y deploya
 ```
 
-¡Felicidades! 🎉 Tu LIGIA v2.0 está lista para producción.
+¡Felicidades! 🎉 Tu LUISA v2.0 está lista para producción.

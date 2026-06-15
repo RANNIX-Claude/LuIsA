@@ -1,8 +1,8 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: PACIENTES 52-100 (Continuación)
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: PACIENTES 52-100 (Continuación)
 -- ============================================================================
 -- Pacientes 52-100 con datos variados
--- Ejecutar DESPUÉS del script ligia_v2_0_seed_test_data_pacientes.sql
+-- Ejecutar DESPUÉS del script luisa_v2_0_seed_test_data_pacientes.sql
 -- ============================================================================
 
 INSERT INTO perfiles_pacientes (

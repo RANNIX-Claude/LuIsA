@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
@@ -539,7 +539,7 @@ function AuthGuard({children}){
   const [listo,setListo] = useState(false);
   useEffect(()=>{
     // Usar localStorage (sesión LUISA propia) en vez de Supabase Auth
-    const sessionStr = localStorage.getItem('ligia_session');
+    const sessionStr = localStorage.getItem('luisa_session');
     if(!sessionStr) {
       window.location.href='/auth.html';
       return;
@@ -548,8 +548,8 @@ function AuthGuard({children}){
       const session = JSON.parse(sessionStr);
       // Verificar expiración 24h
       if (Date.now() - session.timestamp > 24*60*60*1000) {
-        localStorage.removeItem('ligia_user');
-        localStorage.removeItem('ligia_session');
+        localStorage.removeItem('luisa_user');
+        localStorage.removeItem('luisa_session');
         window.location.href='/auth.html';
         return;
       }
@@ -1994,14 +1994,14 @@ function App(){
       return;
     }
     try {
-      // 1. Crear usuario en usuarios_ligia
+      // 1. Crear usuario en usuarios_luisa
       const emailGenerado = nuevo.nombre.trim().toLowerCase()
         .replace(/\s+/g, '.')
         .replace(/[^a-z0-9.]/g, '')
-        + '@temp.ligia.mx';
+        + '@temp.luisa.mx';
 
       const { data: usuario, error: errUsuario } = await sb
-        .from('usuarios_ligia')
+        .from('usuarios_luisa')
         .insert([{
           email: emailGenerado,
           nombre_completo: nuevo.nombre.trim(),

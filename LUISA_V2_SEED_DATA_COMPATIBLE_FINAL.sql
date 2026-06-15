@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA SCRIPT (100% COMPATIBLE)
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA SCRIPT (100% COMPATIBLE)
 -- 100 MÉDICOS + 300 PACIENTES + DATOS CLÍNICOS COMPLETOS
 -- ============================================================================
 -- FECHA: 2026-05-25
@@ -21,13 +21,13 @@ DELETE FROM doctor_patient_relationships;
 DELETE FROM family_relationships;
 DELETE FROM perfiles_pacientes;
 DELETE FROM medicos;
-DELETE FROM usuarios_ligia WHERE rol IN ('medico', 'paciente', 'admin_familiar');
+DELETE FROM usuarios_luisa WHERE rol IN ('medico', 'paciente', 'admin_familiar');
 
 -- ============================================================================
 -- PASO 1: INSERTAR 100 MÉDICOS CON AUTENTICACIÓN
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
 SELECT
   gen_random_uuid() as id,
   CONCAT('medico', LPAD(seq::text, 3, '0'), '@hospital.mx') as email,
@@ -63,7 +63,7 @@ SELECT
   NOW() as updated_at
 FROM generate_series(1, 100) as seq;
 
--- Insertar registros en tabla medicos vinculados a usuarios_ligia
+-- Insertar registros en tabla medicos vinculados a usuarios_luisa
 INSERT INTO medicos (id, id_usuario, cedula_profesional, numero_cedula_verificado, especialidad_id, numero_pacientes, duracion_consulta_defecto, activo, created_at, updated_at)
 SELECT
   gen_random_uuid() as id,
@@ -76,7 +76,7 @@ SELECT
   true as activo,
   NOW() as created_at,
   NOW() as updated_at
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'medico'
 ORDER BY ul.created_at DESC
 LIMIT 100;
@@ -85,7 +85,7 @@ LIMIT 100;
 -- PASO 2: INSERTAR 300 PACIENTES CON AUTENTICACIÓN
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
 SELECT
   gen_random_uuid() as id,
   CONCAT('paciente', LPAD(seq::text, 3, '0'), '@email.com') as email,
@@ -125,7 +125,7 @@ SELECT
   75 as perfil_completo_pct,
   NOW() as created_at,
   NOW() as updated_at
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'paciente'
 ORDER BY ul.created_at DESC
 LIMIT 300;
@@ -134,7 +134,7 @@ LIMIT 300;
 -- PASO 3: INSERTAR 20 ADMINISTRADORES FAMILIARES (MADRES)
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
 SELECT
   gen_random_uuid() as id,
   CONCAT('mama', LPAD(seq::text, 2, '0'), '@email.com') as email,
@@ -174,7 +174,7 @@ SELECT
   75 as perfil_completo_pct,
   NOW() as created_at,
   NOW() as updated_at
-FROM usuarios_ligia ul
+FROM usuarios_luisa ul
 WHERE ul.rol = 'admin_familiar'
 ORDER BY ul.created_at DESC
 LIMIT 20;
@@ -194,12 +194,12 @@ SELECT
 FROM (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at DESC) as mama_seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'admin_familiar')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'admin_familiar')
 ) mama
 CROSS JOIN (
   SELECT id, ROW_NUMBER() OVER (ORDER BY created_at ASC) as patient_seq
   FROM perfiles_pacientes
-  WHERE id_usuario IN (SELECT id FROM usuarios_ligia WHERE rol = 'paciente')
+  WHERE id_usuario IN (SELECT id FROM usuarios_luisa WHERE rol = 'paciente')
 ) hijo
 WHERE hijo.patient_seq <= (mama.mama_seq * 15)
   AND hijo.patient_seq > ((mama.mama_seq - 1) * 15);
@@ -356,7 +356,7 @@ FROM medicos
 UNION ALL
 SELECT 'Pacientes', COUNT(*) FROM perfiles_pacientes
 UNION ALL
-SELECT 'Usuarios LIGIA', COUNT(*) FROM usuarios_ligia
+SELECT 'Usuarios LUISA', COUNT(*) FROM usuarios_luisa
 UNION ALL
 SELECT 'Citas', COUNT(*) FROM citas
 UNION ALL

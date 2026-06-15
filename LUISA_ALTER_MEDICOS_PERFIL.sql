@@ -1,4 +1,4 @@
--- ============================================================================
+﻿-- ============================================================================
 -- AGREGAR CAMPOS DE PERFIL A MÉDICOS
 -- Foto, firma digital, datos del consultorio
 -- ============================================================================
@@ -86,10 +86,10 @@ GRANT ALL ON estudios_paciente TO anon, authenticated, service_role;
 -- Foto y firma para el primer médico (ejemplo con avatar generado)
 UPDATE medicos SET
   foto_url = 'https://ui-avatars.com/api/?name=' ||
-             REPLACE((SELECT nombre_completo FROM usuarios_ligia WHERE id = medicos.id_usuario), ' ', '+') ||
+             REPLACE((SELECT nombre_completo FROM usuarios_luisa WHERE id = medicos.id_usuario), ' ', '+') ||
              '&background=00C9A7&color=fff&size=200&bold=true',
   telefono = '+52 55 ' || LPAD((1000+FLOOR(RANDOM()*9000))::text, 4, '0') || ' ' || LPAD((1000+FLOOR(RANDOM()*9000))::text, 4, '0'),
-  consultorio_nombre = 'Consultorio Médico LIGIA',
+  consultorio_nombre = 'Consultorio Médico LUISA',
   consultorio_direccion = 'Av. Insurgentes Sur ' || (100 + FLOOR(RANDOM()*900))::text || ', CDMX',
   horario_atencion = 'Lun-Vie 9:00-18:00';
 

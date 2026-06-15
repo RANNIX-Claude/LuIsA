@@ -1,4 +1,4 @@
-# 🔗 ENTREGA 2.5: Integración con ENTREGA 1 + ENTREGA 2
+﻿# 🔗 ENTREGA 2.5: Integración con ENTREGA 1 + ENTREGA 2
 
 **Status:** 📋 Cómo integrar el módulo familiar con lo ya creado  
 **Alcance:** Cambios mínimos a tablas existentes  
@@ -237,7 +237,7 @@ WHERE schemaname = 'public'
 ### PASO 2: Ejecutar ENTREGA 2.5 SQL Completo
 
 ```sql
--- Copiar y ejecutar ligia_v2_0_entrega_2_5_modulo_familiar.sql
+-- Copiar y ejecutar luisa_v2_0_entrega_2_5_modulo_familiar.sql
 -- Tiempo: 2 minutos
 -- Errores esperados: 0
 ```
@@ -438,7 +438,7 @@ Sí. Es extensible. Agregar campos, cambiar políticas, etc.
 
 - `ENTREGA_2_5_MODULO_FAMILIAR_GUIA.md` - Detalles completos
 - `ENTREGA_2_5_IMPLEMENTACION_RÁPIDA.md` - Pasos rápidos
-- `ligia_v2_0_entrega_2_5_modulo_familiar.sql` - SQL completo
+- `luisa_v2_0_entrega_2_5_modulo_familiar.sql` - SQL completo
 
 ---
 

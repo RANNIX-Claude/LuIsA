@@ -1,15 +1,15 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA MASTER ÚNICO
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA MASTER ÚNICO
 -- ============================================================================
 -- TODO EN UN ARCHIVO: 20 Médicos + 100 Pacientes + 300+ Registros Clínicos
 -- Tiempo: ~15 minutos
 -- Ejecutar TODO de una vez en Supabase SQL Editor
 -- ============================================================================
 
--- PASO 1: INSERTAR 20 MÉDICOS (usuarios_ligia + medicos)
+-- PASO 1: INSERTAR 20 MÉDICOS (usuarios_luisa + medicos)
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, documento_tipo, rol, activo, created_at, updated_at)
 VALUES
 ('a0000001-0000-0000-0000-000000000001'::uuid, 'carlos.garcia@hospital.mx', 'hash_pwd', 'Carlos García Moreno', 'MED-001-CARD', 'cedula', 'medico', true, NOW(), NOW()),
 ('a0000002-0000-0000-0000-000000000002'::uuid, 'maria.rodriguez@hospital.mx', 'hash_pwd', 'María Rodríguez Pérez', 'MED-002-PEDI', 'cedula', 'medico', true, NOW(), NOW()),
@@ -45,14 +45,14 @@ SELECT
   true,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'medico' AND u.email LIKE '%.mx';
 
 -- ============================================================================
--- PASO 2: INSERTAR 100 PACIENTES (usuarios_ligia + perfiles_pacientes)
+-- PASO 2: INSERTAR 100 PACIENTES (usuarios_luisa + perfiles_pacientes)
 -- ============================================================================
 
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
 VALUES
 ('b0000001-0000-0000-0000-000000000001'::uuid, 'juan.perez@email.com', 'hash_pwd', 'Juan Pérez García', 'PAC-001', 'paciente', true, NOW(), NOW()),
 ('b0000002-0000-0000-0000-000000000002'::uuid, 'maria.lopez@email.com', 'hash_pwd', 'María López Hernández', 'PAC-002', 'paciente', true, NOW(), NOW()),
@@ -76,7 +76,7 @@ VALUES
 ('b0000020-0000-0000-0000-000000000020'::uuid, 'cecilia.gomez@email.com', 'hash_pwd', 'Cecilia Gómez Herrera', 'PAC-020', 'paciente', true, NOW(), NOW());
 
 -- Continuar con 80 pacientes más (generador automático)
-INSERT INTO usuarios_ligia (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
+INSERT INTO usuarios_luisa (id, email, contraseña_hash, nombre_completo, documento_identidad, rol, activo, created_at, updated_at)
 SELECT
   gen_random_uuid(),
   'paciente' || LPAD((seq + 20)::text, 3, '0') || '@email.com',
@@ -106,7 +106,7 @@ SELECT
   75,
   NOW(),
   NOW()
-FROM usuarios_ligia u
+FROM usuarios_luisa u
 WHERE u.rol = 'paciente' AND u.email LIKE 'paciente%@email.com';
 
 -- ============================================================================

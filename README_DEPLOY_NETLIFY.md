@@ -1,4 +1,4 @@
-# 🚀 LIGIA v2.0 — Guía de Deploy a Netlify
+﻿# 🚀 LUISA v2.0 — Guía de Deploy a Netlify
 
 **Fecha de versión:** 2026-05-26
 **Sitio actual:** https://fantastic-crumble-0fea1f.netlify.app
@@ -74,7 +74,7 @@ Esta versión incluye:
 1. Ve a https://app.netlify.com/sites/fantastic-crumble-0fea1f/deploys
 2. Arrastra la **carpeta completa**:
    ```
-   C:\Users\asus\OneDrive\work\Ligia\frontend\otra version
+   C:\Users\asus\OneDrive\work\Luisa\frontend\otra version
    ```
 3. Espera ~30-60 segundos
 4. Netlify rebuilda las funciones automáticamente
@@ -83,7 +83,7 @@ Esta versión incluye:
 ### Opción B: Netlify CLI (avanzado)
 
 ```bash
-cd "C:\Users\asus\OneDrive\work\Ligia\frontend\otra version"
+cd "C:\Users\asus\OneDrive\work\Luisa\frontend\otra version"
 netlify deploy --prod
 ```
 
@@ -93,7 +93,7 @@ netlify deploy --prod
 
 ### 1. Verificar Landing
 - Ir a: https://fantastic-crumble-0fea1f.netlify.app
-- ✅ Carga la landing con logo LIGIA
+- ✅ Carga la landing con logo LUISA
 
 ### 2. Verificar Login
 - Ir a: https://fantastic-crumble-0fea1f.netlify.app/auth.html
@@ -151,9 +151,9 @@ NOTIFY pgrst, 'reload schema';
 Si necesitas reconstruir la BD:
 
 ```
-1. LIGIA_BD_COMPLETA_TODO_EN_UNO.sql    Schema + catálogos + datos demo
-2. LIGIA_DATOS_RICOS_REALISTAS.sql      Reemplazar datos con nombres reales
-3. LIGIA_ALTER_MEDICOS_PERFIL.sql       Campos foto/firma + tablas recetas/estudios
+1. LUISA_BD_COMPLETA_TODO_EN_UNO.sql    Schema + catálogos + datos demo
+2. LUISA_DATOS_RICOS_REALISTAS.sql      Reemplazar datos con nombres reales
+3. LUISA_ALTER_MEDICOS_PERFIL.sql       Campos foto/firma + tablas recetas/estudios
 ```
 
 Ejecutar en **Supabase SQL Editor** en ese orden.
@@ -186,4 +186,4 @@ Si algo no funciona:
 ---
 
 **Última actualización:** 2026-05-26
-**Versión:** LIGIA v2.0
+**Versión:** LUISA v2.0

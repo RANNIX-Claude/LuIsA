@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - RLS (ROW LEVEL SECURITY) + AUDITORÍA
+﻿-- ============================================================================
+-- LUISA v2.0 - RLS (ROW LEVEL SECURITY) + AUDITORÍA
 -- Conformidad NOM-024-SSA3-2010
 -- ============================================================================
 -- Seguridad:
@@ -15,7 +15,7 @@
 
 CREATE TABLE IF NOT EXISTS auditoria_acciones (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  usuario_id UUID NOT NULL REFERENCES usuarios_ligia(id),
+  usuario_id UUID NOT NULL REFERENCES usuarios_luisa(id),
   tipo_evento VARCHAR(100) NOT NULL,
   tabla_afectada VARCHAR(100) NOT NULL,
   id_registro UUID,

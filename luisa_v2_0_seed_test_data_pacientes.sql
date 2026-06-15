@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: 100 PACIENTES CON PERFILES COMPLETOS
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: 100 PACIENTES CON PERFILES COMPLETOS
 -- ============================================================================
 -- Script para cargar 100 pacientes con datos demográficos, antecedentes,
 -- medicamentos actuales y datos realistas

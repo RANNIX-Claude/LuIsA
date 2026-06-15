@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SCRIPT 1: SCHEMA COMPLETO (ejecutar primero)
+﻿-- ============================================================================
+-- LUISA v2.0 - SCRIPT 1: SCHEMA COMPLETO (ejecutar primero)
 -- Crea: 26 catálogos + 15 tablas principales + índices
 -- Idempotente: limpia tablas previas automáticamente
 -- ============================================================================
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS family_relationships CASCADE;
 DROP TABLE IF EXISTS doctor_patient_relationships CASCADE;
 DROP TABLE IF EXISTS perfiles_pacientes CASCADE;
 DROP TABLE IF EXISTS medicos CASCADE;
-DROP TABLE IF EXISTS usuarios_ligia CASCADE;
+DROP TABLE IF EXISTS usuarios_luisa CASCADE;
 DROP TABLE IF EXISTS cat_procedimientos_cie9 CASCADE;
 DROP TABLE IF EXISTS cat_tipos_servicios_auxiliares CASCADE;
 DROP TABLE IF EXISTS cat_tipos_eventos_auditoria CASCADE;
@@ -87,14 +87,14 @@ CREATE TABLE cat_procedimientos_cie9 (id UUID PRIMARY KEY DEFAULT uuid_generate_
 
 -- ============================================================================
 -- TABLAS PRINCIPALES (15)
--- IMPORTANTE: usuarios_ligia usa "password_hash" (sin ñ) para compatibilidad PostgREST
+-- IMPORTANTE: usuarios_luisa usa "password_hash" (sin ñ) para compatibilidad PostgREST
 -- ============================================================================
 
-CREATE TABLE usuarios_ligia (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), email VARCHAR(255) UNIQUE, password_hash VARCHAR(255), nombre_completo VARCHAR(255), documento_identidad VARCHAR(50), documento_tipo VARCHAR(20), rol VARCHAR(50), activo BOOLEAN DEFAULT true, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
+CREATE TABLE usuarios_luisa (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), email VARCHAR(255) UNIQUE, password_hash VARCHAR(255), nombre_completo VARCHAR(255), documento_identidad VARCHAR(50), documento_tipo VARCHAR(20), rol VARCHAR(50), activo BOOLEAN DEFAULT true, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
 
-CREATE TABLE medicos (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_ligia(id) ON DELETE CASCADE, cedula_profesional VARCHAR(20), numero_cedula_verificado BOOLEAN DEFAULT false, especialidad_id UUID REFERENCES cat_especialidades(id), subespecialidad_id UUID REFERENCES cat_especialidades(id), numero_pacientes INT DEFAULT 0, duracion_consulta_defecto INT DEFAULT 30, activo BOOLEAN DEFAULT true, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
+CREATE TABLE medicos (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_luisa(id) ON DELETE CASCADE, cedula_profesional VARCHAR(20), numero_cedula_verificado BOOLEAN DEFAULT false, especialidad_id UUID REFERENCES cat_especialidades(id), subespecialidad_id UUID REFERENCES cat_especialidades(id), numero_pacientes INT DEFAULT 0, duracion_consulta_defecto INT DEFAULT 30, activo BOOLEAN DEFAULT true, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
 
-CREATE TABLE perfiles_pacientes (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_ligia(id) ON DELETE CASCADE, nombre_completo VARCHAR(255), fecha_nacimiento DATE, edad INT, sexo VARCHAR(20), tipo_sangre_id UUID REFERENCES cat_tipos_sanguineo(id), estado_id UUID REFERENCES cat_estados_republica(id), ciudad_id UUID REFERENCES cat_ciudades(id), domicilio_calle VARCHAR(255), domicilio_numero VARCHAR(50), domicilio_cp VARCHAR(10), ocupacion_id UUID REFERENCES cat_ocupaciones(id), estado_civil_id UUID REFERENCES cat_estado_civil(id), grupo_etnico_id UUID REFERENCES cat_grupos_etnicos(id), religion_id UUID REFERENCES cat_religiones(id), nivel_socioeconomico_id UUID REFERENCES cat_niveles_socioeconomicos(id), tipo_vivienda_id UUID REFERENCES cat_tipos_vivienda(id), perfil_completo_pct INT DEFAULT 0, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
+CREATE TABLE perfiles_pacientes (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_luisa(id) ON DELETE CASCADE, nombre_completo VARCHAR(255), fecha_nacimiento DATE, edad INT, sexo VARCHAR(20), tipo_sangre_id UUID REFERENCES cat_tipos_sanguineo(id), estado_id UUID REFERENCES cat_estados_republica(id), ciudad_id UUID REFERENCES cat_ciudades(id), domicilio_calle VARCHAR(255), domicilio_numero VARCHAR(50), domicilio_cp VARCHAR(10), ocupacion_id UUID REFERENCES cat_ocupaciones(id), estado_civil_id UUID REFERENCES cat_estado_civil(id), grupo_etnico_id UUID REFERENCES cat_grupos_etnicos(id), religion_id UUID REFERENCES cat_religiones(id), nivel_socioeconomico_id UUID REFERENCES cat_niveles_socioeconomicos(id), tipo_vivienda_id UUID REFERENCES cat_tipos_vivienda(id), perfil_completo_pct INT DEFAULT 0, created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());
 
 CREATE TABLE doctor_patient_relationships (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_medico UUID REFERENCES medicos(id) ON DELETE CASCADE, id_paciente UUID REFERENCES perfiles_pacientes(id) ON DELETE CASCADE, fecha_asignacion TIMESTAMP DEFAULT NOW(), activo BOOLEAN DEFAULT true, created_at TIMESTAMP DEFAULT NOW());
 
@@ -116,15 +116,15 @@ CREATE TABLE diario_eventos (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_
 
 CREATE TABLE vacunas_paciente (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_paciente UUID REFERENCES perfiles_pacientes(id) ON DELETE CASCADE, nombre_vacuna VARCHAR(255), fabricante VARCHAR(100), numero_lote VARCHAR(50), fecha_aplicacion DATE, created_at TIMESTAMP DEFAULT NOW());
 
-CREATE TABLE auditoria_acciones (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_ligia(id), usuario_rol VARCHAR(50), accion VARCHAR(50), tabla_afectada VARCHAR(100), id_registro UUID, valores_anteriores JSONB, valores_nuevos JSONB, timestamp TIMESTAMP DEFAULT NOW(), ip_address VARCHAR(50), created_at TIMESTAMP DEFAULT NOW());
+CREATE TABLE auditoria_acciones (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_luisa(id), usuario_rol VARCHAR(50), accion VARCHAR(50), tabla_afectada VARCHAR(100), id_registro UUID, valores_anteriores JSONB, valores_nuevos JSONB, timestamp TIMESTAMP DEFAULT NOW(), ip_address VARCHAR(50), created_at TIMESTAMP DEFAULT NOW());
 
-CREATE TABLE firma_electronica (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_ligia(id), tabla_nombre VARCHAR(100), id_registro UUID, tipo_firma VARCHAR(20), fecha_firma TIMESTAMP DEFAULT NOW(), valor_hash VARCHAR(255), certificado_digital TEXT, created_at TIMESTAMP DEFAULT NOW());
+CREATE TABLE firma_electronica (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), id_usuario UUID REFERENCES usuarios_luisa(id), tabla_nombre VARCHAR(100), id_registro UUID, tipo_firma VARCHAR(20), fecha_firma TIMESTAMP DEFAULT NOW(), valor_hash VARCHAR(255), certificado_digital TEXT, created_at TIMESTAMP DEFAULT NOW());
 
 -- ============================================================================
 -- ÍNDICES
 -- ============================================================================
 
-CREATE INDEX idx_usuarios_email ON usuarios_ligia(email);
+CREATE INDEX idx_usuarios_email ON usuarios_luisa(email);
 CREATE INDEX idx_medicos_usuario ON medicos(id_usuario);
 CREATE INDEX idx_medicos_cedula ON medicos(cedula_profesional);
 CREATE INDEX idx_perfiles_usuario ON perfiles_pacientes(id_usuario);

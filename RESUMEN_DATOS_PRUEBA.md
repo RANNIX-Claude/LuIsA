@@ -1,8 +1,8 @@
-# 📊 LIGIA v2.0 - Resumen de Datos de Prueba Preparados
+﻿# 📊 LUISA v2.0 - Resumen de Datos de Prueba Preparados
 
 ## 🎯 Misión Completada
 
-Se han preparado **5 scripts SQL de datos de prueba** que cargan automáticamente **100+ pacientes, 20 médicos, 200+ consultas y 40+ estudios clínicos** en LIGIA v2.0.
+Se han preparado **5 scripts SQL de datos de prueba** que cargan automáticamente **100+ pacientes, 20 médicos, 200+ consultas y 40+ estudios clínicos** en LUISA v2.0.
 
 El sistema está listo para **pruebas completas e inmediatas** sin necesidad de captura manual de datos.
 
@@ -10,7 +10,7 @@ El sistema está listo para **pruebas completas e inmediatas** sin necesidad de 
 
 ## 📦 Archivos Entregados
 
-### 1️⃣ `ligia_v2_0_seed_test_data_medicos.sql` (277 líneas)
+### 1️⃣ `luisa_v2_0_seed_test_data_medicos.sql` (277 líneas)
 **20 Médicos con especialidades variadas**
 
 **Incluye:**
@@ -49,7 +49,7 @@ El sistema está listo para **pruebas completas e inmediatas** sin necesidad de 
 
 ---
 
-### 2️⃣ `ligia_v2_0_seed_test_data_pacientes.sql` (Parte A: 1-51 pacientes)
+### 2️⃣ `luisa_v2_0_seed_test_data_pacientes.sql` (Parte A: 1-51 pacientes)
 **Primeros 51 pacientes con perfiles completos**
 
 **Datos por Paciente:**
@@ -83,7 +83,7 @@ El sistema está listo para **pruebas completas e inmediatas** sin necesidad de 
 
 ---
 
-### 3️⃣ `ligia_v2_0_seed_test_data_pacientes_52_a_100.sql` (Parte B: 52-100)
+### 3️⃣ `luisa_v2_0_seed_test_data_pacientes_52_a_100.sql` (Parte B: 52-100)
 **Continuación con 49 pacientes adicionales**
 
 Completa la cohorte a **100 pacientes totales** con:
@@ -99,7 +99,7 @@ Completa la cohorte a **100 pacientes totales** con:
 
 ---
 
-### 4️⃣ `ligia_v2_0_seed_test_data_consultas_historias.sql` (Consultas e Historias)
+### 4️⃣ `luisa_v2_0_seed_test_data_consultas_historias.sql` (Consultas e Historias)
 **Historias Clínicas Completas + Consultas**
 
 **Datos Cargados Directamente:**
@@ -123,7 +123,7 @@ Completa la cohorte a **100 pacientes totales** con:
 
 ---
 
-### 5️⃣ `ligia_v2_0_seed_test_data_estudios_laboratorio.sql` (Laboratorio + Imagen)
+### 5️⃣ `luisa_v2_0_seed_test_data_estudios_laboratorio.sql` (Laboratorio + Imagen)
 **Reportes de Laboratorio e Imagenología**
 
 **Laboratorios Cargados (5):**
@@ -206,11 +206,11 @@ DATOS CLÍNICOS REALISTAS:
 ### En Supabase (Ejecución):
 
 1. **Abre SQL Editor** en tu proyecto Supabase
-2. **Nueva Query** → Copia `ligia_v2_0_seed_test_data_medicos.sql` → **Run**
-3. **Nueva Query** → Copia `ligia_v2_0_seed_test_data_pacientes.sql` → **Run**
-4. **Nueva Query** → Copia `ligia_v2_0_seed_test_data_pacientes_52_a_100.sql` → **Run**
-5. **Nueva Query** → Copia `ligia_v2_0_seed_test_data_consultas_historias.sql` → **Run**
-6. **Nueva Query** → Copia `ligia_v2_0_seed_test_data_estudios_laboratorio.sql` → **Run**
+2. **Nueva Query** → Copia `luisa_v2_0_seed_test_data_medicos.sql` → **Run**
+3. **Nueva Query** → Copia `luisa_v2_0_seed_test_data_pacientes.sql` → **Run**
+4. **Nueva Query** → Copia `luisa_v2_0_seed_test_data_pacientes_52_a_100.sql` → **Run**
+5. **Nueva Query** → Copia `luisa_v2_0_seed_test_data_consultas_historias.sql` → **Run**
+6. **Nueva Query** → Copia `luisa_v2_0_seed_test_data_estudios_laboratorio.sql` → **Run**
 
 **Tiempo total: ~12 minutos**
 
@@ -297,7 +297,7 @@ Todos los datos respetan relaciones:
 
 Antes de ejecutar los scripts, asegúrate que:
 
-1. ✅ **Base de datos LIGIA v2.0 creada** (ENTREGA 1)
+1. ✅ **Base de datos LUISA v2.0 creada** (ENTREGA 1)
    - Tabla `medicos`
    - Tabla `perfiles_pacientes`
    - Tabla `consultas`
@@ -339,7 +339,7 @@ SELECT
 
 ### Fase 2: Notas de Evolución
 ```
-ligia_v2_0_seed_test_data_notas_evolucion.sql (a crear)
+luisa_v2_0_seed_test_data_notas_evolucion.sql (a crear)
 - 100+ notas de evolución (una por consulta)
 - SOAP notes detalladas
 - Medicamentos prescritos
@@ -347,7 +347,7 @@ ligia_v2_0_seed_test_data_notas_evolucion.sql (a crear)
 
 ### Fase 3: Consentimientos Informados
 ```
-ligia_v2_0_seed_test_data_consentimientos.sql (a crear)
+luisa_v2_0_seed_test_data_consentimientos.sql (a crear)
 - 20+ cartas de consentimiento
 - Procedimientos quirúrgicos
 - Anestesia
@@ -355,11 +355,11 @@ ligia_v2_0_seed_test_data_consentimientos.sql (a crear)
 
 ### Fase 4: Notas Especializadas
 ```
-ligia_v2_0_seed_test_data_notas_urgencia.sql (a crear)
+luisa_v2_0_seed_test_data_notas_urgencia.sql (a crear)
 - 10+ notas de urgencias
 - Atenciones emergentes
 
-ligia_v2_0_seed_test_data_hospitalizacion.sql (a crear)
+luisa_v2_0_seed_test_data_hospitalizacion.sql (a crear)
 - 5+ historias de hospitalización
 - Notas quirúrgicas
 ```
@@ -384,7 +384,7 @@ ligia_v2_0_seed_test_data_hospitalizacion.sql (a crear)
 
 ## 📝 Versión y Fecha
 
-- **Versión:** LIGIA v2.0 - Datasets Fase 1
+- **Versión:** LUISA v2.0 - Datasets Fase 1
 - **Fecha:** 25 de mayo, 2026
 - **Estado:** ✅ Completado y Validado
 - **Escalabilidad:** Generadores automáticos para más datos
@@ -393,7 +393,7 @@ ligia_v2_0_seed_test_data_hospitalizacion.sql (a crear)
 
 ## 🏆 Conclusión
 
-Con estos **5 scripts SQL + 1 guía de implementación**, LIGIA v2.0 estará **completamente poblado con datos clínicamente realistas** en menos de 15 minutos.
+Con estos **5 scripts SQL + 1 guía de implementación**, LUISA v2.0 estará **completamente poblado con datos clínicamente realistas** en menos de 15 minutos.
 
 El sistema está listo para:
 - ✅ Pruebas de funcionalidad completa
@@ -406,6 +406,6 @@ El sistema está listo para:
 
 ---
 
-*Generado para LIGIA v2.0 - Sistema de Expediente Clínico Electrónico*
+*Generado para LUISA v2.0 - Sistema de Expediente Clínico Electrónico*
 *Conforme a NOM-004-SSA3-2012 y NOM-024-SSA3-2010*
 

@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - SEED DATA: 20 MÉDICOS CON PERFILES COMPLETOS
+﻿-- ============================================================================
+-- LUISA v2.0 - SEED DATA: 20 MÉDICOS CON PERFILES COMPLETOS
 -- ============================================================================
 -- Script para cargar 20 médicos con especialidades, certificaciones y datos reales
 -- Ejecutar DESPUÉS de ENTREGA 1, 2 y 2.5

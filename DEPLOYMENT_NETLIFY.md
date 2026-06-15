@@ -1,4 +1,4 @@
-# 🚀 LIGIA v2.0 - Guía de Deployment en Netlify
+﻿# 🚀 LUISA v2.0 - Guía de Deployment en Netlify
 
 ## 📋 Pre-requisitos
 
@@ -32,26 +32,26 @@ SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ```bash
 # 1. Zip todos los archivos
-cd "C:\Users\asus\OneDrive\work\Ligia\frontend\otra version"
-zip -r ligia-v2.zip .
+cd "C:\Users\asus\OneDrive\work\Luisa\frontend\otra version"
+zip -r luisa-v2.zip .
 
 # 2. Ve a https://app.netlify.com/drop
 # 3. Arrastra y suelta el ZIP
-# 4. ¡Listo! Tu site estará en ligia-v2.netlify.app
+# 4. ¡Listo! Tu site estará en luisa-v2.netlify.app
 ```
 
 ### Opción B: Con Git (recomendado para producción)
 
 ```bash
 # 1. Inicializa repositorio git
-cd "C:\Users\asus\OneDrive\work\Ligia\frontend\otra version"
+cd "C:\Users\asus\OneDrive\work\Luisa\frontend\otra version"
 git init
 git add .
-git commit -m "Initial LIGIA v2.0 commit"
+git commit -m "Initial LUISA v2.0 commit"
 
 # 2. Sube a GitHub (o GitLab/Bitbucket)
-# En GitHub: crea nuevo repo "ligia-v2"
-git remote add origin https://github.com/tu-usuario/ligia-v2.git
+# En GitHub: crea nuevo repo "luisa-v2"
+git remote add origin https://github.com/tu-usuario/luisa-v2.git
 git push -u origin main
 
 # 3. En Netlify: New site → Import an existing project
@@ -101,7 +101,7 @@ https://tu-sitio.netlify.app/expediente    # Expediente compartido
 ### Test con usuarios de prueba:
 
 **Doctor:**
-- Email: `pedro.garcia@ligia.mx`
+- Email: `pedro.garcia@luisa.mx`
 - Password: Usa la que configuraste en auth.html
 - Pacientes: Los que están en la BD de Supabase
 
@@ -193,7 +193,7 @@ Si tienes problemas:
 
 ## ✨ ¡Listo!
 
-Tu app LIGIA v2.0 está en el cloud. ¡Comparte el link y empieza a recibir pacientes! 🏥
+Tu app LUISA v2.0 está en el cloud. ¡Comparte el link y empieza a recibir pacientes! 🏥
 
 Próximas mejoras:
 - [ ] Custom domain

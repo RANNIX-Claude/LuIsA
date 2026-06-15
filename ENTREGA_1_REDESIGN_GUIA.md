@@ -1,4 +1,4 @@
-# 🏥 LIGIA v2.0 - ENTREGA 1: REDISEÑO NOM-004 + NOM-024
+﻿# 🏥 LUISA v2.0 - ENTREGA 1: REDISEÑO NOM-004 + NOM-024
 ## Guía Completa de Implementación
 
 **Fecha:** 2026-05-24  
@@ -12,19 +12,19 @@
 ### ENTREGA 1 incluye:
 
 ```
-📁 ligia_v2_0_schema_redesign_nom004_nom024.sql (2,500+ líneas)
+📁 luisa_v2_0_schema_redesign_nom004_nom024.sql (2,500+ líneas)
    ├─ Tablas expandidas (perfiles_pacientes, medicos, citas)
    ├─ 26 Catálogos NOM-024 completos
    ├─ 7 Tablas de expediente clínico (NOM-004)
    └─ Índices y constraints
 
-📁 ligia_v2_0_rls_audit_nom024.sql (1,200+ líneas)
+📁 luisa_v2_0_rls_audit_nom024.sql (1,200+ líneas)
    ├─ Tabla de auditoría (auditoria_acciones)
    ├─ Row Level Security (RLS) en 15+ tablas
    ├─ 40+ políticas de acceso
    └─ Inmutabilidad de expediente
 
-📁 ligia_v2_0_seed_catalogs_completo.sql (500+ líneas)
+📁 luisa_v2_0_seed_catalogs_completo.sql (500+ líneas)
    ├─ 26 catálogos poblados
    ├─ Datos de ejemplo (médicos, pacientes)
    └─ Relaciones médico-paciente
@@ -77,7 +77,7 @@ DESPUÉS (v2.0):
 ```sql
 -- En Supabase → SQL Editor → Copiar y ejecutar:
 
--- Archivo: ligia_v2_0_schema_redesign_nom004_nom024.sql
+-- Archivo: luisa_v2_0_schema_redesign_nom004_nom024.sql
 -- Líneas: 2,500+
 -- Tiempo: ~2 segundos
 
@@ -96,7 +96,7 @@ DESPUÉS (v2.0):
 ### Paso 2: Aplicar RLS y Auditoría (1 min)
 
 ```sql
--- Archivo: ligia_v2_0_rls_audit_nom024.sql
+-- Archivo: luisa_v2_0_rls_audit_nom024.sql
 -- Líneas: 1,200+
 -- Tiempo: ~1 segundo
 
@@ -115,7 +115,7 @@ DESPUÉS (v2.0):
 ### Paso 3: Poblar Catálogos y Datos de Prueba (30 seg)
 
 ```sql
--- Archivo: ligia_v2_0_seed_catalogs_completo.sql
+-- Archivo: luisa_v2_0_seed_catalogs_completo.sql
 -- Líneas: 500+
 -- Tiempo: ~2 segundos
 

@@ -1,6 +1,6 @@
-# 📑 ENTREGA 1: ÍNDICE MAESTRO
+﻿# 📑 ENTREGA 1: ÍNDICE MAESTRO
 
-**Rediseño Completo LIGIA v2.0 para NOM-004 + NOM-024**
+**Rediseño Completo LUISA v2.0 para NOM-004 + NOM-024**
 
 **Fecha:** 2026-05-24  
 **Status:** ✅ COMPLETO Y LISTO  
@@ -12,7 +12,7 @@
 
 ### 🔹 ARCHIVOS SQL (Para Ejecutar en Supabase)
 
-#### 1️⃣ **ligia_v2_0_schema_redesign_nom004_nom024.sql** (2,500+ líneas)
+#### 1️⃣ **luisa_v2_0_schema_redesign_nom004_nom024.sql** (2,500+ líneas)
 
 | Aspecto | Detalles |
 |--------|----------|
@@ -75,7 +75,7 @@ Tablas de Expediente Clínico (7):
 
 ---
 
-#### 2️⃣ **ligia_v2_0_rls_audit_nom024.sql** (1,200+ líneas)
+#### 2️⃣ **luisa_v2_0_rls_audit_nom024.sql** (1,200+ líneas)
 
 | Aspecto | Detalles |
 |--------|----------|
@@ -124,7 +124,7 @@ Inmutabilidad:
 
 ---
 
-#### 3️⃣ **ligia_v2_0_seed_catalogs_completo.sql** (500+ líneas)
+#### 3️⃣ **luisa_v2_0_seed_catalogs_completo.sql** (500+ líneas)
 
 | Aspecto | Detalles |
 |--------|----------|
@@ -294,13 +294,13 @@ Testing:            INCLUIDO
 Objetivo: Automatizar auditoría + Validaciones
 
 Entregables:
-├─ ligia_v2_0_triggers_auditoria.sql
+├─ luisa_v2_0_triggers_auditoria.sql
 │  └─ Triggers que registran automáticamente
 │     ├─ INSERT → auditoria_acciones
 │     ├─ UPDATE → antes/después
 │     └─ DELETE → registro de eliminación
 │
-├─ ligia_v2_0_validaciones.sql
+├─ luisa_v2_0_validaciones.sql
 │  └─ Constraints que validan datos
 │     ├─ JSONB bien formado
 │     ├─ CIE-10 válido

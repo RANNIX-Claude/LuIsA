@@ -1,6 +1,6 @@
-# 🏥 LIGIA v2.0 - START HERE
+﻿# 🏥 LUISA v2.0 - START HERE
 
-**Bienvenido a LIGIA - Tu Sistema de Expediente Clínico Electrónico**
+**Bienvenido a LUISA - Tu Sistema de Expediente Clínico Electrónico**
 
 Última actualización: 2026-05-24 ⏰  
 Estado: ✅ **PRODUCTION READY**
@@ -37,12 +37,12 @@ Estado: ✅ **PRODUCTION READY**
       ✓ Citas - Agenda de consultas
       ✓ Dictar Consulta - Voz → Texto → DB
       ✓ Histórico - Consultas anteriores
-      ✓ Chat con LIGIA - IA médica
+      ✓ Chat con LUISA - IA médica
       ✓ Estudios - Análisis IA de reportes
 ```
 
 **Accede a:** `http://localhost:8000/app.html`  
-**User de prueba:** elena.garcia@ligia.mx
+**User de prueba:** elena.garcia@luisa.mx
 
 ---
 
@@ -57,7 +57,7 @@ Estado: ✅ **PRODUCTION READY**
       ✓ Mi Diario - Síntomas y eventos
       ✓ Mis Citas - Próximas consultas
       ✓ Compartir - QR token seguro
-      ✓ Chat - LIGIA responde dudas
+      ✓ Chat - LUISA responde dudas
 ```
 
 **Accede a:** `http://localhost:8000/paciente.html`  
@@ -160,7 +160,7 @@ Estado: ✅ **PRODUCTION READY**
 │     ✓ dictation - Extracción de dictaciones
 │     ✓ lab-analysis - Análisis de reportes
 │     ✓ translate - Traducción a 7 idiomas
-│     ✓ chat - Chat con LIGIA IA
+│     ✓ chat - Chat con LUISA IA
 │     ✓ extraction - Extracción genérica
 │
 └── 📄 package.json
@@ -270,9 +270,9 @@ Estado: ✅ **PRODUCTION READY**
 
 ```
 1. Ejecutar SQL en Supabase (5 min)
-   - ligia_v2_0_deploy_completo.sql
-   - ligia_v2_0_rls_simple.sql
-   - ligia_v2_0_seed_simple.sql
+   - luisa_v2_0_deploy_completo.sql
+   - luisa_v2_0_rls_simple.sql
+   - luisa_v2_0_seed_simple.sql
 
 2. Obtener API Key de Anthropic (2 min)
    - https://console.anthropic.com/account/keys
@@ -346,7 +346,7 @@ Estado: ✅ **PRODUCTION READY**
 - Extracción automática de datos
 - Guardar notas de evolución
 - Ver histórico de consultas
-- Chat con LIGIA (IA médica)
+- Chat con LUISA (IA médica)
 - Análisis IA de reportes
 
 ### Para Paciente ✅
@@ -373,14 +373,14 @@ Estado: ✅ **PRODUCTION READY**
 
 ### Doctor
 ```
-Email: pedro.garcia@ligia.mx
+Email: pedro.garcia@luisa.mx
 Rol: médico
 Pacientes: 2 asignados
 ```
 
 ### Pacientes
 ```
-Email: elena.garcia@ligia.mx
+Email: elena.garcia@luisa.mx
 Rol: paciente
 
 Email: (crear nuevo para prueba)

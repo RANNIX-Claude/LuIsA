@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - ENTREGA 2.5: Módulo Administrativo Familiar
+﻿-- ============================================================================
+-- LUISA v2.0 - ENTREGA 2.5: Módulo Administrativo Familiar
 -- ============================================================================
 -- Sistema de gestión de permisos para que un familiar administrativo pueda
 -- acceder, visualizar, editar y autorizar expedientes de múltiples miembros
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS permisos_expediente_familiar (
   fecha_vencimiento TIMESTAMP, -- NULL = sin vencimiento
 
   -- Registro de quién otorgó el permiso (generalmente un médico o paciente mayor de edad)
-  otorgado_por UUID REFERENCES usuarios_ligia(id),
+  otorgado_por UUID REFERENCES usuarios_luisa(id),
 
   -- Código de acceso temporal (OTP) para validación en caso de cambio de dispositivo
   codigo_acceso_temporal VARCHAR(20),

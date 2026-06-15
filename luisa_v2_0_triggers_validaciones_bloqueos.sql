@@ -1,5 +1,5 @@
--- ============================================================================
--- LIGIA v2.0 - TRIGGERS PARA VALIDACIONES Y BLOQUEOS
+﻿-- ============================================================================
+-- LUISA v2.0 - TRIGGERS PARA VALIDACIONES Y BLOQUEOS
 -- Aseguran integridad de datos y reglas de negocio
 -- ============================================================================
 
