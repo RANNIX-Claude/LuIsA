@@ -633,6 +633,7 @@
 
 let currentUser = null;
 let pacienteData = null;
+let consultasCount = 0;
 let currentLang  = 'es';
 let chatHistory  = [];
 let currentQRToken = null;
@@ -676,6 +677,12 @@ async function loadPaciente() {
   if (pacienteFromDb) {
     pacienteData = pacienteFromDb;
     fillAllForms();
+    // Cargar conteo de consultas registradas
+    const { count } = await sb
+      .from('notas_evolucion')
+      .select('*', { count: 'exact', head: true })
+      .eq('id_paciente', pacienteFromDb.id);
+    consultasCount = count || 0;
   } else {
     // Si no hay perfil de paciente, mostrar mensaje amigable
     console.warn('Perfil de paciente no encontrado en la base de datos');
@@ -821,7 +828,7 @@ function renderDashboard() {
   // Stats
   document.getElementById('stat-row').innerHTML = `
     <div class="stat-card"><div class="stat-num">${(p.bitacora_mantenimiento||[]).length}</div><div class="stat-lbl">Componentes biológicos</div></div>
-    <div class="stat-card"><div class="stat-num">—</div><div class="stat-lbl">Consultas registradas</div></div>
+    <div class="stat-card"><div class="stat-num">${consultasCount}</div><div class="stat-lbl">Consultas registradas</div></div>
   `;
 
   // Alertas de bitácora
