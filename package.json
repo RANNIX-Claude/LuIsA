@@ -1,15 +1,9 @@
-
+{
   "name": "luisa-v2-0",
   "version": "2.0.0",
-  "description": "LUISA v2.0 - Electronic Medical Record System (Sistema de Expediente Clínico Electrónico)",
+  "description": "LuIsA v2.0 - Electronic Medical Record System",
   "main": "index.html",
-  "type": "module",
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=7.0.0"
-  },
   "scripts": {
-    "install-functions": "npm install --prefix .netlify/functions",
     "dev": "netlify dev",
     "build": "echo 'Build complete - static files only'",
     "deploy": "netlify deploy --prod"
@@ -20,24 +14,10 @@
   "devDependencies": {
     "netlify-cli": "^17.0.0"
   },
-  "keywords": [
-    "medical",
-    "healthcare",
-    "expediente-clínico",
-    "NOM-004",
-    "NOM-024",
-    "electronic-health-record",
-    "EHR",
-    "ECE"
-  ],
-  "author": "LUISA Team",
-  "license": "Proprietary",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tuusuario/luisa-v2.0"
+  "engines": {
+    "node": ">=16.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/tuusuario/luisa-v2.0/issues"
-  },
-  "homepage": "https://luisa.mx"
+  "keywords": ["medical", "healthcare", "EHR", "NOM-004", "NOM-024"],
+  "author": "LuIsA Team",
+  "license": "Proprietary"
 }
