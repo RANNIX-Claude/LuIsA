@@ -1847,6 +1847,8 @@ function App(){
   const [busq,setBusq]             = useState("");
   const [showNuevo,setShowNuevo]   = useState(false);
   const [nuevo,setNuevo]           = useState({nombre:"",edad:"",tel:""});
+  const [kpis,setKpis]             = useState(null);
+  const [citasHoy,setCitasHoy]     = useState([]);
   const [secTextos,setSecTextos]   = useState({});
   const [secCampos,setSecCampos]   = useState({});
   const [guardando,setGuardando]   = useState(false);
@@ -1898,7 +1900,44 @@ function App(){
     })();
   },[]);
 
-  useEffect(()=>{ if(medico) cargarPacientes(); },[medico]);
+  useEffect(()=>{ if(medico){ cargarPacientes(); cargarKPIs(); } },[medico]);
+
+  const cargarKPIs = async () => {
+    if(!medico?.id_supabase) return;
+    try {
+      const hoy = new Date();
+      const inicioHoy = new Date(hoy.getFullYear(),hoy.getMonth(),hoy.getDate()).toISOString();
+      const finHoy = new Date(hoy.getFullYear(),hoy.getMonth(),hoy.getDate()+1).toISOString();
+      const inicioMes = new Date(hoy.getFullYear(),hoy.getMonth(),1).toISOString();
+
+      const [resCitasHoy,resCitasMes,resNotas,resMeds] = await Promise.all([
+        sb.from('citas').select('id,id_paciente,fecha_hora,estado,tipo_consulta').eq('id_medico',medico.id_supabase).gte('fecha_hora',inicioHoy).lt('fecha_hora',finHoy).order('fecha_hora'),
+        sb.from('citas').select('id,estado',{count:'exact'}).eq('id_medico',medico.id_supabase).gte('fecha_hora',inicioMes),
+        sb.from('notas_evolucion').select('id,firmado',{count:'exact'}).eq('id_medico',medico.id_supabase).eq('firmado',false),
+        sb.from('medicamentos_paciente').select('id',{count:'exact'}).eq('activo',true),
+      ]);
+
+      const citasHoyData = resCitasHoy.data || [];
+      setCitasHoy(citasHoyData);
+
+      const totalCitasMes = resCitasMes.count || 0;
+      const citasCompletadas = (resCitasMes.data||[]).filter(c=>c.estado==='completada').length;
+      const notasSinFirma = resNotas.count || 0;
+      const medActivos = resMeds.count || 0;
+
+      setKpis({
+        citasHoy: citasHoyData.length,
+        citasPendientes: citasHoyData.filter(c=>c.estado!=='completada'&&c.estado!=='cancelada').length,
+        citasMes: totalCitasMes,
+        citasCompletadas,
+        notasSinFirma,
+        pacientesTotal: 0,
+        medActivos,
+      });
+    } catch(e){
+      console.error('Error cargando KPIs:', e.message);
+    }
+  };
 
   useEffect(()=>{
     if(pac){
@@ -2141,10 +2180,77 @@ function App(){
         {/* MAIN */}
         <main className="main">
           {!pac ? (
-            <div className="empty-state">
-              <div className="empty-icono">👈</div>
-              <div className="empty-titulo">Selecciona un paciente</div>
-              <div className="empty-sub">Elige un paciente del panel izquierdo para comenzar la consulta</div>
+            <div>
+              {/* ── DASHBOARD KPIs ── */}
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:12,marginBottom:16}}>
+                {[
+                  {label:'Citas hoy',valor:kpis?.citasHoy??'…',sub:`${kpis?.citasPendientes??0} pendientes`,color:'#00C9A7',icon:'📅'},
+                  {label:'Este mes',valor:kpis?.citasMes??'…',sub:`${kpis?.citasCompletadas??0} completadas`,color:'#38BDF8',icon:'📊'},
+                  {label:'Sin firma',valor:kpis?.notasSinFirma??'…',sub:'notas pendientes',color:kpis?.notasSinFirma>0?'#DC2626':'#059669',icon:'✍️'},
+                  {label:'Pacientes',valor:pacientes.length,sub:'asignados a ti',color:'#6366F1',icon:'👥'},
+                ].map(k=>(
+                  <div key={k.label} style={{background:'#fff',border:'1px solid #E2E8F0',borderRadius:12,padding:'16px',boxShadow:'0 1px 4px rgba(0,0,0,.06)'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
+                      <span style={{fontSize:20}}>{k.icon}</span>
+                      <span style={{fontSize:12,fontWeight:600,color:'#64748B',textTransform:'uppercase',letterSpacing:'.04em'}}>{k.label}</span>
+                    </div>
+                    <div style={{fontSize:32,fontWeight:800,color:k.color,lineHeight:1}}>{k.valor}</div>
+                    <div style={{fontSize:12,color:'#94A3B8',marginTop:4}}>{k.sub}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* ── AGENDA DEL DÍA ── */}
+              <div style={{background:'#fff',border:'1px solid #E2E8F0',borderRadius:12,padding:16,boxShadow:'0 1px 4px rgba(0,0,0,.06)'}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:14}}>
+                  <span style={{fontSize:16}}>🗓️</span>
+                  <span style={{fontWeight:700,fontSize:15,color:'#0F172A'}}>Agenda de hoy</span>
+                  <span style={{marginLeft:'auto',fontSize:12,color:'#94A3B8'}}>
+                    {new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}
+                  </span>
+                </div>
+                {citasHoy.length===0?(
+                  <div style={{textAlign:'center',padding:'32px 0',color:'#94A3B8'}}>
+                    <div style={{fontSize:32,marginBottom:8}}>☀️</div>
+                    <div style={{fontWeight:600}}>Sin citas programadas hoy</div>
+                  </div>
+                ):(
+                  <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                    {citasHoy.map(c=>{
+                      const hora = new Date(c.fecha_hora).toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+                      const pac2 = pacientes.find(p=>p.id===c.id_paciente);
+                      const estadoColor = c.estado==='completada'?'#059669':c.estado==='cancelada'?'#DC2626':'#D97706';
+                      return (
+                        <div key={c.id} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 12px',background:'#F8FAFC',borderRadius:8,cursor:'pointer',border:'1px solid #E2E8F0'}}
+                          onClick={()=>{ if(pac2){setPac({...pac2,historial:[]});setTab('resumen');cargarHistorial(pac2.id);} }}>
+                          <div style={{fontWeight:700,fontSize:14,color:'#00C9A7',minWidth:44}}>{hora}</div>
+                          <div style={{flex:1}}>
+                            <div style={{fontWeight:600,fontSize:13,color:'#0F172A'}}>{pac2?.nombre||'Paciente'}</div>
+                            <div style={{fontSize:11,color:'#94A3B8'}}>{c.tipo_consulta||'Consulta general'}</div>
+                          </div>
+                          <div style={{fontSize:11,fontWeight:700,color:estadoColor,textTransform:'capitalize'}}>{c.estado||'programada'}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* ── ACCESOS RÁPIDOS ── */}
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginTop:12}}>
+                <div style={{background:'linear-gradient(135deg,#00C9A7,#00A88C)',borderRadius:12,padding:'18px',cursor:'pointer',color:'#fff'}}
+                  onClick={()=>setShowNuevo(true)}>
+                  <div style={{fontSize:24,marginBottom:6}}>➕</div>
+                  <div style={{fontWeight:700,fontSize:14}}>Nuevo Paciente</div>
+                  <div style={{fontSize:12,opacity:.8,marginTop:2}}>Registrar en expediente</div>
+                </div>
+                <div style={{background:'linear-gradient(135deg,#6366F1,#4F46E5)',borderRadius:12,padding:'18px',cursor:'pointer',color:'#fff'}}
+                  onClick={()=>{ if(pacientes[0]){setPac({...pacientes[0],historial:[]});setTab('consulta');cargarHistorial(pacientes[0].id);} }}>
+                  <div style={{fontSize:24,marginBottom:6}}>🎤</div>
+                  <div style={{fontWeight:700,fontSize:14}}>Iniciar Consulta</div>
+                  <div style={{fontSize:12,opacity:.8,marginTop:2}}>Dictación con IA</div>
+                </div>
+              </div>
             </div>
           ):(
             <>
