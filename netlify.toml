@@ -1,18 +1,8 @@
- ============================================================================
-# LUISA v2.0 - Netlify Configuration
-# ============================================================================
-
-# Build configuration
 [build]
-  command = "npm install && echo 'Build complete - static files only'"
-  functions = ".netlify/functions"
+  command = "npm install && echo 'Build complete'"
+  functions = "netlify/functions"
   publish = "."
 
-# Environment variables (set in Netlify dashboard)
-# ANTHROPIC_API_KEY = your-key-here
-
-# Redirects - SPA routing
-# Rutas sin extensión
 [[redirects]]
   from = "/app"
   to = "/app.html"
@@ -20,16 +10,6 @@
 
 [[redirects]]
   from = "/paciente"
-  to = "/paciente.html"
-  status = 200
-
-[[redirects]]
-  from = "/doctor/*"
-  to = "/app.html"
-  status = 200
-
-[[redirects]]
-  from = "/patient/*"
   to = "/paciente.html"
   status = 200
 
@@ -48,26 +28,21 @@
   to = "/expediente.html"
   status = 200
 
-# Fallback para SPA - redirige rutas desconocidas a index.html (landing)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers de seguridad
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "SAMEORIGIN"
-    X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Headers para APIs
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
-    Content-Type = "application/json"
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "POST, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type"
