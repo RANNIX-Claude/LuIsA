@@ -1,4 +1,4 @@
-- ============================================================================
+-- ============================================================================
 -- LUISA v2.0 - SCRIPT 1: SCHEMA COMPLETO (ejecutar primero)
 -- Crea: 26 catálogos + 15 tablas principales + índices
 -- Idempotente: limpia tablas previas automáticamente

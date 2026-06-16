@@ -1,4 +1,4 @@
-- ============================================================================
+-- ============================================================================
 -- LUISA v2.0 - SCRIPT COMPLETO TODO EN UNO
 -- Schema + 26 Catálogos + Datos de prueba (médicos, pacientes, datos clínicos)
 -- Idempotente: se puede re-ejecutar

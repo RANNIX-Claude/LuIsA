@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Bash(node *)",
+      "Bash(netlify *)",
+      "Bash(powershell *)",
+      "Bash(pwsh *)",
+      "Bash(curl *)",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep"
+    ],
+    "defaultMode": "acceptEdits"
+  }
+}

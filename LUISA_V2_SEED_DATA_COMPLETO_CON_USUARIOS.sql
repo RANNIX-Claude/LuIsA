@@ -1,4 +1,4 @@
-- ============================================================================
+-- ============================================================================
 -- LUISA v2.0 - SEED DATA COMPLETO CON USUARIOS AUTENTICABLES
 -- 20 MÉDICOS + 100 PACIENTES + 10 ADMINISTRADORES FAMILIARES
 -- TODO CON CONTRASEÑAS QUE FUNCIONAN (bcrypt)
