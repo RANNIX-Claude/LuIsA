@@ -1,4 +1,4 @@
-﻿# 🏥 LUISA v2.0 - ENTREGA 1: REDISEÑO NOM-004 + NOM-024
+ 🏥 LUISA v2.0 - ENTREGA 1: REDISEÑO NOM-004 + NOM-024
 ## Guía Completa de Implementación
 
 **Fecha:** 2026-05-24  

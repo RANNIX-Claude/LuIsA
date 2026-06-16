@@ -1,4 +1,4 @@
-﻿# 👨‍👩‍👧‍👦 ENTREGA 2.5 RESUMEN MAESTRO: Módulo Administrativo Familiar
+ 👨‍👩‍👧‍👦 ENTREGA 2.5 RESUMEN MAESTRO: Módulo Administrativo Familiar
 
 **Estado:** ✅ Completada y lista para deploy  
 **Fecha:** Mayo 2026  

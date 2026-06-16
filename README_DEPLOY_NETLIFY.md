@@ -1,4 +1,4 @@
-﻿# 🚀 LUISA v2.0 — Guía de Deploy a Netlify
+ 🚀 LUISA v2.0 — Guía de Deploy a Netlify
 
 **Fecha de versión:** 2026-05-26
 **Sitio actual:** https://fantastic-crumble-0fea1f.netlify.app

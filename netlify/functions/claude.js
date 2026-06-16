@@ -1,4 +1,4 @@
-﻿// netlify/functions/claude.js
+/ netlify/functions/claude.js
 // Proxy seguro — Claude API
 // LUISA v2.0
 

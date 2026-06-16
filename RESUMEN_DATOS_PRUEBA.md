@@ -1,4 +1,4 @@
-﻿# 📊 LUISA v2.0 - Resumen de Datos de Prueba Preparados
+ 📊 LUISA v2.0 - Resumen de Datos de Prueba Preparados
 
 ## 🎯 Misión Completada
 

@@ -1,4 +1,4 @@
-﻿# 🎉 LUISA v2.0 - RESUMEN DE TRABAJO COMPLETADO
+ 🎉 LUISA v2.0 - RESUMEN DE TRABAJO COMPLETADO
 
 **Fecha**: 2026-05-24  
 **Tiempo Total**: ~4 horas  

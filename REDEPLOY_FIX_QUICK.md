@@ -1,4 +1,4 @@
-﻿# 🚀 RE-DEPLOY CON FIX
+ 🚀 RE-DEPLOY CON FIX
 
 **Problema anterior:** Error de permisos en node_modules
 

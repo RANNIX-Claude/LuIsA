@@ -1,4 +1,4 @@
-﻿# ⚡ LUISA v2.0 - Quick Reference Card
+ ⚡ LUISA v2.0 - Quick Reference Card
 
 **Imprime esto o márcalo en tu teléfono** 📱
 

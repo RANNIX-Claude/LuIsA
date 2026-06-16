@@ -1,4 +1,4 @@
-﻿# 🎉 ENTREGA 2: COMPLETADA
+ 🎉 ENTREGA 2: COMPLETADA
 
 **Triggers + Auditoría Automática para LUISA v2.0**
 

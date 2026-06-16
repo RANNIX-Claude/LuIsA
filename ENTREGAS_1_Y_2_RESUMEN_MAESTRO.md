@@ -1,4 +1,4 @@
-﻿# 🏆 ENTREGAS 1 + 2: RESUMEN MAESTRO
+ 🏆 ENTREGAS 1 + 2: RESUMEN MAESTRO
 
 **LUISA v2.0 - Rediseño Completo NOM-004 + NOM-024**
 

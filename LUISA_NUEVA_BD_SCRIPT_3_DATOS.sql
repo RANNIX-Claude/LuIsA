@@ -1,4 +1,4 @@
-﻿-- ============================================================================
+- ============================================================================
 -- LUISA v2.0 - SCRIPT 3: DATOS DE PRUEBA (ejecutar después del SCRIPT 2)
 -- 20 médicos + 100 pacientes + 10 mamás + datos clínicos
 -- IMPORTANTE: Usa "password_hash" (sin ñ)

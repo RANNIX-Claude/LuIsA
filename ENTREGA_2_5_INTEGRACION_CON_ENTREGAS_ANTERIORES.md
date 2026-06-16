@@ -1,4 +1,4 @@
-﻿# 🔗 ENTREGA 2.5: Integración con ENTREGA 1 + ENTREGA 2
+ 🔗 ENTREGA 2.5: Integración con ENTREGA 1 + ENTREGA 2
 
 **Status:** 📋 Cómo integrar el módulo familiar con lo ya creado  
 **Alcance:** Cambios mínimos a tablas existentes  

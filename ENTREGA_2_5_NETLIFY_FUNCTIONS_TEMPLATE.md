@@ -1,4 +1,4 @@
-# 🔌 ENTREGA 2.5: Plantillas Netlify Functions
+ 🔌 ENTREGA 2.5: Plantillas Netlify Functions
 
 **Propósito:** Crear las funciones backend que conectan app.html/paciente.html con el módulo familiar de BD  
 **Ubicación:** `.netlify/functions/`  

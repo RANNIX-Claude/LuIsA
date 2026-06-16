@@ -1,4 +1,4 @@
-﻿# LUISA v2.0 - GUÍA COMPLETA: Implementación de Datos de Prueba
+ LUISA v2.0 - GUÍA COMPLETA: Implementación de Datos de Prueba
 
 ## 📋 Introducción
 

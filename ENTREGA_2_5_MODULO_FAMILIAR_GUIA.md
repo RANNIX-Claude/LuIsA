@@ -1,4 +1,4 @@
-﻿# 👨‍👩‍👧‍👦 ENTREGA 2.5: Módulo Administrativo Familiar
+ 👨‍👩‍👧‍👦 ENTREGA 2.5: Módulo Administrativo Familiar
 
 **Estado:** ✅ Completado y listo para deploy  
 **Fecha:** Mayo 2026  

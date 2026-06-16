@@ -1,4 +1,4 @@
-﻿# 🚀 LUISA v2.0 - Guía de Deployment en Netlify
+ 🚀 LUISA v2.0 - Guía de Deployment en Netlify
 
 ## 📋 Pre-requisitos
 

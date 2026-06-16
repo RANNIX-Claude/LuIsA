@@ -1,4 +1,4 @@
-﻿# 🏠 LUISA v2.0 - Setup Local & Testing
+ 🏠 LUISA v2.0 - Setup Local & Testing
 
 ## 📦 Instalación en tu máquina
 

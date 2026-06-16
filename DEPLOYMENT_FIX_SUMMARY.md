@@ -1,4 +1,4 @@
-﻿# 🚀 DEPLOYMENT FIX: Error de Netlify Resuelto
+ 🚀 DEPLOYMENT FIX: Error de Netlify Resuelto
 
 **Problema:** Error en deploy - `Cannot find module '@anthropic-ai/sdk'`
 

@@ -1,4 +1,4 @@
-﻿-- ============================================================================
+- ============================================================================
 -- LUISA v2.0 - SEED DATA: ESTUDIOS DE LABORATORIO E IMAGENOLOGÍA
 -- ============================================================================
 -- Script para cargar reportes de laboratorio, estudios de imagen y análisis clínicos

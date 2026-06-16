@@ -1,4 +1,4 @@
-﻿# ⚡ ENTREGA 2: TRIGGERS + AUDITORÍA AUTOMÁTICA
+ ⚡ ENTREGA 2: TRIGGERS + AUDITORÍA AUTOMÁTICA
 
 **Automatización completa de auditoria y validaciones**
 

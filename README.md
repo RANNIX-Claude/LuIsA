@@ -1,4 +1,4 @@
-﻿# 🏥 LUISA v2.0 - Electronic Medical Record System
+ 🏥 LUISA v2.0 - Electronic Medical Record System
 
 **Sistema de Expediente Clínico Electrónico conforme NOM-004-SSA3-2012 & NOM-024-SSA3-2010**
 

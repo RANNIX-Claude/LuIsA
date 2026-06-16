@@ -1,4 +1,4 @@
-﻿# ⚡ ENTREGA 1: EJECUCIÓN EN 5 MINUTOS
+ ⚡ ENTREGA 1: EJECUCIÓN EN 5 MINUTOS
 
 **Tiempo total:** 5 minutos  
 **Riesgo:** 0 - No elimina datos existentes  

@@ -1,4 +1,4 @@
-﻿# 🔧 FIX: Error de Deploy en Netlify
+ 🔧 FIX: Error de Deploy en Netlify
 
 **Problema:** `Cannot find module '@anthropic-ai/sdk'`
 

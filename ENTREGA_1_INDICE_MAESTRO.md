@@ -1,4 +1,4 @@
-﻿# 📑 ENTREGA 1: ÍNDICE MAESTRO
+ 📑 ENTREGA 1: ÍNDICE MAESTRO
 
 **Rediseño Completo LUISA v2.0 para NOM-004 + NOM-024**
 

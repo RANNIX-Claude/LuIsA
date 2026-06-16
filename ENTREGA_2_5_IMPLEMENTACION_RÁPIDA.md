@@ -1,4 +1,4 @@
-﻿# 🚀 ENTREGA 2.5: Guía de Implementación Rápida
+ 🚀 ENTREGA 2.5: Guía de Implementación Rápida
 
 **Tiempo estimado:** 5 minutos  
 **Complejidad:** Baja  

@@ -1,4 +1,4 @@
-﻿# 📑 ENTREGA 2.5: Índice Completo de Archivos
+ 📑 ENTREGA 2.5: Índice Completo de Archivos
 
 **Total de archivos creados:** 6  
 **Total de líneas de código:** ~2,500  

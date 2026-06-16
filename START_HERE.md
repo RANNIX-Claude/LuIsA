@@ -1,4 +1,4 @@
-﻿# 🏥 LUISA v2.0 - START HERE
+ 🏥 LUISA v2.0 - START HERE
 
 **Bienvenido a LUISA - Tu Sistema de Expediente Clínico Electrónico**
 
