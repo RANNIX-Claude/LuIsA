@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>LUISA — Nuevo Paciente</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#00C9A7',
+            secondary: '#1B5499',
+            surface: '#F5F7FA'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface">
+
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div style="font-size: 24px; font-weight: 900; color: #050C1A;">LU<span style="color: #00C9A7;">I</span>SA</div>
+          <div>
+            <h1 class="text-lg font-bold text-gray-900">Nuevo Paciente</h1>
+            <p class="text-xs text-gray-500">Registro NOM-024-SSA3-2010</p>
+          </div>
+        </div>
+        <a href="/app.html" class="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg">← Volver</a>
+      </div>
+    </header>
+
+    <!-- Form -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+      <form id="registro-form" class="space-y-6">
+
+        <!-- SECTION 1: DATOS PERSONALES -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            👤 DATOS PERSONALES
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+              <input type="text" name="nombre" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Apellido Paterno *</label>
+              <input type="text" name="apellido_paterno" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Apellido Materno</label>
+              <input type="text" name="apellido_materno" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento *</label>
+              <input type="date" name="fecha_nacimiento" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Sexo *</label>
+              <select name="sexo" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Selecciona...</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Estado Civil *</label>
+              <select name="estado_civil_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: IDENTIFICACIÓN -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            🆔 IDENTIFICACIÓN
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Documento *</label>
+              <select name="tipo_documento" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Selecciona...</option>
+                <option value="CURP">CURP</option>
+                <option value="RFC">RFC</option>
+                <option value="INE">INE/Cédula</option>
+                <option value="PASAPORTE">Pasaporte</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Número de Documento *</label>
+              <input type="text" name="documento_identidad" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: DOMICILIO -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            🏠 DOMICILIO
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Calle y Número *</label>
+              <input type="text" name="domicilio_calle" placeholder="Ej: Avenida Reforma 505" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Estado *</label>
+              <select name="estado_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ciudad *</label>
+              <select name="ciudad_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Selecciona estado primero</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Código Postal *</label>
+              <input type="text" name="domicilio_cp" pattern="[0-9]{5}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Colonia/Barrio</label>
+              <input type="text" name="domicilio_colonia" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: DATOS DE CONTACTO -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            📞 CONTACTO
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
+              <input type="tel" name="telefono" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: DATOS CLÍNICOS -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            🩺 DATOS CLÍNICOS
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Sangre *</label>
+              <select name="tipo_sangre_id" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Peso (kg)</label>
+              <input type="number" step="0.1" name="peso" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Talla (cm)</label>
+              <input type="number" step="0.1" name="talla" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Ocupación</label>
+              <select name="ocupacion_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                <option value="">Cargando...</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Antecedentes Personales</label>
+            <textarea name="antecedentes_personales" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enfermedades previas, cirugías, etc."></textarea>
+          </div>
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Antecedentes Familiares</label>
+            <textarea name="antecedentes_familiares" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enfermedades en familia"></textarea>
+          </div>
+          <div class="mt-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Alergias</label>
+            <textarea name="alergias" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Medicamentos, alimentos, etc."></textarea>
+          </div>
+        </div>
+
+        <!-- SECTION 6: RESPONSABLE -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            👨‍👩‍👧 RESPONSABLE (si aplica)
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Responsable</label>
+              <input type="text" name="responsable_nombre" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Relación</label>
+              <input type="text" name="responsable_relacion" placeholder="Ej: Padre, Esposa, etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono del Responsable</label>
+              <input type="tel" name="responsable_telefono" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="flex gap-4 justify-end">
+          <a href="/app.html" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50">
+            Cancelar
+          </a>
+          <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90">
+            💾 Guardar Paciente
+          </button>
+        </div>
+      </form>
+
+      <div id="loading" style="display: none; text-align: center; padding: 20px; color: #6B8BAE;">
+        <div style="font-size: 24px; animation: spin 2s linear infinite; margin-bottom: 12px;">⏳</div>
+        <div>Guardando paciente...</div>
+      </div>
+
+      <div id="success" style="display: none; background: #E8F5E9; border-left: 4px solid #059669; padding: 16px; border-radius: 6px; color: #1b5e20; margin-top: 16px;">
+        ✅ Paciente guardado correctamente. Redirigiendo...
+      </div>
+
+      <div id="error" style="display: none; background: #FFEBEE; border-left: 4px solid #DC2626; padding: 16px; border-radius: 6px; color: #991B1B; margin-top: 16px;">
+      </div>
+    </main>
+  </div>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
+    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
+
+    async function supabaseApi(table, filters = '') {
+      const url = `${SUPABASE_URL}/rest/v1/${table}${filters}`;
+      const res = await fetch(url, {
+        headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
+      });
+      if (!res.ok) throw new Error(`${res.status}`);
+      return await res.json();
+    }
+
+    // Load catalogs on page load
+    async function loadCatalogs() {
+      try {
+        const [estados, estadosCivil, sangre, ocupaciones] = await Promise.all([
+          supabaseApi('cat_estados_republica', '?select=id,nombre&order=nombre'),
+          supabaseApi('cat_estado_civil', '?select=id,nombre&order=nombre'),
+          supabaseApi('cat_tipos_sanguineo', '?select=id,nombre&order=nombre'),
+          supabaseApi('cat_ocupaciones', '?select=id,nombre&order=nombre')
+        ]);
+
+        // Fill estado civil
+        document.querySelector('[name="estado_civil_id"]').innerHTML = '<option value="">Selecciona...</option>' +
+          estadosCivil.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+
+        // Fill estados
+        document.querySelector('[name="estado_id"]').innerHTML = '<option value="">Selecciona...</option>' +
+          estados.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+
+        // Fill sangre
+        document.querySelector('[name="tipo_sangre_id"]').innerHTML = '<option value="">Selecciona...</option>' +
+          sangre.map(s => `<option value="${s.id}">${s.nombre}</option>`).join('');
+
+        // Fill ocupaciones
+        document.querySelector('[name="ocupacion_id"]').innerHTML = '<option value="">Selecciona...</option>' +
+          ocupaciones.map(o => `<option value="${o.id}">${o.nombre}</option>`).join('');
+
+        // Load cities when estado changes
+        document.querySelector('[name="estado_id"]').addEventListener('change', async (e) => {
+          const estadoId = e.target.value;
+          if (estadoId) {
+            const ciudades = await supabaseApi('cat_ciudades', `?estado_id=eq.${estadoId}&select=id,nombre&order=nombre`);
+            document.querySelector('[name="ciudad_id"]').innerHTML = '<option value="">Selecciona...</option>' +
+              ciudades.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+          }
+        });
+      } catch (e) {
+        console.error('Error loading catalogs:', e);
+      }
+    }
+
+    // Form submission
+    document.getElementById('registro-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        nombre_completo: `${formData.get('nombre')} ${formData.get('apellido_paterno')} ${formData.get('apellido_materno')}`.trim(),
+        fecha_nacimiento: formData.get('fecha_nacimiento'),
+        sexo: formData.get('sexo'),
+        estado_civil_id: formData.get('estado_civil_id') || null,
+        documento_identidad: formData.get('documento_identidad'),
+        domicilio_calle: formData.get('domicilio_calle'),
+        domicilio_cp: formData.get('domicilio_cp'),
+        estado_id: formData.get('estado_id'),
+        ciudad_id: formData.get('ciudad_id'),
+        ocupacion_id: formData.get('ocupacion_id') || null,
+        tipo_sangre_id: formData.get('tipo_sangre_id') || null,
+        alergias: formData.get('alergias'),
+        antecedentes_personales: formData.get('antecedentes_personales'),
+        antecedentes_familiares: formData.get('antecedentes_familiares')
+      };
+
+      document.getElementById('registro-form').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/perfiles_pacientes`, {
+          method: 'POST',
+          headers: {
+            'apikey': ANON_KEY,
+            'Authorization': `Bearer ${ANON_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!res.ok) throw new Error(`${res.status}`);
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
+        setTimeout(() => window.location.href = '/app.html', 2000);
+      } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').textContent = '❌ Error: ' + e.message;
+        document.getElementById('registro-form').style.display = 'block';
+      }
+    });
+
+    loadCatalogs();
+  </script>
+
+</body>
+</html>
