@@ -552,12 +552,32 @@ async function handleLogin(e) {
       return;
     }
 
+    // 2.5 Si es médico, obtener su ID en la tabla medicos
+    let medicoId = null;
+    if (user.rol === 'medico') {
+      const medicoUrl = `${SUPABASE_URL}/rest/v1/medicos?email=eq.${encodeURIComponent(email)}&select=id`;
+      const medicoRes = await fetch(medicoUrl, {
+        method: 'GET',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (medicoRes.ok) {
+        const medicos = await medicoRes.json();
+        if (medicos && medicos.length > 0) {
+          medicoId = medicos[0].id;
+        }
+      }
+    }
+
     // 3. Guardar sesión en localStorage
     const userData = {
       id: user.id,
       email: user.email,
       nombre_completo: user.nombre_completo,
-      rol: user.rol
+      rol: user.rol,
+      medico_id: medicoId
     };
     localStorage.setItem('luisa_user', JSON.stringify(userData));
     localStorage.setItem('luisa_session', JSON.stringify({

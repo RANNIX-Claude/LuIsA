@@ -402,7 +402,7 @@
 
     async function loadDashboard() {
       try {
-        const medId = currentMedico.id;
+        const medId = currentMedico.medico_id || currentMedico.id;
         const hoy = new Date();
         const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).toISOString();
         const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1).toISOString();
@@ -533,7 +533,8 @@
       const container = document.getElementById('pacientes-list');
 
       try {
-        const pacientes = await supabaseApi('doctor_patient_relationships', `?id_medico=eq.${currentMedico.id}&activo=eq.true&select=id_paciente`);
+        const medicoId = currentMedico.medico_id || currentMedico.id;
+        const pacientes = await supabaseApi('doctor_patient_relationships', `?id_medico=eq.${medicoId}&activo=eq.true&select=id_paciente`);
 
         if (pacientes.length === 0) {
           container.innerHTML = `
