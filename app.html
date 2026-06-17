@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="LUISA — Inteligencia Clínica">
+  <meta name="theme-color" content="#00C9A7">
+
   <title>LUISA — Portal Médico</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
   <script>
     tailwind.config = {
       theme: {
@@ -19,15 +25,62 @@
       }
     }
   </script>
+
   <style>
-    * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
-    button, a { min-height: 44px; min-width: 44px; }
-    .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-    @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-    .offline-badge { position: fixed; top: 10px; right: 10px; z-index: 999; }
+    /* Mobile-first base styles */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Touch-friendly minimum sizes */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* PWA install prompt */
+    #install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 1000;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Offline indicator */
+    .offline-badge {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 999;
+    }
   </style>
 </head>
+
 <body class="bg-surface">
 
   <!-- Offline Indicator -->
@@ -37,23 +90,43 @@
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- PWA Install Prompt -->
+  <div id="install-prompt" class="hidden">
+    <div class="bg-white rounded-lg shadow-xl p-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div style="font-size: 24px; font-weight: 900;">LU<span style="color: #00C9A7;">I</span>SA</div>
+        <div>
+          <p class="font-semibold text-gray-900">Instalar LUISA</p>
+          <p class="text-sm text-gray-600">Funciona como app nativa</p>
+        </div>
+      </div>
+      <div class="flex space-x-2">
+        <button id="install-dismiss" class="px-3 py-2 text-gray-600 text-sm">
+          Ahora no
+        </button>
+        <button id="install-accept" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium">
+          Instalar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
   <div id="app" class="min-h-screen">
 
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div style="font-size: 24px; font-weight: 900; color: #050C1A;">
-            LU<span style="color: #00C9A7;">I</span>SA
-          </div>
+          <div style="font-size: 24px; font-weight: 900; color: #050C1A;">LU<span style="color: #00C9A7;">I</span>SA</div>
           <div>
-            <h1 class="text-sm font-bold text-gray-900">Portal Médico</h1>
-            <p class="text-xs text-gray-500">Inteligencia Clínica</p>
+            <h1 class="text-lg font-bold text-gray-900">Inteligencia Clínica</h1>
+            <p class="text-xs text-gray-500">Portal Médico</p>
           </div>
         </div>
 
         <div class="flex items-center space-x-3">
+          <!-- Notifications -->
           <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -61,12 +134,14 @@
             <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
 
+          <!-- User Menu -->
           <button id="user-menu" class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg">
             <div id="user-avatar" class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold text-sm">
-              ?
+              DR
             </div>
           </button>
 
+          <!-- Salir -->
           <button onclick="logout()" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg font-medium">
             Salir
           </button>
@@ -86,25 +161,28 @@
             👥 Pacientes
           </button>
           <button data-tab="consulta" class="tab-btn px-4 py-3 text-sm font-medium text-gray-600 border-b-2 border-transparent whitespace-nowrap">
-            🎤 Dictación
+            🎤 Consulta
           </button>
         </div>
       </nav>
     </header>
 
-    <!-- Content -->
+    <!-- Content Area -->
     <main class="max-w-7xl mx-auto px-4 py-6">
 
       <!-- Dashboard Tab -->
       <div id="tab-dashboard" class="tab-content">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <!-- Stat Cards -->
           <div class="bg-white rounded-lg shadow p-4">
             <div class="flex items-center justify-between">
               <div>
                 <p class="text-sm text-gray-600">Citas Hoy</p>
                 <p class="text-2xl font-bold text-gray-900" id="stat-citas">--</p>
               </div>
-              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">📅</div>
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
+                📅
+              </div>
             </div>
           </div>
 
@@ -114,7 +192,9 @@
                 <p class="text-sm text-gray-600">Pacientes</p>
                 <p class="text-2xl font-bold text-primary" id="stat-pacientes">--</p>
               </div>
-              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">👥</div>
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">
+                👥
+              </div>
             </div>
           </div>
 
@@ -124,7 +204,9 @@
                 <p class="text-sm text-gray-600">Notas Sin Firma</p>
                 <p class="text-2xl font-bold text-red-500" id="stat-notas">--</p>
               </div>
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">✍️</div>
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">
+                ✍️
+              </div>
             </div>
           </div>
 
@@ -134,7 +216,9 @@
                 <p class="text-sm text-gray-600">Medicamentos</p>
                 <p class="text-2xl font-bold text-gray-900" id="stat-meds">--</p>
               </div>
-              <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center text-2xl">💊</div>
+              <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center text-2xl">
+                💊
+              </div>
             </div>
           </div>
         </div>
@@ -145,17 +229,21 @@
             <h2 class="text-lg font-semibold text-gray-900">🚨 Alertas Pendientes</h2>
           </div>
           <div id="alertas-list" class="divide-y divide-gray-200">
-            <div class="p-4 text-center text-gray-500">No hay alertas</div>
+            <!-- Loading skeleton -->
+            <div class="p-4">
+              <div class="skeleton h-4 w-3/4 mb-2 rounded"></div>
+              <div class="skeleton h-3 w-1/2 rounded"></div>
+            </div>
           </div>
         </div>
 
         <!-- Agenda -->
         <div class="bg-white rounded-lg shadow">
           <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">🗓️ Agenda del Día</h2>
+            <h2 class="text-lg font-semibold text-gray-900">🗓️ Agenda de Hoy</h2>
           </div>
           <div id="agenda-list" class="divide-y divide-gray-200">
-            <div class="p-4 text-center text-gray-500">Sin citas programadas</div>
+            <!-- Populated by JS -->
           </div>
         </div>
       </div>
@@ -165,112 +253,92 @@
         <div class="bg-white rounded-lg shadow p-6 text-center">
           <div class="text-6xl mb-4">📅</div>
           <h2 class="text-xl font-semibold text-gray-900 mb-2">Calendario de Citas</h2>
-          <p class="text-gray-600">Vista de agenda semanal próximamente</p>
+          <p class="text-gray-600 mb-4">Vista de agenda semanal próximamente</p>
+          <button class="px-6 py-3 bg-primary text-white rounded-lg font-medium">
+            Nueva Cita
+          </button>
         </div>
       </div>
 
       <!-- Pacientes Tab -->
       <div id="tab-pacientes" class="tab-content hidden">
         <div class="bg-white rounded-lg shadow">
-          <div class="p-4 border-b border-gray-200">
+          <div class="p-4 border-b border-gray-200 flex items-center justify-between">
             <h2 class="text-lg font-semibold text-gray-900">Mis Pacientes</h2>
+            <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium">
+              + Nuevo Paciente
+            </button>
           </div>
-          <div id="pacientes-list" class="divide-y divide-gray-200">
-            <div class="p-8 text-center text-gray-500">Cargando...</div>
+          <div id="pacientes-list">
+            <!-- Populated by JS -->
+            <div class="p-8 text-center text-gray-500">
+              Cargando pacientes...
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Consulta/Dictación Tab -->
+      <!-- Consulta Tab -->
       <div id="tab-consulta" class="tab-content hidden">
         <div class="bg-white rounded-lg shadow p-6 text-center">
           <div class="text-6xl mb-4">🎤</div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">Iniciar Dictación</h2>
-          <p class="text-gray-600 mb-4">Consulta + Extracción SOAP automática con IA</p>
-          <button onclick="openDictation()" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90">
+          <h2 class="text-xl font-semibold text-gray-900 mb-2">Nueva Consulta</h2>
+          <p class="text-gray-600 mb-4">Dictado por voz + Extracción SOAP con IA</p>
+          <button onclick="openChatDoc()" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90">
             🎤 Iniciar Dictación
           </button>
         </div>
       </div>
 
     </main>
+
   </div>
 
-  <!-- Modal Dictación -->
-  <div id="dictation-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 9999; align-items: center; justify-content: center;">
-    <div style="background: #fff; border-radius: 12px; padding: 24px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative;">
-      <button onclick="closeDictation()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">✕</button>
-
-      <h2 style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700;">
-        <span id="dict-status-icon">🎤</span>
-        <span id="dict-status-text">Preparando dictación...</span>
-      </h2>
-
-      <div id="dict-recording" style="display: none; text-align: center; padding: 32px 0;">
-        <div style="font-size: 48px; margin-bottom: 12px;"><span style="width: 12px; height: 12px; background: #DC2626; border-radius: 50%; display: inline-block; animation: pulse 1s infinite;"></span></div>
-        <div style="margin: 12px 0; font-size: 14px; font-weight: 600;">Grabando...</div>
-        <p id="dict-interim" style="color: #6B8BAE; font-size: 14px; margin: 12px 0; font-style: italic; min-height: 40px; max-height: 120px; overflow-y: auto;">Escuchando...</p>
-        <button onclick="stopDictation()" style="padding: 8px 24px; background: #DC2626; color: #fff; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; margin-top: 12px;">⏹ Detener</button>
-      </div>
-
-      <div id="dict-processing" style="display: none;">
-        <div style="text-align: center; padding: 20px; color: #6B8BAE;">
-          <div style="font-size: 32px; animation: spin 2s linear infinite; margin-bottom: 12px;">⚙️</div>
-          <div>Analizando con IA...</div>
-        </div>
-      </div>
-
-      <div id="dict-result" style="display: none;">
-        <div style="margin-bottom: 16px;">
-          <strong>Texto dictado:</strong>
-          <p id="dict-full-text" style="background: #F8FAFC; padding: 12px; border-radius: 6px; margin-top: 6px; max-height: 150px; overflow-y: auto;"></p>
-        </div>
-
-        <div style="margin-bottom: 16px;">
-          <strong style="color: #00C9A7;">📋 Análisis SOAP:</strong>
-          <div id="dict-soap"></div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <button onclick="saveDictation()" style="flex: 1; padding: 10px 20px; background: #00C9A7; color: #fff; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px;">💾 Guardar Nota</button>
-          <button onclick="closeDictation()" style="flex: 1; padding: 10px 20px; background: #fff; color: #00C9A7; border: 1.5px solid #00C9A7; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px;">Cancelar</button>
-        </div>
-      </div>
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600">
+      <p>© 2026 LUISA — Inteligencia Clínica</p>
+      <p class="mt-1">Desarrollado por RANNIX • v2.0.0</p>
     </div>
-  </div>
+  </footer>
 
-  <style>
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-
+  <!-- JavaScript -->
   <script>
     const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
     const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
-
-    async function supabaseApi(table, filters = '') {
-      const url = `${SUPABASE_URL}/rest/v1/${table}${filters}`;
-      const res = await fetch(url, {
-        headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
-      });
-      if (!res.ok) throw new Error(`${res.status}`);
-      return await res.json();
-    }
-
+    let deferredPrompt = null;
     let currentMedico = null;
-    let recognition = null;
-    let isRecording = false;
-    let dictatedText = '';
 
-    // Tabs navigation
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tabName = btn.dataset.tab;
-        switchTab(tabName);
-      });
+    // ══════════════════════════════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════════════════════════════
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('[LUISA] Inicializando...');
+
+      initTabs();
+      initPWAInstall();
+      initOfflineDetection();
+      checkSession();
     });
 
+    // ══════════════════════════════════════════════════════════════════════
+    // TABS NAVIGATION
+    // ══════════════════════════════════════════════════════════════════════
+
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabName = btn.dataset.tab;
+          switchTab(tabName);
+        });
+      });
+    }
+
     function switchTab(tabName) {
+      // Update buttons
       document.querySelectorAll('.tab-btn').forEach(btn => {
         if (btn.dataset.tab === tabName) {
           btn.classList.add('active', 'text-primary', 'border-primary');
@@ -281,13 +349,35 @@
         }
       });
 
+      // Update content
       document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.add('hidden');
       });
 
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      if (tabName === 'pacientes') loadPacientes();
+
+      // Load data for tab
+      if (tabName === 'pacientes') {
+        loadPacientes();
+      }
     }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // SUPABASE API
+    // ══════════════════════════════════════════════════════════════════════
+
+    async function supabaseApi(table, filters = '') {
+      const url = `${SUPABASE_URL}/rest/v1/${table}${filters}`;
+      const res = await fetch(url, {
+        headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
+      });
+      if (!res.ok) throw new Error(`${res.status}`);
+      return await res.json();
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // SESSION
+    // ══════════════════════════════════════════════════════════════════════
 
     async function checkSession() {
       const session = localStorage.getItem('luisa_session');
@@ -299,12 +389,20 @@
       currentMedico = user;
       document.getElementById('user-avatar').textContent = user.nombre.split(' ').map(n => n[0]).join('').substring(0, 2);
       await loadDashboard();
-      initRecognition();
     }
 
+    function logout() {
+      localStorage.removeItem('luisa_session');
+      window.location.href = '/auth.html';
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // DASHBOARD DATA
+    // ══════════════════════════════════════════════════════════════════════
+
     async function loadDashboard() {
-      const medId = currentMedico.id;
       try {
+        const medId = currentMedico.id;
         const hoy = new Date();
         const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).toISOString();
         const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1).toISOString();
@@ -316,162 +414,285 @@
           supabaseApi('medicamentos_paciente', `?activo=eq.true&select=id`)
         ]);
 
+        // Update stats
         document.getElementById('stat-citas').textContent = citas.length;
         document.getElementById('stat-pacientes').textContent = pacientes.length;
         document.getElementById('stat-notas').textContent = notas.length;
         document.getElementById('stat-meds').textContent = meds.length;
 
-        // Alertas
-        const alertas = [];
-        if (notas.length > 0) alertas.push({ tipo: 'notas', desc: `${notas.length} nota(s) sin firma` });
-        if (citas.filter(c => c.estado !== 'completada').length > 0) alertas.push({ tipo: 'citas', desc: `${citas.filter(c => c.estado !== 'completada').length} cita(s) pendientes` });
+        // Render alertas
+        renderAlertas(citas, notas);
 
-        const alertasHtml = alertas.length === 0
-          ? '<div class="p-4 text-center text-gray-500">✅ No hay alertas</div>'
-          : alertas.map(a => `<div class="p-4 hover:bg-gray-50"><div class="flex items-center justify-between"><div><strong>${a.desc}</strong></div><button class="px-3 py-1 text-sm text-primary hover:bg-primary hover:text-white rounded-lg transition">Revisar</button></div></div>`).join('');
+        // Render agenda
+        renderAgenda(citas);
 
-        document.getElementById('alertas-list').innerHTML = alertasHtml;
-
-        // Agenda
-        const agendaHtml = citas.length === 0
-          ? '<div class="p-4 text-center text-gray-500">☀️ Sin citas programadas hoy</div>'
-          : citas.map(c => {
-            const hora = new Date(c.fecha_hora).toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
-            return `<div class="p-4 hover:bg-gray-50"><div class="flex items-center justify-between"><div><strong>${hora}</strong><br><span style="font-size: 12px; color: #6B8BAE;">${c.tipo_consulta || 'Consulta'}</span></div><span style="font-size: 11px; font-weight: 700; text-transform: capitalize; color: ${c.estado === 'completada' ? '#059669' : '#D97706'}">${c.estado}</span></div></div>`;
-          }).join('');
-
-        document.getElementById('agenda-list').innerHTML = agendaHtml;
-      } catch (e) {
-        console.error('Error:', e);
+      } catch (error) {
+        console.error('[DASHBOARD] Error:', error);
+        showOfflineData();
       }
     }
+
+    function renderAlertas(citas, notas) {
+      const container = document.getElementById('alertas-list');
+      const alertas = [];
+
+      if (notas.length > 0) {
+        alertas.push({
+          paciente: `${notas.length} nota(s) sin firma`,
+          prioridad: 2,
+          tipo: 'notas',
+          descripcion: 'Notas pendientes de firma electrónica',
+          fecha: new Date().toISOString()
+        });
+      }
+
+      const citasPendientes = citas.filter(c => c.estado !== 'completada');
+      if (citasPendientes.length > 0) {
+        alertas.push({
+          paciente: `${citasPendientes.length} cita(s) pendiente(s)`,
+          prioridad: 1,
+          tipo: 'citas',
+          descripcion: 'Citas programadas sin completar',
+          fecha: new Date().toISOString()
+        });
+      }
+
+      if (alertas.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-gray-500">
+            <div class="text-4xl mb-2">✅</div>
+            <p>No hay alertas pendientes</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = alertas.map(alerta => `
+        <div class="p-4 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-1">
+                <span class="font-semibold text-gray-900">${alerta.paciente}</span>
+                <span class="px-2 py-0.5 text-xs font-medium rounded-full ${
+                  alerta.prioridad === 2 ? 'bg-yellow-100 text-yellow-700' :
+                  'bg-blue-100 text-blue-700'
+                }">
+                  ${alerta.tipo === 'notas' ? 'Firma' : 'Citas'}
+                </span>
+              </div>
+              <p class="text-sm text-gray-600">${alerta.descripcion}</p>
+              <p class="text-xs text-gray-400 mt-1">${formatDate(alerta.fecha)}</p>
+            </div>
+            <button class="ml-3 px-3 py-1 text-sm text-primary hover:bg-primary hover:text-white rounded-lg transition">
+              Revisar
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAgenda(citas) {
+      const container = document.getElementById('agenda-list');
+
+      if (citas.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-gray-500">
+            <div class="text-4xl mb-2">☀️</div>
+            <p>Sin citas programadas hoy</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = citas.map(c => {
+        const hora = new Date(c.fecha_hora).toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
+        const estadoColor = c.estado === 'completada' ? 'text-green-500' : 'text-yellow-500';
+        return `
+          <div class="p-4 hover:bg-gray-50 cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-gray-900">${hora}</div>
+                <p class="text-sm text-gray-600">${c.tipo_consulta || 'Consulta general'}</p>
+              </div>
+              <div class="text-right">
+                <div class="text-sm font-bold ${estadoColor}">
+                  ${c.estado || 'programada'}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // PACIENTES
+    // ══════════════════════════════════════════════════════════════════════
 
     async function loadPacientes() {
+      const container = document.getElementById('pacientes-list');
+
       try {
         const pacientes = await supabaseApi('doctor_patient_relationships', `?id_medico=eq.${currentMedico.id}&activo=eq.true&select=id_paciente`);
-        const html = pacientes.length === 0
-          ? '<div class="p-8 text-center text-gray-500">👥 Sin pacientes asignados</div>'
-          : pacientes.map(p => `<div class="p-4 hover:bg-gray-50"><div class="flex items-center justify-between"><div><strong>Paciente ${p.id_paciente.substring(0, 8)}...</strong></div></div></div>`).join('');
-        document.getElementById('pacientes-list').innerHTML = html;
-      } catch (e) {
-        console.error('Error:', e);
-      }
-    }
 
-    function initRecognition() {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) return;
-      recognition = new SpeechRecognition();
-      recognition.lang = 'es-ES';
-      recognition.continuous = true;
-      recognition.interimResults = true;
-
-      recognition.onstart = () => {
-        isRecording = true;
-        dictatedText = '';
-        document.getElementById('dict-recording').style.display = 'block';
-        document.getElementById('dict-processing').style.display = 'none';
-        document.getElementById('dict-result').style.display = 'none';
-      };
-
-      recognition.onresult = (e) => {
-        let interim = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const transcript = e.results[i][0].transcript;
-          if (e.results[i].isFinal) dictatedText += transcript + ' ';
-          else interim += transcript;
-        }
-        document.getElementById('dict-interim').textContent = dictatedText + interim || 'Escuchando...';
-      };
-
-      recognition.onend = async () => {
-        isRecording = false;
-        if (dictatedText.trim()) await processDictation();
-      };
-    }
-
-    function openDictation() {
-      document.getElementById('dictation-modal').style.display = 'flex';
-      if (recognition && !isRecording) recognition.start();
-    }
-
-    function closeDictation() {
-      if (recognition && isRecording) recognition.stop();
-      document.getElementById('dictation-modal').style.display = 'none';
-      dictatedText = '';
-    }
-
-    function stopDictation() {
-      if (recognition && isRecording) recognition.stop();
-    }
-
-    async function processDictation() {
-      document.getElementById('dict-recording').style.display = 'none';
-      document.getElementById('dict-processing').style.display = 'block';
-
-      try {
-        const res = await fetch('/.netlify/functions/claude', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1024,
-            system: `Eres un asistente médico. Extrae SOAP del texto dictado. Responde SOLO con JSON: {"subjetivo":"...","objetivo":"...","analisis":"...","plan":"..."}`,
-            messages: [{ role: 'user', content: `Texto: "${dictatedText}"` }]
-          })
-        });
-
-        const data = await res.json();
-        let soapJson = {};
-        try {
-          soapJson = JSON.parse(data.content[0].text);
-        } catch {
-          soapJson = { error: data.content[0].text };
+        if (pacientes.length === 0) {
+          container.innerHTML = `
+            <div class="p-12 text-center text-gray-500">
+              <div class="text-6xl mb-4">👥</div>
+              <p class="text-lg mb-2">No tienes pacientes registrados</p>
+              <p class="text-sm">Comienza agregando tu primer paciente</p>
+            </div>
+          `;
+          return;
         }
 
-        document.getElementById('dict-full-text').textContent = dictatedText;
-        document.getElementById('dict-soap').innerHTML = `
-          <div style="background: #F8FAFC; border-left: 4px solid #00C9A7; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <div style="font-weight: 700; color: #00C9A7; font-size: 12px; text-transform: uppercase;">Subjetivo (S)</div>
-            <div style="margin-top: 8px; font-size: 14px; line-height: 1.5;">${soapJson.subjetivo || '—'}</div>
-          </div>
-          <div style="background: #F8FAFC; border-left: 4px solid #00C9A7; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <div style="font-weight: 700; color: #00C9A7; font-size: 12px; text-transform: uppercase;">Objetivo (O)</div>
-            <div style="margin-top: 8px; font-size: 14px; line-height: 1.5;">${soapJson.objetivo || '—'}</div>
-          </div>
-          <div style="background: #F8FAFC; border-left: 4px solid #00C9A7; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <div style="font-weight: 700; color: #00C9A7; font-size: 12px; text-transform: uppercase;">Análisis (A)</div>
-            <div style="margin-top: 8px; font-size: 14px; line-height: 1.5;">${soapJson.analisis || '—'}</div>
-          </div>
-          <div style="background: #F8FAFC; border-left: 4px solid #00C9A7; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <div style="font-weight: 700; color: #00C9A7; font-size: 12px; text-transform: uppercase;">Plan (P)</div>
-            <div style="margin-top: 8px; font-size: 14px; line-height: 1.5;">${soapJson.plan || '—'}</div>
+        container.innerHTML = `
+          <div class="divide-y divide-gray-200">
+            ${pacientes.map(p => `
+              <div class="p-4 hover:bg-gray-50 cursor-pointer transition">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-semibold text-lg">
+                      P
+                    </div>
+                    <div>
+                      <p class="font-semibold text-gray-900">Paciente ${p.id_paciente.substring(0, 8)}...</p>
+                      <p class="text-sm text-gray-600">ID: ${p.id_paciente}</p>
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-lg font-bold text-primary">--</div>
+                    <p class="text-xs text-gray-500">Sin datos</p>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
           </div>
         `;
 
-        document.getElementById('dict-processing').style.display = 'none';
-        document.getElementById('dict-result').style.display = 'block';
-        document.getElementById('dict-status-icon').textContent = '✅';
-        document.getElementById('dict-status-text').textContent = 'Análisis completado';
-      } catch (e) {
-        console.error('Error:', e);
-        document.getElementById('dict-result').innerHTML = `<div style="background: #FFEBEE; border-left: 4px solid #DC2626; padding: 12px; border-radius: 6px; color: #991B1B;">Error: ${e.message}</div>`;
-        document.getElementById('dict-processing').style.display = 'none';
-        document.getElementById('dict-result').style.display = 'block';
+      } catch (error) {
+        console.error('[PACIENTES] Error:', error);
+        container.innerHTML = `
+          <div class="p-8 text-center text-red-500">
+            <p>Error cargando pacientes</p>
+            <button onclick="loadPacientes()" class="mt-2 text-sm text-primary">
+              Reintentar
+            </button>
+          </div>
+        `;
       }
     }
 
-    function saveDictation() {
-      alert('Nota guardada\n\n' + dictatedText.substring(0, 100) + '...');
-      closeDictation();
+    // ══════════════════════════════════════════════════════════════════════
+    // CONSULTA / CHAT DOC
+    // ══════════════════════════════════════════════════════════════════════
+
+    function openChatDoc() {
+      alert('🎤 Dictación + Chat Doc — próximamente integrado');
     }
 
-    function logout() {
-      localStorage.removeItem('luisa_session');
-      window.location.href = '/auth.html';
+    // ══════════════════════════════════════════════════════════════════════
+    // PWA INSTALL
+    // ══════════════════════════════════════════════════════════════════════
+
+    function initPWAInstall() {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        // Show install prompt
+        document.getElementById('install-prompt').classList.remove('hidden');
+      });
+
+      document.getElementById('install-accept')?.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+
+        console.log('[PWA] Install:', outcome);
+
+        if (outcome === 'accepted') {
+          document.getElementById('install-prompt').classList.add('hidden');
+        }
+
+        deferredPrompt = null;
+      });
+
+      document.getElementById('install-dismiss')?.addEventListener('click', () => {
+        document.getElementById('install-prompt').classList.add('hidden');
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App instalada');
+        document.getElementById('install-prompt').classList.add('hidden');
+      });
     }
 
-    checkSession();
+    // ══════════════════════════════════════════════════════════════════════
+    // OFFLINE DETECTION
+    // ══════════════════════════════════════════════════════════════════════
+
+    function initOfflineDetection() {
+      const indicator = document.getElementById('offline-indicator');
+
+      window.addEventListener('online', () => {
+        indicator.classList.add('hidden');
+        console.log('[NETWORK] Online');
+        loadDashboard(); // Refresh data
+      });
+
+      window.addEventListener('offline', () => {
+        indicator.classList.remove('hidden');
+        console.log('[NETWORK] Offline');
+      });
+
+      // Initial check
+      if (!navigator.onLine) {
+        indicator.classList.remove('hidden');
+      }
+    }
+
+    function showOfflineData() {
+      // Show cached/dummy data when offline
+      document.getElementById('stat-citas').textContent = '--';
+      document.getElementById('stat-pacientes').textContent = '--';
+      document.getElementById('stat-notas').textContent = '--';
+      document.getElementById('stat-meds').textContent = '--';
+
+      document.getElementById('alertas-list').innerHTML = `
+        <div class="p-8 text-center text-gray-500">
+          <div class="text-4xl mb-2">📡</div>
+          <p>Sin conexión a internet</p>
+          <p class="text-sm mt-1">Los datos se actualizarán al reconectar</p>
+        </div>
+      `;
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // UTILS
+    // ══════════════════════════════════════════════════════════════════════
+
+    function formatDate(dateString) {
+      if (!dateString) return 'N/A';
+
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) return 'Hoy';
+      if (diffDays === 1) return 'Ayer';
+      if (diffDays < 7) return `Hace ${diffDays} días`;
+
+      return date.toLocaleDateString('es-MX', {
+        day: 'numeric',
+        month: 'short',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+      });
+    }
+
+    console.log('[LUISA] ✅ App cargada - v2.0.0');
   </script>
 
 </body>
