@@ -555,7 +555,7 @@ async function handleLogin(e) {
     // 2.5 Si es médico, obtener su ID en la tabla medicos
     let medicoId = null;
     if (user.rol === 'medico') {
-      const medicoUrl = `${SUPABASE_URL}/rest/v1/medicos?email=eq.${encodeURIComponent(email)}&select=id`;
+      const medicoUrl = `${SUPABASE_URL}/rest/v1/medicos?id_usuario=eq.${encodeURIComponent(user.id)}&select=id`;
       const medicoRes = await fetch(medicoUrl, {
         method: 'GET',
         headers: {
