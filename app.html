@@ -387,7 +387,29 @@
       }
       const user = JSON.parse(session).user;
       currentMedico = user;
-      document.getElementById('user-avatar').textContent = user.nombre.split(' ').map(n => n[0]).join('').substring(0, 2);
+      console.log('[LOGIN] currentMedico:', currentMedico);
+
+      // Si no tiene medico_id y es médico, obtenerlo ahora
+      if (!currentMedico.medico_id && currentMedico.rol === 'medico') {
+        try {
+          const medUrl = `${SUPABASE_URL}/rest/v1/medicos?id_usuario=eq.${currentMedico.id}&select=id`;
+          const medRes = await fetch(medUrl, {
+            headers: { 'apikey': SUPABASE_KEY }
+          });
+          if (medRes.ok) {
+            const meds = await medRes.json();
+            if (meds && meds.length > 0) {
+              currentMedico.medico_id = meds[0].id;
+              console.log('[LOGIN] medico_id obtenido:', currentMedico.medico_id);
+            }
+          }
+        } catch (e) {
+          console.error('[LOGIN] Error obteniendo medico_id:', e);
+        }
+      }
+
+      const initials = (currentMedico.nombre_completo || 'U').split(' ').map(n => n[0]).join('').substring(0, 2);
+      document.getElementById('user-avatar').textContent = initials;
       await loadDashboard();
     }
 
