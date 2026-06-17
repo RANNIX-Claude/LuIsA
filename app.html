@@ -534,7 +534,10 @@
 
       try {
         const medicoId = currentMedico.medico_id || currentMedico.id;
+        console.log('[DEBUG] currentMedico:', currentMedico);
+        console.log('[DEBUG] medicoId:', medicoId);
         const pacientes = await supabaseApi('doctor_patient_relationships', `?id_medico=eq.${medicoId}&activo=eq.true&select=id_paciente`);
+        console.log('[DEBUG] pacientes encontrados:', pacientes.length);
 
         if (pacientes.length === 0) {
           container.innerHTML = `
