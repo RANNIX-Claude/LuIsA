@@ -304,20 +304,22 @@
 
       const formData = new FormData(e.target);
       const data = {
+        id_usuario: null,
         nombre_completo: `${formData.get('nombre')} ${formData.get('apellido_paterno')} ${formData.get('apellido_materno')}`.trim(),
-        fecha_nacimiento: formData.get('fecha_nacimiento'),
-        sexo: formData.get('sexo'),
+        fecha_nacimiento: formData.get('fecha_nacimiento') || null,
+        sexo: formData.get('sexo') || null,
         estado_civil_id: formData.get('estado_civil_id') || null,
-        documento_identidad: formData.get('documento_identidad'),
-        domicilio_calle: formData.get('domicilio_calle'),
-        domicilio_cp: formData.get('domicilio_cp'),
-        estado_id: formData.get('estado_id'),
-        ciudad_id: formData.get('ciudad_id'),
+        domicilio_calle: formData.get('domicilio_calle') || null,
+        domicilio_numero: formData.get('domicilio_numero') || null,
+        domicilio_cp: formData.get('domicilio_cp') || null,
+        estado_id: formData.get('estado_id') || null,
+        ciudad_id: formData.get('ciudad_id') || null,
         ocupacion_id: formData.get('ocupacion_id') || null,
         tipo_sangre_id: formData.get('tipo_sangre_id') || null,
-        alergias: formData.get('alergias'),
-        antecedentes_personales: formData.get('antecedentes_personales'),
-        antecedentes_familiares: formData.get('antecedentes_familiares')
+        grupo_etnico_id: null,
+        religion_id: null,
+        nivel_socioeconomico_id: null,
+        tipo_vivienda_id: null
       };
 
       document.getElementById('registro-form').style.display = 'none';
