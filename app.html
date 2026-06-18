@@ -117,11 +117,46 @@
     .btn-primary:hover{background:var(--azul-marino);box-shadow:var(--sombra-hover)}
     .btn-secondary{padding:8px 16px;background:#fff;color:var(--azul-primario);border:1.5px solid var(--azul-primario);border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
     .btn-secondary:hover{background:var(--azul-claro)}
-    .btn-ghost{padding:7px 14px;background:none;color:var(--gris-texto);border:1.5px solid var(--gris-borde);border-radius:20px;font-size:13px;font-weight:600;transition:all .15s}
-    .btn-ghost:hover{border-color:var(--gris-oscuro);color:var(--gris-oscuro)}
-    .btn-verde{padding:8px 18px;background:var(--verde);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
-    .btn-verde:hover{background:#046038}
-    .btn-disabled{opacity:.45;cursor:not-allowed!important}
+
+    /* TABS estilo LinkedIn */
+    .tabs{display:flex;border-bottom:1px solid var(--gris-borde);background:#fff;padding:0 4px}
+    .tab{padding:12px 16px;font-size:13px;font-weight:600;color:var(--gris-texto);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;cursor:pointer}
+    .tab:hover{color:var(--gris-oscuro)}
+    .tab.activo{color:var(--azul-primario);border-bottom-color:var(--azul-primario)}
+    .tab-badge{background:var(--azul-claro);color:var(--azul-primario);font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:4px}
+
+    /* SECTION TABS */
+    .sec-tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--gris-borde);background:#fff;padding:0 8px;gap:2px;scrollbar-width:none;position:sticky;top:0;z-index:19}
+    .sec-tabs::-webkit-scrollbar{display:none}
+    .sec-tab{display:flex;align-items:center;gap:5px;padding:10px 14px;font-size:12px;font-weight:600;color:var(--gris-texto);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .sec-tab:hover{color:var(--gris-oscuro)}
+    .sec-tab.activo{color:var(--teal-dark);border-bottom-color:var(--teal);font-weight:700}
+    .sec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .sec-dot.lleno{background:var(--teal)}
+    .sec-dot.vacio{background:var(--gris-borde)}
+
+    /* IA TOOLBAR */
+    .ia-toolbar{background:var(--navy);padding:8px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .ia-toolbar-label{color:rgba(255,255,255,.5);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-right:4px}
+    .ia-btn{padding:5px 14px;border:1.5px solid rgba(255,255,255,.2);border-radius:20px;background:transparent;color:rgba(255,255,255,.85);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px}
+    .ia-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4)}
+    .ia-area{padding:12px 14px;background:#fff;border-bottom:1px solid var(--gris-borde)}
+    .ia-textarea{width:100%;min-height:90px;padding:10px 12px;border:1.5px solid var(--gris-borde);border-radius:var(--radio);font-size:13px;font-family:inherit;resize:vertical;color:var(--gris-oscuro);background:#fafafa;transition:all .2s}
+    .ia-textarea:focus{outline:none;border-color:var(--teal);background:#fff}
+    .ia-textarea.tiene-texto{border-color:var(--teal);background:#fff}
+    .extract-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--navy);color:#fff;border:none;border-radius:var(--radio);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:10px;letter-spacing:.02em}
+    .extract-btn:hover{background:#0A1F3A}
+    .extract-btn:disabled{opacity:.55;cursor:not-allowed}
+
+    /* SECTION FIELDS */
+    .sec-campos{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+    .sec-campo{display:flex;flex-direction:column;gap:4px}
+    .sec-campo.wide{grid-column:span 2}
+    .sec-lbl{font-size:10px;font-weight:700;color:var(--teal-dark);text-transform:uppercase;letter-spacing:.5px}
+    .sec-lbl.req::after{content:" *";color:var(--rojo)}
+    .sec-input{width:100%;padding:8px 10px;border:1.5px solid var(--gris-borde);border-radius:var(--radio);font-size:13px;font-family:inherit;background:#fafafa;color:var(--gris-oscuro);transition:all .15s;resize:vertical}
+    .sec-input:focus{outline:none;border-color:var(--teal);background:#fff}
+    .sec-input.lleno{border-color:var(--teal);background:var(--teal-light)}
 
     /* EMPTY STATE */
     .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:#bbb;text-align:center;flex:1}
@@ -131,6 +166,8 @@
 
     @media(max-width:768px){
       .sidebar{display:none}
+      .sec-campos{grid-template-columns:1fr}
+      .sec-campo.wide{grid-column:span 1}
     }
   </style>
 </head>
@@ -143,41 +180,30 @@
 </div>
 
 <div class="app">
-  <!-- HEADER -->
   <div class="header">
-    <div style="font-size:18px;font-weight:900;letter-spacing:-.02em">
-      <span style="color:#050C1A">LU</span><span style="color:#00C9A7">ISA</span>
-    </div>
+    <div style="font-size:20px;font-weight:900;color:var(--navy)">LUISA</div>
     <div class="header-sep"></div>
     <div class="header-medico">
       <div class="header-nombre" id="header-medico-nombre">Dr. Médico</div>
       <div class="header-avatar-ini" id="header-avatar">MD</div>
-      <button class="btn-salir" id="btn-logout">Salir</button>
+      <button class="btn-salir" id="btn-salir">Salir</button>
     </div>
   </div>
 
-  <!-- BODY -->
   <div class="body">
-    <!-- SIDEBAR -->
     <div class="sidebar">
       <div class="sidebar-search">
-        <input type="text" placeholder="Buscar paciente..." id="search-pacientes"/>
+        <input type="text" id="search-pacientes" placeholder="Buscar paciente..." autocomplete="off"/>
       </div>
-      <div class="btn-nuevo">
-        ➕ Nuevo paciente
-      </div>
-      <div class="sidebar-label">Mis Pacientes</div>
+      <button class="btn-nuevo" id="btn-nuevo-pac">➕ Nuevo paciente</button>
+      <div class="sidebar-label">MIS PACIENTES</div>
       <div class="sidebar-lista" id="pacientes-list">
-        <div class="empty-state" style="padding:30px 10px">
-          <div class="empty-icono">👥</div>
-          <div class="empty-titulo">Cargando...</div>
-        </div>
+        <div style="padding:20px;text-align:center;color:#999">Cargando...</div>
       </div>
     </div>
 
-    <!-- MAIN -->
-    <div class="main">
-      <div id="main-content" class="empty-state">
+    <div class="main" id="main-content">
+      <div class="empty-state">
         <div class="empty-icono">👤</div>
         <div class="empty-titulo">Selecciona un paciente</div>
         <div class="empty-sub">Elige un paciente de la lista para ver su expediente</div>
@@ -199,12 +225,7 @@ let currentMedico = null;
 let pacientes = [];
 let pacienteActual = null;
 
-// ────────────────────────────────────────────────────────────────
-// INIT SUPABASE & CHECK AUTH
-// ────────────────────────────────────────────────────────────────
-
 async function initApp() {
-  // Check localStorage for session
   const sessionStr = localStorage.getItem('luisa_session');
   if (!sessionStr) {
     window.location.href = '/auth.html';
@@ -213,38 +234,21 @@ async function initApp() {
 
   try {
     currentSession = JSON.parse(sessionStr);
-    // Verify session not expired (24h)
-    if (Date.now() - currentSession.timestamp > 24*60*60*1000) {
-      localStorage.removeItem('luisa_session');
-      localStorage.removeItem('luisa_user');
-      window.location.href = '/auth.html';
-      return;
-    }
   } catch(e) {
+    console.error('Invalid session:', e);
     window.location.href = '/auth.html';
     return;
   }
 
-  // Hide splash after 500ms
   setTimeout(() => {
     const splash = document.getElementById('splash');
-    splash.classList.add('out');
-    setTimeout(() => { splash.style.display = 'none'; }, 500);
+    if (splash) splash.classList.add('out');
   }, 500);
 
-  // Load medico data
   await loadMedicoData();
-
-  // Load patients
   await loadPacientes();
-
-  // Setup event listeners
   setupEventListeners();
 }
-
-// ────────────────────────────────────────────────────────────────
-// LOAD MEDICO DATA FROM SUPABASE
-// ────────────────────────────────────────────────────────────────
 
 async function loadMedicoData() {
   try {
@@ -257,161 +261,102 @@ async function loadMedicoData() {
     if (error) throw error;
 
     currentMedico = data;
-
-    // Update header
     const iniciales = data.nombre_completo
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map(w => w[0])
-      .join('')
-      .toUpperCase();
+      ? data.nombre_completo.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+      : 'MD';
 
-    document.getElementById('header-medico-nombre').textContent =
-      data.nombre_completo || 'Dr. Médico';
+    document.getElementById('header-medico-nombre').textContent = data.nombre_completo || 'Dr. Médico';
     document.getElementById('header-avatar').textContent = iniciales;
   } catch(e) {
     console.error('Error loading medico:', e);
-    alert('Error cargando datos del médico');
   }
 }
-
-// ────────────────────────────────────────────────────────────────
-// LOAD PACIENTES FROM SUPABASE
-// ────────────────────────────────────────────────────────────────
 
 async function loadPacientes() {
   if (!currentMedico) return;
 
   try {
-    // Get relationships
     const { data: rels, error: relError } = await sb
       .from('doctor_patient_relationships')
       .select('id_paciente')
       .eq('id_medico', currentMedico.id);
 
     if (relError) throw relError;
-
     if (!rels || rels.length === 0) {
-      renderPacientesList([]);
+      document.getElementById('pacientes-list').innerHTML = '<div style="padding:20px;text-align:center;color:#999">No tienes pacientes</div>';
       return;
     }
 
-    const pacienteIds = rels.map(r => r.id_paciente);
-
-    // Get patient details
+    const ids = rels.map(r => r.id_paciente);
     const { data: pacs, error: pacError } = await sb
       .from('perfiles_pacientes')
       .select('*')
-      .in('id', pacienteIds);
+      .in('id', ids);
 
     if (pacError) throw pacError;
-
     pacientes = pacs || [];
-    renderPacientesList(pacientes);
+    renderPacientes();
   } catch(e) {
     console.error('Error loading pacientes:', e);
-    renderPacientesList([]);
   }
 }
 
-// ────────────────────────────────────────────────────────────────
-// RENDER PACIENTES LIST
-// ────────────────────────────────────────────────────────────────
-
-function renderPacientesList(list) {
-  const container = document.getElementById('pacientes-list');
-
-  if (list.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state" style="padding:30px 10px">
-        <div class="empty-icono">👥</div>
-        <div class="empty-titulo">Sin pacientes</div>
-        <div class="empty-sub" style="font-size:11px">Aquí aparecerán tus pacientes</div>
-      </div>
-    `;
+function renderPacientes() {
+  const list = document.getElementById('pacientes-list');
+  if (!pacientes.length) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:#999">No hay pacientes</div>';
     return;
   }
 
-  container.innerHTML = list.map(p => {
-    const iniciales = (p.nombre_completo || 'P')
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map(w => w[0])
-      .join('')
-      .toUpperCase();
-
+  list.innerHTML = pacientes.map(p => {
+    const edad = p.fecha_nacimiento
+      ? Math.floor((Date.now() - new Date(p.fecha_nacimiento)) / 31557600000)
+      : '—';
+    const iniciales = p.nombre_completo
+      ? p.nombre_completo.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+      : 'P';
     return `
-      <div class="pac-item" data-pac-id="${p.id}">
-        <div class="pac-avatar">
-          ${iniciales}
-        </div>
+      <div class="pac-item" data-id="${p.id}">
+        <div class="pac-avatar">${iniciales}</div>
         <div class="pac-info">
-          <div class="pac-nombre">${p.nombre_completo || 'Sin nombre'}</div>
-          <div class="pac-meta">
-            <span>${p.edad || '—'} años</span>
-          </div>
+          <div class="pac-nombre">${p.nombre_completo}</div>
+          <div class="pac-meta">${edad} años</div>
         </div>
       </div>
     `;
   }).join('');
 
-  // Add event listeners to items
-  container.querySelectorAll('.pac-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const pacId = item.dataset.pacId;
-      selectPaciente(pacId);
-    });
+  document.querySelectorAll('.pac-item').forEach(el => {
+    el.addEventListener('click', () => selectPaciente(el.dataset.id));
   });
 }
 
-// ────────────────────────────────────────────────────────────────
-// SELECT PACIENTE & SHOW DETAILS
-// ────────────────────────────────────────────────────────────────
+function selectPaciente(id) {
+  const pac = pacientes.find(p => p.id === id);
+  if (!pac) return;
 
-async function selectPaciente(pacId) {
-  pacienteActual = pacientes.find(p => p.id === pacId);
+  pacienteActual = pac;
+  document.querySelectorAll('.pac-item').forEach(el => el.classList.remove('activo'));
+  document.querySelector(`[data-id="${id}"]`).classList.add('activo');
 
-  if (!pacienteActual) return;
-
-  // Update sidebar active state
-  document.querySelectorAll('.pac-item').forEach(item => {
-    item.classList.toggle('activo', item.dataset.pacId === pacId);
-  });
-
-  // Render patient card in main
-  renderPacienteDetail(pacienteActual);
+  renderPacienteDetail(pac);
 }
-
-// ────────────────────────────────────────────────────────────────
-// RENDER PACIENTE DETAIL CARD
-// ────────────────────────────────────────────────────────────────
 
 function renderPacienteDetail(pac) {
-  const mainContent = document.getElementById('main-content');
+  const edad = pac.fecha_nacimiento
+    ? Math.floor((Date.now() - new Date(pac.fecha_nacimiento)) / 31557600000)
+    : '—';
+  const iniciales = pac.nombre_completo
+    ? pac.nombre_completo.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
+    : 'P';
 
-  const iniciales = (pac.nombre_completo || 'P')
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(w => w[0])
-    .join('')
-    .toUpperCase();
-
-  mainContent.innerHTML = `
-    <div class="pac-header-card">
+  const main = document.getElementById('main-content');
+  main.innerHTML = `
+    <div class="card pac-header-card">
       <div class="pac-header-avatar">${iniciales}</div>
       <div class="pac-header-info">
-        <div class="pac-header-nombre">${pac.nombre_completo || 'Sin nombre'}</div>
-        <div class="pac-header-meta">
-          ${pac.edad || '—'} años · ${pac.sexo || '—'} · ${pac.telefono || 'Sin teléfono'}
-        </div>
-        ${pac.alergias ? `
-          <div class="pac-header-alerta">
-            ⚠️ Alergias: ${pac.alergias}
-          </div>
-        ` : ''}
+        <div class="pac-header-nombre">${pac.nombre_completo}</div>
+        <div class="pac-header-meta">${edad} años · ${pac.sexo || '—'} · Sin teléfono</div>
       </div>
       <div class="pac-header-acciones">
         <button class="btn-primary">📋 Ver expediente</button>
@@ -419,78 +364,111 @@ function renderPacienteDetail(pac) {
       </div>
     </div>
 
+    <div class="tabs">
+      <button class="tab activo">Consulta</button>
+      <button class="tab">Estudios</button>
+      <button class="tab">Historial <span class="tab-badge">1</span></button>
+    </div>
+
     <div class="card">
       <div class="card-header">
-        <div class="card-titulo">📝 Información General</div>
+        <span class="card-titulo">📋 Información General</span>
       </div>
-      <div class="card-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
-          <div>
-            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Edad</div>
-            <div style="color:var(--gris-oscuro)">${pac.edad || '—'}</div>
-          </div>
-          <div>
-            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Sexo</div>
-            <div style="color:var(--gris-oscuro)">${pac.sexo || '—'}</div>
-          </div>
-          <div>
-            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Teléfono</div>
-            <div style="color:var(--gris-oscuro)">${pac.telefono || '—'}</div>
-          </div>
-          <div>
-            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Alergias</div>
-            <div style="color:var(--gris-oscuro)">${pac.alergias || 'No reportadas'}</div>
-          </div>
+      <div class="card-body sec-campos">
+        <div class="sec-campo">
+          <label class="sec-lbl">EDAD</label>
+          <div class="sec-input" style="background:#fafafa;padding:8px 10px;border-radius:8px">${edad}</div>
+        </div>
+        <div class="sec-campo">
+          <label class="sec-lbl">SEXO</label>
+          <div class="sec-input" style="background:#fafafa;padding:8px 10px;border-radius:8px">${pac.sexo || '—'}</div>
+        </div>
+        <div class="sec-campo">
+          <label class="sec-lbl">TELÉFONO</label>
+          <div class="sec-input" style="background:#fafafa;padding:8px 10px;border-radius:8px">—</div>
+        </div>
+        <div class="sec-campo">
+          <label class="sec-lbl">ALERGIAS</label>
+          <div class="sec-input" style="background:#fafafa;padding:8px 10px;border-radius:8px">No reportadas</div>
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <div class="card-titulo">💊 Medicamentos Actuales</div>
+        <span class="card-titulo">💊 Medicamentos Actuales</span>
       </div>
       <div class="card-body">
-        <div style="color:var(--gris-texto);font-size:13px;line-height:1.6">
-          ${pac.medicamentos_actuales || 'No hay medicamentos registrados'}
+        <div style="color:#999;font-size:13px">No hay medicamentos registrados</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ia-toolbar">
+        <span class="ia-toolbar-label">IA</span>
+        <button class="ia-btn">🎤 Dictar</button>
+        <button class="ia-btn">✨ Extraer datos con IA → llenar campos</button>
+      </div>
+      <div class="ia-area">
+        <textarea class="ia-textarea" placeholder="Dicta o escribe sobre antecedentes..."></textarea>
+      </div>
+      <div style="padding:12px 14px">
+        <button class="extract-btn">🔄 Extraer datos con IA → llenar campos</button>
+      </div>
+    </div>
+
+    <div class="sec-tabs">
+      <button class="sec-tab activo">
+        <span class="sec-dot lleno"></span>
+        <span>Antecedentes</span>
+      </button>
+      <button class="sec-tab">
+        <span class="sec-dot vacio"></span>
+        <span>Padecimiento</span>
+      </button>
+      <button class="sec-tab">
+        <span class="sec-dot vacio"></span>
+        <span>Signos Vitales</span>
+      </button>
+      <button class="sec-tab">
+        <span class="sec-dot vacio"></span>
+        <span>Exploración</span>
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="sec-campos">
+        <div class="sec-campo wide">
+          <label class="sec-lbl req">Dicta o escribe sobre antecedentes...</label>
+          <textarea class="sec-input" style="min-height:100px"></textarea>
         </div>
+        <div style="grid-column:span 2;padding:0 8px;color:#999;font-size:11px">⚠️ Faltan 6 campo(s) obligatorio(s)</div>
       </div>
     </div>
   `;
 }
 
-// ────────────────────────────────────────────────────────────────
-// SETUP EVENT LISTENERS
-// ────────────────────────────────────────────────────────────────
-
 function setupEventListeners() {
-  // Logout button
-  document.getElementById('btn-logout').addEventListener('click', handleLogout);
+  document.getElementById('btn-salir').addEventListener('click', () => {
+    localStorage.removeItem('luisa_session');
+    window.location.href = '/auth.html';
+  });
 
-  // Search pacientes
   document.getElementById('search-pacientes').addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
-    const filtered = pacientes.filter(p =>
-      (p.nombre_completo || '').toLowerCase().includes(query)
-    );
-    renderPacientesList(filtered);
+    const items = document.querySelectorAll('.pac-item');
+    items.forEach(item => {
+      const nombre = item.querySelector('.pac-nombre').textContent.toLowerCase();
+      item.style.display = nombre.includes(query) ? '' : 'none';
+    });
+  });
+
+  document.getElementById('btn-nuevo-pac').addEventListener('click', () => {
+    window.location.href = '/paciente-nuevo.html';
   });
 }
 
-// ────────────────────────────────────────────────────────────────
-// LOGOUT
-// ────────────────────────────────────────────────────────────────
-
-function handleLogout() {
-  localStorage.removeItem('luisa_session');
-  localStorage.removeItem('luisa_user');
-  window.location.href = '/auth.html';
-}
-
-// ────────────────────────────────────────────────────────────────
-// START APP
-// ────────────────────────────────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', initApp);
+initApp();
 </script>
 
 </body>
