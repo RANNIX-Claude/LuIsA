@@ -267,32 +267,35 @@ async function initApp() {
 
 async function loadMedicoData() {
   try {
+    if (!currentSession || !currentSession.user) {
+      console.warn('No session user');
+      return;
+    }
+
     const { data, error } = await sb
       .from('medicos')
       .select('*')
       .eq('id_usuario', currentSession.user.id)
       .single();
 
-    if (error) throw error;
-    if (!data) {
-      currentMedico = null;
+    if (error) {
+      console.warn('No medico found:', error);
       return;
     }
 
+    if (!data) return;
+
     currentMedico = data;
     const nombre = (data.nombre_completo && data.nombre_completo.trim()) || 'Dr. Médico';
-    const iniciales = nombre
-      .split(' ')
-      .slice(0, 2)
-      .map(w => w[0])
-      .join('')
-      .toUpperCase() || 'MD';
+    const initials = nombre.split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'MD';
 
     document.getElementById('header-medico-nombre').textContent = nombre;
     document.getElementById('header-medico-esp').textContent = data.especialidad_nombre || 'Especialista';
-    document.getElementById('header-avatar').textContent = iniciales;
+    document.getElementById('header-avatar').textContent = initials;
   } catch(e) {
-    console.error('Error loading medico:', e);
+    console.error('Error in loadMedicoData:', e);
+    // Set defaults even if error
+    document.getElementById('header-medico-nombre').textContent = currentSession?.user?.nombre_completo || 'Dr. Médico';
   }
 }
 
