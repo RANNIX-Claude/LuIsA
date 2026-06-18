@@ -225,9 +225,6 @@ async function initApp() {
     return;
   }
 
-  // Init Supabase
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
   // Hide splash after 500ms
   setTimeout(() => {
     const splash = document.getElementById('splash');
