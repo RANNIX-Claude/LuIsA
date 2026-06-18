@@ -184,8 +184,12 @@
     <div style="font-size:20px;font-weight:900;color:var(--navy)">LUISA</div>
     <div class="header-sep"></div>
     <div class="header-medico">
-      <div class="header-nombre" id="header-medico-nombre">Dr. Médico</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end">
+        <div class="header-nombre" id="header-medico-nombre">Dr. Médico</div>
+        <div style="font-size:11px;color:var(--gris-texto)" id="header-medico-esp">Especialista</div>
+      </div>
       <div class="header-avatar-ini" id="header-avatar">MD</div>
+      <button class="btn-inicio" id="btn-inicio">– Inicio</button>
       <button class="btn-salir" id="btn-salir">Salir</button>
     </div>
   </div>
@@ -196,6 +200,17 @@
         <input type="text" id="search-pacientes" placeholder="Buscar paciente..." autocomplete="off"/>
       </div>
       <button class="btn-nuevo" id="btn-nuevo-pac">➕ Nuevo paciente</button>
+
+      <div class="nuevo-form" id="nuevo-form-container" style="display:none">
+        <input type="text" id="nuevo-pac-nombre" placeholder="Nombre completo" autocomplete="off"/>
+        <input type="number" id="nuevo-pac-edad" placeholder="Edad" min="0" max="120"/>
+        <input type="tel" id="nuevo-pac-tel" placeholder="Teléfono" autocomplete="off"/>
+        <div class="nuevo-form-btns">
+          <button class="btn-guardar-pac" id="btn-guardar-pac">Guardar</button>
+          <button class="btn-cancelar-pac" id="btn-cancelar-pac">✕</button>
+        </div>
+      </div>
+
       <div class="sidebar-label">MIS PACIENTES</div>
       <div class="sidebar-lista" id="pacientes-list">
         <div style="padding:20px;text-align:center;color:#999">Cargando...</div>
@@ -264,7 +279,8 @@ async function loadMedicoData() {
     const nombre = data.nombre_completo || 'Dr. Médico';
     const iniciales = nombre.trim().split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'MD';
 
-    document.getElementById('header-medico-nombre').textContent = data.nombre_completo || 'Dr. Médico';
+    document.getElementById('header-medico-nombre').textContent = nombre;
+    document.getElementById('header-medico-esp').textContent = data.especialidad_nombre || 'Especialista';
     document.getElementById('header-avatar').textContent = iniciales;
   } catch(e) {
     console.error('Error loading medico:', e);
@@ -453,6 +469,10 @@ function setupEventListeners() {
     window.location.href = '/auth.html';
   });
 
+  document.getElementById('btn-inicio').addEventListener('click', () => {
+    window.location.href = '/index.html';
+  });
+
   document.getElementById('search-pacientes').addEventListener('input', (e) => {
     const query = e.target.value.toLowerCase();
     const items = document.querySelectorAll('.pac-item');
@@ -463,7 +483,61 @@ function setupEventListeners() {
   });
 
   document.getElementById('btn-nuevo-pac').addEventListener('click', () => {
-    window.location.href = '/paciente-nuevo.html';
+    const form = document.getElementById('nuevo-form-container');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.getElementById('btn-cancelar-pac').addEventListener('click', () => {
+    document.getElementById('nuevo-form-container').style.display = 'none';
+    document.getElementById('nuevo-pac-nombre').value = '';
+    document.getElementById('nuevo-pac-edad').value = '';
+    document.getElementById('nuevo-pac-tel').value = '';
+  });
+
+  document.getElementById('btn-guardar-pac').addEventListener('click', async () => {
+    const nombre = document.getElementById('nuevo-pac-nombre').value.trim();
+    const edad = document.getElementById('nuevo-pac-edad').value.trim();
+    const tel = document.getElementById('nuevo-pac-tel').value.trim();
+
+    if (!nombre) {
+      alert('Por favor ingresa el nombre completo');
+      return;
+    }
+
+    try {
+      const { data, error } = await sb
+        .from('perfiles_pacientes')
+        .insert([{
+          nombre_completo: nombre,
+          fecha_nacimiento: edad ? new Date(Date.now() - edad * 31557600000).toISOString() : null,
+          sexo: null,
+          id_usuario: null
+        }])
+        .select();
+
+      if (error) throw error;
+
+      const pacienteId = data[0].id;
+      const { error: relError } = await sb
+        .from('doctor_patient_relationships')
+        .insert([{
+          id_medico: currentMedico.id,
+          id_paciente: pacienteId,
+          activo: true
+        }]);
+
+      if (relError) throw relError;
+
+      alert('Paciente registrado exitosamente');
+      document.getElementById('nuevo-form-container').style.display = 'none';
+      document.getElementById('nuevo-pac-nombre').value = '';
+      document.getElementById('nuevo-pac-edad').value = '';
+      document.getElementById('nuevo-pac-tel').value = '';
+      await loadPacientes();
+    } catch(e) {
+      console.error('Error:', e);
+      alert('Error al registrar paciente: ' + e.message);
+    }
   });
 }
 
