@@ -251,7 +251,7 @@ async function loadMedicoData() {
     const { data, error } = await sb
       .from('medicos')
       .select('*')
-      .eq('email', currentSession.email)
+      .eq('id_usuario', currentSession.user.id)
       .single();
 
     if (error) throw error;
