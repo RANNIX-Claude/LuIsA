@@ -452,14 +452,14 @@
 
 <script>
 // ── SUPABASE ────────────────────────────────────────────────────
-const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
+const SUPABASE_URL = 'https://isxspjlwuzbbtpamkknq.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeHNwamx3dXpiYnRwYW1ra25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDYwMjMsImV4cCI6MjA5NTM4MjAyM30.D5iWO9K7137hFW_pBx9xYASHFfnyUcDthi9_A-6pksA';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ── INIT: si ya hay sesión activa, redirigir al app ─────────────
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) window.location.href = '/medico.html';
+  if (session) window.location.href = '/app.html';
 })();
 
 // ── TABS ────────────────────────────────────────────────────────
@@ -511,7 +511,7 @@ async function handleLogin(e) {
     const SUPABASE_KEY = sb.supabaseKey;
 
     // 1. Hacer fetch directo al endpoint REST (evita el SDK)
-    const url = `${SUPABASE_URL}/rest/v1/usuarios_luisa?email=eq.${encodeURIComponent(email)}&activo=eq.true&select=id,email,nombre_completo,rol,password_hash`;
+    const url = `${SUPABASE_URL}/rest/v1/usuarios_ligia?email=eq.${encodeURIComponent(email)}&activo=eq.true&select=id,email,nombre_completo,rol,password_hash`;
 
     const response = await fetch(url, {
       method: 'GET',
@@ -552,46 +552,26 @@ async function handleLogin(e) {
       return;
     }
 
-    // 2.5 Si es médico, obtener su ID en la tabla medicos
-    let medicoId = null;
-    if (user.rol === 'medico') {
-      const medicoUrl = `${SUPABASE_URL}/rest/v1/medicos?id_usuario=eq.${encodeURIComponent(user.id)}&select=id`;
-      const medicoRes = await fetch(medicoUrl, {
-        method: 'GET',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Content-Type': 'application/json'
-        }
-      });
-      if (medicoRes.ok) {
-        const medicos = await medicoRes.json();
-        if (medicos && medicos.length > 0) {
-          medicoId = medicos[0].id;
-        }
-      }
-    }
-
     // 3. Guardar sesión en localStorage
     const userData = {
       id: user.id,
       email: user.email,
       nombre_completo: user.nombre_completo,
-      rol: user.rol,
-      medico_id: medicoId
+      rol: user.rol
     };
-    localStorage.setItem('luisa_user', JSON.stringify(userData));
-    localStorage.setItem('luisa_session', JSON.stringify({
+    localStorage.setItem('ligia_user', JSON.stringify(userData));
+    localStorage.setItem('ligia_session', JSON.stringify({
       user: userData,
       timestamp: Date.now()
     }));
 
     // 4. Redireccionar según rol
     if (user.rol === 'medico') {
-      window.location.href = '/medico.html';
+      window.location.href = '/app.html';
     } else if (user.rol === 'paciente' || user.rol === 'admin_familiar') {
       window.location.href = '/paciente.html';
     } else {
-      window.location.href = '/medico.html';
+      window.location.href = '/app.html';
     }
 
   } catch (err) {
@@ -651,7 +631,7 @@ async function handleRegister(e) {
 
   // Si confirmación de email está desactivada → redirigir directo
   if (data.session) {
-    window.location.href = '/medico.html';
+    window.location.href = '/app.html';
   } else {
     showAlert(
       `✅ Cuenta creada. Revisa tu correo ${email} para confirmar tu cuenta.`,
