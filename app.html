@@ -274,10 +274,19 @@ async function loadMedicoData() {
       .single();
 
     if (error) throw error;
+    if (!data) {
+      currentMedico = null;
+      return;
+    }
 
     currentMedico = data;
-    const nombre = data.nombre_completo || 'Dr. Médico';
-    const iniciales = nombre.trim().split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'MD';
+    const nombre = (data.nombre_completo && data.nombre_completo.trim()) || 'Dr. Médico';
+    const iniciales = nombre
+      .split(' ')
+      .slice(0, 2)
+      .map(w => w[0])
+      .join('')
+      .toUpperCase() || 'MD';
 
     document.getElementById('header-medico-nombre').textContent = nombre;
     document.getElementById('header-medico-esp').textContent = data.especialidad_nombre || 'Especialista';
