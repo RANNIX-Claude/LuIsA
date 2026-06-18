@@ -392,6 +392,7 @@
 <div id="splash">
   <div class="splash-brand"><span class="lig">LU</span><span class="ia">ISA</span></div>
   <div class="splash-tagline">Inteligencia Clínica</div>
+  <div style="position:absolute;top:10px;right:10px;font-size:10px;color:rgba(255,255,255,.4)">v.2025.06.17 22:25</div>
   <div class="splash-spin"></div>
 </div>
 
@@ -539,7 +540,7 @@ function AuthGuard({children}){
   const [listo,setListo] = useState(false);
   useEffect(()=>{
     // Usar localStorage (sesión LUISA propia) en vez de Supabase Auth
-    const sessionStr = localStorage.getItem('luisa_session');
+    const sessionStr = localStorage.getItem('ligia_session');
     if(!sessionStr) {
       window.location.href='/auth.html';
       return;
@@ -548,8 +549,8 @@ function AuthGuard({children}){
       const session = JSON.parse(sessionStr);
       // Verificar expiración 24h
       if (Date.now() - session.timestamp > 24*60*60*1000) {
-        localStorage.removeItem('luisa_user');
-        localStorage.removeItem('luisa_session');
+        localStorage.removeItem('ligia_user');
+        localStorage.removeItem('ligia_session');
         window.location.href='/auth.html';
         return;
       }
