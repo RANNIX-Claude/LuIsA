@@ -3,8 +3,8 @@
 // Compartido entre app.html (médico) e index.html (paciente)
 // ============================================================================
 
-const SUPABASE_URL = 'https://isxspjlwuzbbtpamkknq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlzeHNwamx3dXpiYnRwYW1ra25xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4MDYwMjMsImV4cCI6MjA5NTM4MjAyM30.D5iWO9K7137hFW_pBx9xYASHFfnyUcDthi9_A-6pksA';
+const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -14,7 +14,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function checkSession() {
   // Usar nuestra propia sesión en localStorage (no Supabase Auth)
-  const sessionStr = localStorage.getItem('ligia_session');
+  const sessionStr = localStorage.getItem('luisa_session');
   if (!sessionStr) {
     window.location.href = '/auth.html';
     return null;
@@ -26,8 +26,8 @@ async function checkSession() {
     // Verificar que la sesión no esté expirada (24 horas)
     const SESSION_DURATION = 24 * 60 * 60 * 1000;
     if (Date.now() - session.timestamp > SESSION_DURATION) {
-      localStorage.removeItem('ligia_user');
-      localStorage.removeItem('ligia_session');
+      localStorage.removeItem('luisa_user');
+      localStorage.removeItem('luisa_session');
       window.location.href = '/auth.html';
       return null;
     }
@@ -44,14 +44,14 @@ async function checkSession() {
 }
 
 async function logout() {
-  localStorage.removeItem('ligia_user');
-  localStorage.removeItem('ligia_session');
+  localStorage.removeItem('luisa_user');
+  localStorage.removeItem('luisa_session');
   window.location.href = '/auth.html';
 }
 
 // Obtener usuario actual de localStorage
 function getCurrentUser() {
-  const userStr = localStorage.getItem('ligia_user');
+  const userStr = localStorage.getItem('luisa_user');
   if (!userStr) return null;
   try {
     return JSON.parse(userStr);
