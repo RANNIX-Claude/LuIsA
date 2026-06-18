@@ -1,0 +1,1 @@
+SELECT tablename, policyname, roles FROM pg_policies WHERE schemaname='public' AND policyname LIKE '%anon%' ORDER BY tablename;

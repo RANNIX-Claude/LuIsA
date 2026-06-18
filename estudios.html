@@ -3,260 +3,683 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>LUISA — Análisis de Estudios</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <title>MediVoz — Módulo de Estudios Clínicos</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230A66C2'/><text y='.9em' font-size='72' x='12'>🧪</text></svg>"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: 'Inter', sans-serif; background: #F5F7FA; color: #0F172A; }
-
-    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-    .header { background: #fff; border-bottom: 1px solid #E2E8F0; padding: 16px; margin-bottom: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
-    .header h1 { font-size: 24px; font-weight: 800; }
-    .btn { padding: 10px 20px; background: #00C9A7; color: #fff; border: none; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 14px; }
-    .btn:hover { background: #00A88C; }
-    .btn-secondary { background: #fff; color: #00C9A7; border: 1.5px solid #00C9A7; }
-
-    .card { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-    .card-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-
-    .drop-zone { border: 2px dashed #00C9A7; border-radius: 12px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: #E6FAF7; }
-    .drop-zone:hover { background: #D0F5F0; }
-    .drop-zone.over { background: #B8F1E8; border-color: #00A88C; }
-    .drop-zone-icon { font-size: 48px; margin-bottom: 12px; }
-
-    .file-info { background: #E6FAF7; border-left: 4px solid #00C9A7; padding: 12px; border-radius: 6px; margin: 12px 0; display: flex; align-items: center; justify-content: space-between; }
-    .file-name { font-weight: 600; }
-
-    .loading { text-align: center; padding: 32px; }
-    .spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid rgba(0,201,167,0.2); border-top-color: #00C9A7; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .analysis-result { background: #F8FAFC; padding: 16px; border-radius: 8px; margin: 12px 0; border-left: 4px solid #00C9A7; }
-    .analysis-label { font-weight: 700; color: #00C9A7; font-size: 12px; text-transform: uppercase; }
-    .analysis-text { margin-top: 8px; font-size: 14px; line-height: 1.5; }
-
-    .value-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #E2E8F0; }
-    .value-name { font-weight: 600; }
-    .value-status { font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 4px; }
-    .status-normal { background: #E8F5E9; color: #1b5e20; }
-    .status-alto { background: #FFF3E0; color: #E65100; }
-    .status-bajo { background: #E3F2FD; color: #1565C0; }
-    .status-critico { background: #FFEBEE; color: #b71c1c; }
-
-    .error { background: #FFEBEE; border-left: 4px solid #DC2626; padding: 12px; border-radius: 6px; color: #991B1B; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100%;font-family:'DM Sans','Segoe UI',sans-serif;background:#F0F4F8;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .spin{animation:spin .8s linear infinite}
+    textarea:focus,input:focus,select:focus{outline:none!important;border-color:#0A66C2!important}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#C8D8F0;border-radius:4px}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+    .badge-critico{background:#FFEBEE;color:#b71c1c;border:1px solid #EF9A9A}
+    .badge-alto{background:#FFF3E0;color:#E65100;border:1px solid #FFCC02}
+    .badge-bajo{background:#E3F2FD;color:#1565C0;border:1px solid #90CAF9}
+    .badge-normal{background:#E8F5E9;color:#1b5e20;border:1px solid #A5D6A7}
+    .valor-critico{background:#FFEBEE;border-left:4px solid #F44336}
+    .valor-alto{background:#FFF8E1;border-left:4px solid #FF9800}
+    .valor-bajo{background:#E3F2FD;border-left:4px solid #2196F3}
+    .valor-normal{background:#F9F9F9;border-left:3px solid #E0DFDC}
+    .drop-zone{border:2.5px dashed #C8D8F0;border-radius:12px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFCFF}
+    .drop-zone:hover,.drop-zone.over{border-color:#0A66C2;background:#F0F7FF}
+    .prob-bar{height:8px;border-radius:4px;background:#E0DFDC;overflow:hidden;margin-top:4px}
+    .prob-fill{height:100%;border-radius:4px;transition:width .8s ease}
+    @media print{
+      header,.no-print{display:none!important}
+      body{background:#fff}
+    }
   </style>
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <div class="container">
-    <div class="header">
-      <h1>🧪 Análisis IA de Estudios</h1>
-      <a href="/app.html" class="btn btn-secondary">← Volver</a>
-    </div>
 
-    <div class="card">
-      <div class="card-title">Subir Resultado de Laboratorio (PDF)</div>
-      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <div class="drop-zone-icon">📄</div>
-        <div style="font-weight: 600; margin-bottom: 4px;">Arrastra un PDF aquí o haz click</div>
-        <div style="font-size: 12px; color: #6B8BAE;">Soporta PDF con resultados de laboratorio</div>
-      </div>
-      <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="handleFileSelect(event)"/>
-      <div id="fileInfo" style="display: none;">
-        <div class="file-info">
-          <div>
-            <div class="file-name" id="fileName"></div>
-            <div style="font-size: 12px; color: #6B8BAE; margin-top: 4px;" id="fileSize"></div>
-          </div>
-          <button class="btn" onclick="analyzeFile()">🚀 Analizar</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="result" style="display: none;">
-      <div class="card">
-        <div class="card-title">📊 Análisis de Resultados</div>
-        <div id="resultContent"></div>
-      </div>
-    </div>
-
-    <div id="loading" style="display: none;">
-      <div class="card">
-        <div class="loading">
-          <div class="spinner"></div>
-          <div style="margin-top: 12px; color: #6B8BAE;">Analizando PDF con IA...</div>
-        </div>
-      </div>
-    </div>
+<!-- HEADER -->
+<header style="background:linear-gradient(135deg,#004182,#0A66C2);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px rgba(10,102,194,.3);position:sticky;top:0;z-index:50">
+  <div style="display:flex;align-items:center;gap:10px">
+    <span style="font-size:20px">🧪</span>
+    <span style="color:#fff;font-weight:800;font-size:16px">MediVoz</span>
+    <span style="color:rgba(255,255,255,.7);font-size:13px">— Módulo de Estudios Clínicos</span>
   </div>
+  <a href="index.html" style="background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;text-decoration:none">← Volver al sistema</a>
+</header>
 
-  <script>
-    let selectedFile = null;
+<div id="root" style="padding:20px;max-width:1100px;margin:0 auto"></div>
 
-    const dropZone = document.getElementById('dropZone');
-    dropZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropZone.classList.add('over');
-    });
-    dropZone.addEventListener('dragleave', () => {
-      dropZone.classList.remove('over');
-    });
-    dropZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropZone.classList.remove('over');
-      const files = e.dataTransfer.files;
-      if (files.length > 0 && files[0].type === 'application/pdf') {
-        selectedFile = files[0];
-        showFileInfo();
-      } else {
-        alert('Por favor, sube un archivo PDF');
-      }
-    });
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useRef,useCallback} = React;
 
-    function handleFileSelect(e) {
-      const files = e.target.files;
-      if (files.length > 0) {
-        selectedFile = files[0];
-        showFileInfo();
-      }
-    }
+// ── CALL IA ─────────────────────────────────────────────────────
+async function callIA(payload) {
+  const res = await fetch("/.netlify/functions/claude",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,...payload})
+  });
+  const ct = res.headers.get("content-type")||"";
+  if(!ct.includes("application/json")){
+    const t = await res.text();
+    throw new Error(`Función no disponible (HTTP ${res.status}). Verifica ANTHROPIC_API_KEY.\n${t.substring(0,80)}`);
+  }
+  const data = await res.json();
+  if(data.error) throw new Error(data.error.message||JSON.stringify(data.error));
+  return data.content?.[0]?.text||"";
+}
 
-    function showFileInfo() {
-      document.getElementById('fileName').textContent = selectedFile.name;
-      document.getElementById('fileSize').textContent = (selectedFile.size / 1024).toFixed(2) + ' KB';
-      document.getElementById('fileInfo').style.display = 'block';
-      document.getElementById('result').style.display = 'none';
-    }
+// ── UTILS ────────────────────────────────────────────────────────
+const B = (bg,ex={})=>({padding:"9px 18px",background:bg,color:"#fff",border:"none",borderRadius:7,fontSize:13,fontWeight:700,cursor:"pointer",...ex});
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const fmt = iso=>iso?new Date(iso).toLocaleDateString("es-MX",{day:"2-digit",month:"short",year:"numeric"}):"—";
 
-    async function analyzeFile() {
-      if (!selectedFile) return;
+const RANGOS_NORMALES = {
+  "Hemoglobina":      {m:[13.5,17.5], f:[12,15.5],   unidad:"g/dL"},
+  "Hematocrito":      {m:[41,53],     f:[36,46],      unidad:"%"},
+  "Leucocitos":       {m:[4500,11000],f:[4500,11000], unidad:"/μL"},
+  "Plaquetas":        {m:[150000,400000],f:[150000,400000],unidad:"/μL"},
+  "Glucosa":          {m:[70,100],    f:[70,100],     unidad:"mg/dL"},
+  "Creatinina":       {m:[0.7,1.3],   f:[0.5,1.1],   unidad:"mg/dL"},
+  "BUN":              {m:[7,20],      f:[7,20],       unidad:"mg/dL"},
+  "Sodio":            {m:[136,145],   f:[136,145],    unidad:"mEq/L"},
+  "Potasio":          {m:[3.5,5.1],   f:[3.5,5.1],   unidad:"mEq/L"},
+  "Cloro":            {m:[98,107],    f:[98,107],     unidad:"mEq/L"},
+  "Colesterol total": {m:[0,200],     f:[0,200],      unidad:"mg/dL"},
+  "LDL":              {m:[0,100],     f:[0,100],      unidad:"mg/dL"},
+  "HDL":              {m:[40,60],     f:[50,60],      unidad:"mg/dL"},
+  "Triglicéridos":    {m:[0,150],     f:[0,150],      unidad:"mg/dL"},
+  "TSH":              {m:[0.4,4.0],   f:[0.4,4.0],   unidad:"μUI/mL"},
+  "T4 libre":         {m:[0.8,1.8],   f:[0.8,1.8],   unidad:"ng/dL"},
+  "HbA1c":            {m:[0,5.7],     f:[0,5.7],      unidad:"%"},
+  "ALT":              {m:[7,56],      f:[7,45],       unidad:"U/L"},
+  "AST":              {m:[10,40],     f:[10,35],      unidad:"U/L"},
+  "Bilirrubina total":{m:[0.1,1.2],  f:[0.1,1.2],   unidad:"mg/dL"},
+  "Proteínas totales":{m:[6,8.3],    f:[6,8.3],      unidad:"g/dL"},
+};
 
-      document.getElementById('fileInfo').style.display = 'none';
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('result').style.display = 'none';
+// Determinar estado de un valor
+function estadoValor(nombre, valor, sexo="m") {
+  const rango = RANGOS_NORMALES[nombre];
+  if(!rango) return "normal";
+  const num = parseFloat(valor);
+  if(isNaN(num)) return "normal";
+  const [min,max] = sexo==="f" ? rango.f : rango.m;
+  const diff = Math.max(Math.abs(num-min), Math.abs(num-max));
+  const rng = max-min;
+  if(num < min*0.7 || num > max*1.5) return "critico";
+  if(num < min || num > max) {
+    if(diff > rng*0.3) return num<min?"bajo":"alto";
+    return num<min?"bajo":"alto";
+  }
+  return "normal";
+}
 
-      try {
-        // Extraer texto del PDF
-        const arrayBuffer = await selectedFile.arrayBuffer();
-        pdfjsLib.getDocument(arrayBuffer).promise.then(async (pdf) => {
-          let pdfText = '';
-          for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            pdfText += textContent.items.map(item => item.str).join(' ') + '\n';
-          }
+// ── COMPONENTE VALOR ─────────────────────────────────────────────
+function ValorLab({nombre, valor, unidad, referencia, estado}) {
+  const clases = {critico:"valor-critico",alto:"valor-alto",bajo:"valor-bajo",normal:"valor-normal"};
+  const iconos = {critico:"🚨",alto:"⬆️",bajo:"⬇️",normal:"✓"};
+  const colores = {critico:"#b71c1c",alto:"#E65100",bajo:"#1565C0",normal:"#555"};
+  return (
+    <div className={clases[estado]||"valor-normal"} style={{borderRadius:7,padding:"8px 12px",marginBottom:6,display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
+      <div style={{flex:1}}>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          <span style={{fontSize:14}}>{iconos[estado]||"✓"}</span>
+          <span style={{fontWeight:600,fontSize:13,color:"#1a1a1a"}}>{nombre}</span>
+          {estado!=="normal"&&<span className={`badge badge-${estado}`}>{estado.toUpperCase()}</span>}
+        </div>
+        {referencia&&<div style={{fontSize:11,color:"#888",marginTop:2}}>Ref: {referencia}</div>}
+      </div>
+      <div style={{textAlign:"right",fontWeight:800,fontSize:16,color:colores[estado]||"#555"}}>
+        {valor} <span style={{fontSize:11,fontWeight:500,color:"#888"}}>{unidad}</span>
+      </div>
+    </div>
+  );
+}
 
-          // Enviar texto a Claude para análisis
-          const res = await fetch('/.netlify/functions/claude', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              model: 'claude-sonnet-4-20250514',
-              max_tokens: 2000,
-              system: `Eres un médico especialista en análisis de laboratorio. Examina el resultado y:
-1. Extrae TODOS los valores de laboratorio
-2. Identifica qué valores están fuera de rango (alto, bajo, crítico)
-3. Proporciona interpretación clínica breve
-4. Recomienda seguimiento si es necesario
+// ── COMPONENTE DIAGNÓSTICO DIFERENCIAL ──────────────────────────
+function DiagnosticoDiff({dx}) {
+  const colProb = p => p>=70?"#0A66C2":p>=40?"#FF9800":"#888";
+  const bgProb  = p => p>=70?"#F0F7FF":p>=40?"#FFF8E1":"#F9F9F9";
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:10}}>
+      {dx.map((d,i)=>(
+        <div key={i} style={{background:bgProb(d.probabilidad),borderRadius:10,padding:"12px 16px",border:`1.5px solid ${d.probabilidad>=70?"#0A66C2":d.probabilidad>=40?"#FFB300":"#E0DFDC"}`}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{width:24,height:24,borderRadius:"50%",background:colProb(d.probabilidad),color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>{i+1}</span>
+              <span style={{fontWeight:700,fontSize:14,color:"#1a1a1a"}}>{d.nombre}</span>
+              {i===0&&<span style={{background:"#0A66C2",color:"#fff",fontSize:10,padding:"2px 8px",borderRadius:20,fontWeight:700}}>PRINCIPAL</span>}
+            </div>
+            <span style={{fontWeight:800,fontSize:18,color:colProb(d.probabilidad)}}>{d.probabilidad}%</span>
+          </div>
+          <div className="prob-bar">
+            <div className="prob-fill" style={{width:`${d.probabilidad}%`,background:colProb(d.probabilidad)}}/>
+          </div>
+          <div style={{fontSize:12,color:"#555",marginTop:8,lineHeight:1.6}}>{d.razonamiento}</div>
+          {d.hallazgos_clave&&(
+            <div style={{marginTop:8,display:"flex",flexWrap:"wrap",gap:4}}>
+              {d.hallazgos_clave.map((h,j)=>(
+                <span key={j} style={{background:"rgba(10,102,194,.1)",color:"#0A66C2",fontSize:11,padding:"2px 8px",borderRadius:12,fontWeight:600}}>📌 {h}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
-Responde SOLO en JSON (sin markdown):
+// ── APP PRINCIPAL ─────────────────────────────────────────────────
+function App() {
+  const [estudios,setEstudios]         = useState([]);
+  const [analisisActivo,setActivo]     = useState(null);
+  const [procesando,setProcesando]     = useState(false);
+  const [msgProceso,setMsg]            = useState("");
+  const [dragOver,setDragOver]         = useState(false);
+  const [contexto,setContexto]         = useState({
+    nombre:"",edad:"",sexo:"M",motivo:"",
+    medicamentos:"",antecedentes:""
+  });
+  const [tabActiva,setTabActiva]       = useState("subir");
+  const fileRef = useRef();
+
+  // Convertir archivo a base64
+  const fileToBase64 = file => new Promise((res,rej)=>{
+    const reader = new FileReader();
+    reader.onload  = e => res(e.target.result.split(",")[1]);
+    reader.onerror = rej;
+    reader.readAsDataURL(file);
+  });
+
+  // Procesar archivo con IA
+  const procesarArchivo = async (file) => {
+    const isPDF   = file.type === "application/pdf";
+    const isImage = file.type.startsWith("image/");
+    if(!isPDF && !isImage) { alert("Solo se aceptan PDF e imágenes (JPG, PNG, WEBP)"); return; }
+
+    setProcesando(true);
+    setMsg("📂 Leyendo archivo...");
+
+    try {
+      const b64 = await fileToBase64(file);
+      const mediaType = isPDF ? "application/pdf" : file.type;
+
+      setMsg("🤖 Extrayendo valores del estudio...");
+
+      // PASO 1: Extraer valores del estudio
+      const extractPayload = {
+        system:`Eres un especialista en análisis de estudios clínicos. 
+Analiza este ${isPDF?"PDF de laboratorio":"imagen de estudio médico"} y extrae TODOS los valores.
+Responde SOLO JSON sin markdown con esta estructura:
 {
-  "titulo": "Nombre del estudio",
+  "tipo_estudio": "BH|QS|Perfil tiroideo|Rx tórax|TAC|RMN|USG|otro",
+  "fecha_estudio": "fecha si visible o null",
+  "laboratorio": "nombre del laboratorio si visible",
   "valores": [
-    { "nombre": "Hemoglobina", "valor": "15.2", "unidad": "g/dL", "rango_normal": "12-16", "estado": "normal" },
-    ...
+    {"nombre":"Hemoglobina","valor":"12.5","unidad":"g/dL","referencia":"13.5-17.5","estado":"bajo|alto|critico|normal"}
   ],
-  "interpretacion": "Breve análisis clínico",
-  "recomendaciones": "Qué hacer con estos resultados",
-  "critico": false
+  "hallazgos_imagen": "descripción si es imagen radiológica, null si es laboratorio",
+  "observaciones_lab": "notas del laboratorio o patólogo si las hay"
 }`,
-              messages: [{
-                role: 'user',
-                content: `Resultado de laboratorio:\n\n${pdfText}`
-              }]
-            })
-          });
-
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error?.message || 'Error en análisis');
-
-          let result = {};
-          try {
-            result = JSON.parse(data.content[0].text);
-          } catch {
-            result = { error: 'No se pudo parsear resultado', text: data.content[0].text };
-          }
-
-          displayResult(result);
-        });
-      } catch (e) {
-        console.error('Error:', e);
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('resultContent').innerHTML = `<div class="error">Error: ${e.message}</div>`;
-      }
-    }
-
-    function displayResult(result) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('result').style.display = 'block';
-
-      const statusColor = (estado) => {
-        if (estado === 'critico') return 'status-critico';
-        if (estado === 'alto') return 'status-alto';
-        if (estado === 'bajo') return 'status-bajo';
-        return 'status-normal';
+        messages:[{
+          role:"user",
+          content:[
+            {
+              type: isPDF ? "document" : "image",
+              source:{type:"base64", media_type:mediaType, data:b64}
+            },
+            {type:"text", text:"Extrae todos los valores y hallazgos de este estudio clínico."}
+          ]
+        }]
       };
 
-      let html = '';
+      const txtExtrac = await callIA(extractPayload);
+      const datosEstudio = JSON.parse(txtExtrac.replace(/```json|```/g,"").trim());
 
-      if (result.titulo) {
-        html += `<h3 style="margin-bottom: 12px; color: #00C9A7;">${result.titulo}</h3>`;
-      }
+      setMsg("⚠️ Analizando valores críticos...");
 
-      if (result.valores && Array.isArray(result.valores)) {
-        html += '<div style="margin-bottom: 16px;">';
-        result.valores.forEach(v => {
-          html += `
-            <div class="value-item">
+      // PASO 2: Análisis clínico completo
+      const ctxStr = [
+        contexto.nombre && `Paciente: ${contexto.nombre}`,
+        contexto.edad   && `Edad: ${contexto.edad} años, Sexo: ${contexto.sexo}`,
+        contexto.motivo && `Motivo de consulta: ${contexto.motivo}`,
+        contexto.medicamentos && `Medicamentos actuales: ${contexto.medicamentos}`,
+        contexto.antecedentes && `Antecedentes: ${contexto.antecedentes}`,
+      ].filter(Boolean).join("\n");
+
+      const analisisPayload = {
+        system:`Eres un médico internista experto en medicina diagnóstica mexicana.
+Analiza los resultados de laboratorio/imagen y el contexto clínico del paciente.
+Responde SOLO JSON sin markdown con esta estructura exacta:
+{
+  "resumen_ejecutivo": "párrafo breve con los hallazgos más importantes",
+  "valores_criticos": [
+    {"nombre":"","valor":"","porque_critico":"","accion_inmediata":""}
+  ],
+  "diagnostico_diferencial": [
+    {
+      "nombre":"",
+      "probabilidad":75,
+      "razonamiento":"explicación basada en los valores",
+      "hallazgos_clave":["valor1 anormal","valor2 anormal"]
+    }
+  ],
+  "estudios_complementarios": [
+    {"estudio":"","justificacion":"","urgencia":"inmediato|urgente|electivo"}
+  ],
+  "recomendaciones_medico": [
+    "acción recomendada 1",
+    "acción recomendada 2"
+  ],
+  "advertencia": "Este pre-diagnóstico es un apoyo para el médico, no reemplaza el juicio clínico."
+}
+Máximo 4 diagnósticos diferenciales ordenados por probabilidad.
+Máximo 5 estudios complementarios.`,
+        messages:[{
+          role:"user",
+          content:`CONTEXTO DEL PACIENTE:\n${ctxStr||"No proporcionado"}\n\nRESULTADOS DEL ESTUDIO (${datosEstudio.tipo_estudio}):\n${JSON.stringify(datosEstudio.valores||[])}\n\nHALLAZGOS RADIOLÓGICOS: ${datosEstudio.hallazgos_imagen||"N/A"}\n\nOBSERVACIONES: ${datosEstudio.observaciones_lab||"N/A"}\n\nGenera el análisis clínico completo.`
+        }]
+      };
+
+      setMsg("🧠 Generando diagnóstico diferencial...");
+      const txtAnalisis = await callIA(analisisPayload);
+      const analisis = JSON.parse(txtAnalisis.replace(/```json|```/g,"").trim());
+
+      const estudio = {
+        id: uid(),
+        fecha: new Date().toISOString(),
+        nombre: file.name,
+        tipo: datosEstudio.tipo_estudio,
+        datos: datosEstudio,
+        analisis,
+        contexto: {...contexto},
+        archivo_b64: b64,
+        archivo_tipo: mediaType,
+        es_imagen: isImage,
+      };
+
+      setEstudios(prev=>[estudio,...prev]);
+      setActivo(estudio);
+      setTabActiva("resultados");
+
+    } catch(e) {
+      alert("❌ Error al procesar el estudio:\n\n"+e.message);
+    }
+    setProcesando(false);
+    setMsg("");
+  };
+
+  const onDrop = useCallback(e=>{
+    e.preventDefault(); setDragOver(false);
+    const file = e.dataTransfer.files[0];
+    if(file) procesarArchivo(file);
+  },[contexto]);
+
+  const onFileChange = e => { if(e.target.files[0]) procesarArchivo(e.target.files[0]); };
+
+  const urgColor = u => u==="inmediato"?"#b71c1c":u==="urgente"?"#E65100":"#057642";
+  const urgBg    = u => u==="inmediato"?"#FFEBEE":u==="urgente"?"#FFF3E0":"#E8F5E9";
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:18}}>
+
+      {/* TABS */}
+      <div style={{display:"flex",gap:0,borderBottom:"2px solid #E0DFDC",background:"#fff",borderRadius:"10px 10px 0 0",overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,.06)"}}>
+        {[
+          ["subir","📤 Subir Estudio"],
+          ["resultados",`🔬 Resultados${estudios.length>0?" ("+estudios.length+")":""}`],
+          ["historial","📁 Historial"],
+        ].map(([k,lbl])=>(
+          <button key={k} onClick={()=>setTabActiva(k)}
+            style={{padding:"12px 22px",background:tabActiva===k?"#F0F7FF":"#fff",border:"none",borderBottom:tabActiva===k?"2px solid #0A66C2":"2px solid transparent",marginBottom:-2,color:tabActiva===k?"#0A66C2":"#666",fontWeight:tabActiva===k?700:500,fontSize:13,cursor:"pointer",fontFamily:"inherit",transition:"all .15s"}}>
+            {lbl}
+          </button>
+        ))}
+      </div>
+
+      {/* ── TAB SUBIR ── */}
+      {tabActiva==="subir"&&(
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:18}}>
+
+          {/* Contexto del paciente */}
+          <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)"}}>
+            <div style={{padding:"12px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:16}}>👤</span>
+              <span style={{fontWeight:700,fontSize:14}}>Contexto del Paciente</span>
+              <span style={{fontSize:11,color:"#888",marginLeft:4}}>(opcional pero mejora el diagnóstico)</span>
+            </div>
+            <div style={{padding:16,display:"flex",flexDirection:"column",gap:10}}>
+              {[
+                ["nombre","Nombre del paciente","text"],
+                ["edad","Edad (años)","number"],
+              ].map(([k,ph,t])=>(
+                <div key={k}>
+                  <div style={{fontSize:10,fontWeight:700,color:"#0A66C2",textTransform:"uppercase",letterSpacing:.5,marginBottom:3}}>{ph}</div>
+                  <input type={t} value={contexto[k]} onChange={e=>setContexto(p=>({...p,[k]:e.target.value}))} placeholder={ph}
+                    style={{width:"100%",padding:"7px 10px",border:"1.5px solid #E0DFDC",borderRadius:6,fontSize:13,fontFamily:"inherit",background:"#FAFAFA"}}/>
+                </div>
+              ))}
               <div>
-                <div class="value-name">${v.nombre}</div>
-                <div style="font-size: 12px; color: #6B8BAE;">${v.valor} ${v.unidad}</div>
+                <div style={{fontSize:10,fontWeight:700,color:"#0A66C2",textTransform:"uppercase",letterSpacing:.5,marginBottom:3}}>Sexo</div>
+                <div style={{display:"flex",gap:8}}>
+                  {["M","F"].map(s=>(
+                    <button key={s} onClick={()=>setContexto(p=>({...p,sexo:s}))}
+                      style={{flex:1,padding:"7px",border:`1.5px solid ${contexto.sexo===s?"#0A66C2":"#E0DFDC"}`,borderRadius:6,background:contexto.sexo===s?"#F0F7FF":"#FAFAFA",color:contexto.sexo===s?"#0A66C2":"#666",fontWeight:contexto.sexo===s?700:400,fontSize:13,cursor:"pointer",fontFamily:"inherit"}}>
+                      {s==="M"?"♂ Masculino":"♀ Femenino"}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div style="text-align: right;">
-                <div class="value-status ${statusColor(v.estado)}">${v.estado.toUpperCase()}</div>
-                <div style="font-size: 11px; color: #94A3B8; margin-top: 4px;">Rango: ${v.rango_normal}</div>
+              {[
+                ["motivo","Motivo de consulta / síntomas actuales",3],
+                ["medicamentos","Medicamentos actuales",2],
+                ["antecedentes","Antecedentes relevantes (DM, HTA, etc.)",2],
+              ].map(([k,ph,rows])=>(
+                <div key={k}>
+                  <div style={{fontSize:10,fontWeight:700,color:"#0A66C2",textTransform:"uppercase",letterSpacing:.5,marginBottom:3}}>{ph}</div>
+                  <textarea value={contexto[k]} onChange={e=>setContexto(p=>({...p,[k]:e.target.value}))} placeholder={ph} rows={rows}
+                    style={{width:"100%",padding:"7px 10px",border:"1.5px solid #E0DFDC",borderRadius:6,fontSize:12,fontFamily:"inherit",background:"#FAFAFA",resize:"vertical"}}/>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Zona de carga */}
+          <div style={{display:"flex",flexDirection:"column",gap:14}}>
+            <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)"}}>
+              <div style={{padding:"12px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:16}}>📤</span>
+                <span style={{fontWeight:700,fontSize:14}}>Subir Estudio</span>
+              </div>
+              <div style={{padding:16}}>
+                {procesando ? (
+                  <div style={{textAlign:"center",padding:"40px 20px"}}>
+                    <div style={{width:48,height:48,border:"4px solid #E0DFDC",borderTop:"4px solid #0A66C2",borderRadius:"50%",margin:"0 auto 16px",animation:"spin .8s linear infinite"}}/>
+                    <div style={{fontWeight:700,fontSize:14,color:"#0A66C2",marginBottom:6}}>{msgProceso}</div>
+                    <div style={{fontSize:12,color:"#888"}}>La IA está analizando tu estudio...</div>
+                  </div>
+                ):(
+                  <>
+                    <div
+                      className={`drop-zone${dragOver?" over":""}`}
+                      onDragOver={e=>{e.preventDefault();setDragOver(true);}}
+                      onDragLeave={()=>setDragOver(false)}
+                      onDrop={onDrop}
+                      onClick={()=>fileRef.current.click()}
+                    >
+                      <div style={{fontSize:48,marginBottom:12}}>📋</div>
+                      <div style={{fontWeight:700,fontSize:15,color:"#0A66C2",marginBottom:6}}>Arrastra aquí o haz clic</div>
+                      <div style={{fontSize:13,color:"#888",marginBottom:12}}>PDF de laboratorio · Imagen de RX, TAC, RMN, USG</div>
+                      <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+                        {["📄 PDF","🖼️ JPG","🖼️ PNG","🖼️ WEBP"].map(t=>(
+                          <span key={t} style={{background:"#E8F0FE",color:"#0A66C2",padding:"3px 10px",borderRadius:12,fontSize:12,fontWeight:600}}>{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <input ref={fileRef} type="file" accept=".pdf,image/*" style={{display:"none"}} onChange={onFileChange}/>
+                    <div style={{marginTop:12,background:"#FFF8E1",borderRadius:7,padding:"8px 12px",fontSize:12,color:"#795548"}}>
+                      💡 <strong>Tip:</strong> Agrega el contexto del paciente a la izquierda para un diagnóstico diferencial más preciso.
+                    </div>
+                  </>
+                )}
               </div>
             </div>
-          `;
-        });
-        html += '</div>';
-      }
 
-      if (result.interpretacion) {
-        html += `
-          <div class="analysis-result">
-            <div class="analysis-label">📋 Interpretación</div>
-            <div class="analysis-text">${result.interpretacion}</div>
+            {/* Tipos de estudios soportados */}
+            <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",padding:16}}>
+              <div style={{fontWeight:700,fontSize:13,color:"#1a1a1a",marginBottom:10}}>📊 Estudios soportados</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6}}>
+                {[
+                  ["🩸","Biometría Hemática (BH)"],
+                  ["⚗️","Química Sanguínea (QS)"],
+                  ["🦋","Perfil Tiroideo"],
+                  ["❤️","Perfil Lipídico"],
+                  ["🔬","EGO / Urocultivo"],
+                  ["🩻","Radiografía (Rx)"],
+                  ["🖥️","Tomografía (TAC)"],
+                  ["🧲","Resonancia (RMN)"],
+                  ["🔊","Ultrasonido (USG)"],
+                  ["📈","Electrocardiograma"],
+                  ["🧫","Cultivos y antibiograma"],
+                  ["🩺","Cualquier otro estudio"],
+                ].map(([em,lbl])=>(
+                  <div key={lbl} style={{display:"flex",alignItems:"center",gap:6,fontSize:12,color:"#555",padding:"3px 0"}}>
+                    <span>{em}</span><span>{lbl}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        `;
-      }
+        </div>
+      )}
 
-      if (result.recomendaciones) {
-        html += `
-          <div class="analysis-result">
-            <div class="analysis-label">💊 Recomendaciones</div>
-            <div class="analysis-text">${result.recomendaciones}</div>
+      {/* ── TAB RESULTADOS ── */}
+      {tabActiva==="resultados"&&(
+        !analisisActivo ? (
+          <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",padding:60,textAlign:"center",color:"#aaa"}}>
+            <div style={{fontSize:48,marginBottom:12}}>🔬</div>
+            <div style={{fontWeight:600,fontSize:16,marginBottom:6}}>Sin análisis activo</div>
+            <div style={{fontSize:13,marginBottom:20}}>Sube un estudio para ver los resultados</div>
+            <button onClick={()=>setTabActiva("subir")} style={{...B("linear-gradient(135deg,#0A66C2,#004182)"),padding:"9px 20px"}}>
+              → Subir estudio
+            </button>
           </div>
-        `;
-      }
+        ):(
+          <div style={{display:"flex",flexDirection:"column",gap:14,animation:"fadeUp .4s ease"}}>
 
-      if (result.critico) {
-        html = `<div class="error" style="margin-bottom: 16px;">⚠️ RESULTADOS CRÍTICOS - Contacta al médico de inmediato</div>` + html;
-      }
+            {/* Header del estudio */}
+            <div style={{background:"linear-gradient(135deg,#F0F7FF,#E8F0FE)",borderRadius:10,border:"2px solid #0A66C2",padding:"14px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+              <div>
+                <div style={{fontWeight:800,fontSize:16,color:"#0A66C2"}}>🔬 {analisisActivo.datos.tipo_estudio}</div>
+                <div style={{fontSize:12,color:"#666",marginTop:2}}>
+                  {analisisActivo.nombre} · Analizado: {fmt(analisisActivo.fecha)}
+                  {analisisActivo.datos.laboratorio&&` · ${analisisActivo.datos.laboratorio}`}
+                  {analisisActivo.contexto.nombre&&` · Paciente: ${analisisActivo.contexto.nombre}`}
+                </div>
+              </div>
+              <div style={{display:"flex",gap:8}}>
+                <button onClick={()=>window.print()} style={{...B("linear-gradient(135deg,#057642,#046038)"),padding:"6px 12px",fontSize:11}}>🖨️ Imprimir</button>
+                <button onClick={()=>setTabActiva("subir")} style={{padding:"6px 12px",background:"none",border:"1.5px solid #E0DFDC",borderRadius:7,fontSize:11,cursor:"pointer"}}>+ Nuevo estudio</button>
+              </div>
+            </div>
 
-      document.getElementById('resultContent').innerHTML = html;
-    }
-  </script>
+            {/* RESUMEN EJECUTIVO */}
+            <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",overflow:"hidden"}}>
+              <div style={{padding:"10px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:16}}>📋</span>
+                <span style={{fontWeight:700,fontSize:14}}>Resumen Ejecutivo</span>
+                <span style={{marginLeft:"auto",fontSize:11,color:"#888",fontStyle:"italic"}}>⚕️ Apoyo diagnóstico — no reemplaza criterio clínico</span>
+              </div>
+              <div style={{padding:16,fontSize:14,color:"#333",lineHeight:1.7,background:"#FAFCFF"}}>
+                {analisisActivo.analisis.resumen_ejecutivo}
+              </div>
+            </div>
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+
+              {/* VALORES DEL ESTUDIO */}
+              <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",overflow:"hidden"}}>
+                <div style={{padding:"10px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                  <span style={{fontSize:16}}>🧪</span>
+                  <span style={{fontWeight:700,fontSize:14}}>Valores del Estudio</span>
+                  {analisisActivo.datos.valores?.filter(v=>v.estado!=="normal").length>0&&(
+                    <span style={{marginLeft:"auto",background:"#FFEBEE",color:"#b71c1c",fontSize:11,padding:"2px 8px",borderRadius:20,fontWeight:700}}>
+                      {analisisActivo.datos.valores.filter(v=>v.estado!=="normal").length} fuera de rango
+                    </span>
+                  )}
+                </div>
+                <div style={{padding:12,maxHeight:420,overflowY:"auto"}}>
+                  {/* Si es imagen */}
+                  {analisisActivo.datos.hallazgos_imagen&&(
+                    <div style={{background:"#F0F7FF",borderRadius:8,padding:"10px 14px",marginBottom:10,border:"1px solid #C8D8F0"}}>
+                      <div style={{fontWeight:700,fontSize:12,color:"#0A66C2",marginBottom:4}}>🩻 Hallazgos radiológicos</div>
+                      <div style={{fontSize:13,color:"#333",lineHeight:1.6}}>{analisisActivo.datos.hallazgos_imagen}</div>
+                    </div>
+                  )}
+                  {/* Valores numéricos */}
+                  {analisisActivo.datos.valores?.length>0 ? (
+                    // Críticos primero
+                    [...(analisisActivo.datos.valores.filter(v=>v.estado==="critico")),
+                     ...(analisisActivo.datos.valores.filter(v=>v.estado==="alto"||v.estado==="bajo")),
+                     ...(analisisActivo.datos.valores.filter(v=>v.estado==="normal"||!v.estado))
+                    ].map((v,i)=>(
+                      <ValorLab key={i}
+                        nombre={v.nombre} valor={v.valor} unidad={v.unidad}
+                        referencia={v.referencia} estado={v.estado||"normal"}/>
+                    ))
+                  ):(
+                    <div style={{textAlign:"center",color:"#aaa",padding:20,fontSize:13}}>No se detectaron valores numéricos</div>
+                  )}
+                  {analisisActivo.datos.observaciones_lab&&(
+                    <div style={{marginTop:10,background:"#FFF8E1",borderRadius:6,padding:"8px 12px",fontSize:12,color:"#795548",borderLeft:"3px solid #FFD54F"}}>
+                      <strong>Observaciones del laboratorio:</strong> {analisisActivo.datos.observaciones_lab}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* VALORES CRÍTICOS */}
+              <div style={{display:"flex",flexDirection:"column",gap:14}}>
+                {analisisActivo.analisis.valores_criticos?.length>0&&(
+                  <div style={{background:"#fff",borderRadius:10,border:"2px solid #F44336",boxShadow:"0 1px 4px rgba(244,67,54,.15)",overflow:"hidden"}}>
+                    <div style={{padding:"10px 16px",background:"#FFEBEE",borderBottom:"1px solid #EF9A9A",display:"flex",alignItems:"center",gap:8}}>
+                      <span style={{fontSize:16}}>🚨</span>
+                      <span style={{fontWeight:700,fontSize:14,color:"#b71c1c"}}>Valores Críticos — Acción Inmediata</span>
+                    </div>
+                    <div style={{padding:12}}>
+                      {analisisActivo.analisis.valores_criticos.map((vc,i)=>(
+                        <div key={i} style={{background:"#FFEBEE",borderRadius:8,padding:"10px 14px",marginBottom:8,border:"1px solid #EF9A9A"}}>
+                          <div style={{fontWeight:700,fontSize:13,color:"#b71c1c"}}>{vc.nombre}: {vc.valor}</div>
+                          <div style={{fontSize:12,color:"#555",marginTop:3}}>{vc.porque_critico}</div>
+                          <div style={{marginTop:6,background:"#fff",borderRadius:5,padding:"5px 9px",fontSize:12,color:"#1b5e20",fontWeight:600,border:"1px solid #A5D6A7"}}>
+                            ✅ Acción: {vc.accion_inmediata}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* ESTUDIOS COMPLEMENTARIOS */}
+                {analisisActivo.analisis.estudios_complementarios?.length>0&&(
+                  <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",overflow:"hidden"}}>
+                    <div style={{padding:"10px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                      <span style={{fontSize:16}}>🧫</span>
+                      <span style={{fontWeight:700,fontSize:14}}>Estudios Complementarios Sugeridos</span>
+                    </div>
+                    <div style={{padding:12}}>
+                      {analisisActivo.analisis.estudios_complementarios.map((ec,i)=>(
+                        <div key={i} style={{background:urgBg(ec.urgencia),borderRadius:8,padding:"9px 12px",marginBottom:7,display:"flex",gap:10,alignItems:"flex-start"}}>
+                          <div style={{flexShrink:0}}>
+                            <span style={{background:urgColor(ec.urgencia),color:"#fff",fontSize:10,padding:"2px 8px",borderRadius:20,fontWeight:700,whiteSpace:"nowrap"}}>{ec.urgencia?.toUpperCase()}</span>
+                          </div>
+                          <div>
+                            <div style={{fontWeight:600,fontSize:13,color:"#1a1a1a"}}>{ec.estudio}</div>
+                            <div style={{fontSize:12,color:"#555",marginTop:2}}>{ec.justificacion}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* DIAGNÓSTICO DIFERENCIAL */}
+            <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",overflow:"hidden"}}>
+              <div style={{padding:"10px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                <span style={{fontSize:16}}>🧠</span>
+                <span style={{fontWeight:700,fontSize:14}}>Pre-diagnóstico Diferencial — IA</span>
+                <span style={{marginLeft:"auto",background:"#FFF3E0",color:"#E65100",fontSize:11,padding:"3px 10px",borderRadius:20,fontWeight:700}}>⚕️ APOYO AL MÉDICO</span>
+              </div>
+              <div style={{padding:16}}>
+                <DiagnosticoDiff dx={analisisActivo.analisis.diagnostico_diferencial||[]}/>
+              </div>
+            </div>
+
+            {/* RECOMENDACIONES */}
+            {analisisActivo.analisis.recomendaciones_medico?.length>0&&(
+              <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",overflow:"hidden"}}>
+                <div style={{padding:"10px 16px",borderBottom:"1px solid #F0F0F0",display:"flex",alignItems:"center",gap:8}}>
+                  <span style={{fontSize:16}}>💡</span>
+                  <span style={{fontWeight:700,fontSize:14}}>Recomendaciones para el Médico</span>
+                </div>
+                <div style={{padding:"12px 16px"}}>
+                  {analisisActivo.analisis.recomendaciones_medico.map((r,i)=>(
+                    <div key={i} style={{display:"flex",alignItems:"flex-start",gap:10,padding:"7px 0",borderBottom:i<analisisActivo.analisis.recomendaciones_medico.length-1?"1px dashed #E0DFDC":"none"}}>
+                      <span style={{color:"#0A66C2",fontWeight:700,flexShrink:0}}>{i+1}.</span>
+                      <span style={{fontSize:13,color:"#333",lineHeight:1.6}}>{r}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* DISCLAIMER */}
+            <div style={{background:"#FFF8E1",border:"1px solid #FFD54F",borderRadius:8,padding:"10px 16px",display:"flex",alignItems:"center",gap:10}}>
+              <span style={{fontSize:18}}>⚕️</span>
+              <span style={{fontSize:12,color:"#795548",lineHeight:1.5}}><strong>Aviso importante:</strong> {analisisActivo.analisis.advertencia||"Este pre-diagnóstico es un apoyo para el médico, no reemplaza el juicio clínico ni la valoración presencial del paciente."}</span>
+            </div>
+
+          </div>
+        )
+      )}
+
+      {/* ── TAB HISTORIAL ── */}
+      {tabActiva==="historial"&&(
+        !estudios.length ? (
+          <div style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",padding:60,textAlign:"center",color:"#aaa"}}>
+            <div style={{fontSize:48,marginBottom:12}}>📁</div>
+            <div style={{fontWeight:600,fontSize:16,marginBottom:6}}>Sin estudios procesados</div>
+            <div style={{fontSize:13}}>Los estudios analizados aparecerán aquí</div>
+          </div>
+        ):(
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {estudios.map(e=>(
+              <div key={e.id} style={{background:"#fff",borderRadius:10,border:"1px solid #E0DFDC",boxShadow:"0 1px 4px rgba(0,0,0,.06)",padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:12}}>
+                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                  <div style={{width:42,height:42,borderRadius:8,background:"linear-gradient(135deg,#F0F7FF,#E8F0FE)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,border:"1px solid #C8D8F0"}}>
+                    {e.es_imagen?"🩻":"📄"}
+                  </div>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:14,color:"#1a1a1a"}}>{e.datos.tipo_estudio}</div>
+                    <div style={{fontSize:12,color:"#666"}}>{e.nombre} · {fmt(e.fecha)}</div>
+                    {e.contexto.nombre&&<div style={{fontSize:11,color:"#0A66C2"}}>👤 {e.contexto.nombre}</div>}
+                  </div>
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:8}}>
+                  {e.datos.valores?.filter(v=>v.estado==="critico").length>0&&(
+                    <span style={{background:"#FFEBEE",color:"#b71c1c",fontSize:11,padding:"3px 9px",borderRadius:20,fontWeight:700}}>
+                      🚨 {e.datos.valores.filter(v=>v.estado==="critico").length} crítico(s)
+                    </span>
+                  )}
+                  {e.analisis.diagnostico_diferencial?.[0]&&(
+                    <span style={{background:"#F0F7FF",color:"#0A66C2",fontSize:11,padding:"3px 9px",borderRadius:20,fontWeight:600}}>
+                      Dx: {e.analisis.diagnostico_diferencial[0].nombre}
+                    </span>
+                  )}
+                  <button onClick={()=>{setActivo(e);setTabActiva("resultados");}}
+                    style={{...B("linear-gradient(135deg,#0A66C2,#004182)"),padding:"6px 14px",fontSize:12}}>
+                    Ver análisis →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      )}
+
+      {/* FOOTER */}
+      <div style={{textAlign:"center",fontSize:11,color:"#aaa",padding:"8px 0",borderTop:"1px solid #E0DFDC",marginTop:4}}>
+        © RANNIX Consulting · MediVoz — Módulo de Estudios Clínicos v4.0 · 2026
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>

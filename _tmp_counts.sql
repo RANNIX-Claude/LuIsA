@@ -1,0 +1,1 @@
+SELECT count(*) FROM citas; SELECT count(*) FROM medicos; SELECT count(*) FROM perfiles_pacientes;

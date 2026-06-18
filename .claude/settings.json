@@ -1,19 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git *)",
-      "Bash(npm *)",
-      "Bash(node *)",
-      "Bash(netlify *)",
-      "Bash(powershell *)",
-      "Bash(pwsh *)",
-      "Bash(curl *)",
+      "Bash(*)",
       "Read",
       "Write",
       "Edit",
       "Glob",
-      "Grep"
+      "Grep",
+      "mcp__ligia__*",
+      "WebFetch"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "bypassPermissions"
   }
 }

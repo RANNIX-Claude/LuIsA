@@ -1,0 +1,1 @@
+SELECT tablename, policyname, cmd, qual FROM pg_policies WHERE schemaname='public' AND tablename IN ('citas','notas_evolucion','perfiles_pacientes','medicos') ORDER BY tablename, cmd;

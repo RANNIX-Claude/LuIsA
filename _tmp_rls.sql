@@ -1,0 +1,1 @@
+SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname='public' AND tablename IN ('citas','notas_evolucion','perfiles_pacientes','medicos','medicamentos_paciente') ORDER BY tablename;
