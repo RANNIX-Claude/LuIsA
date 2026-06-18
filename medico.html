@@ -548,7 +548,7 @@ function AuthGuard({children}){
       const session = JSON.parse(sessionStr);
       // Verificar expiración 24h
       if (Date.now() - session.timestamp > 24*60*60*1000) {
-        localStorage.removeItem('ligia_user');
+        localStorage.removeItem('luisa_user');
         localStorage.removeItem('luisa_session');
         window.location.href='/auth.html';
         return;
