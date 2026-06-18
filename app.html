@@ -261,9 +261,8 @@ async function loadMedicoData() {
     if (error) throw error;
 
     currentMedico = data;
-    const iniciales = data.nombre_completo
-      ? data.nombre_completo.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase()
-      : 'MD';
+    const nombre = data.nombre_completo || 'Dr. Médico';
+    const iniciales = nombre.trim().split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase() || 'MD';
 
     document.getElementById('header-medico-nombre').textContent = data.nombre_completo || 'Dr. Médico';
     document.getElementById('header-avatar').textContent = iniciales;
