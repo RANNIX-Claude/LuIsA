@@ -1,725 +1,504 @@
 <!DOCTYPE html>
-<html lang="es-MX">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="LUISA — Inteligencia Clínica">
-  <meta name="theme-color" content="#00C9A7">
-
-  <title>LUISA — Portal Médico</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Tailwind Config -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#00C9A7',
-            secondary: '#1B5499',
-            surface: '#F5F7FA'
-          }
-        }
-      }
-    }
-  </script>
-
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>LUISA — Inteligencia Clínica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <style>
-    /* Mobile-first base styles */
-    * {
-      -webkit-tap-highlight-color: transparent;
+    :root {
+      --navy: #050C1A;
+      --azul-marino: #050C1A;
+      --teal: #00C9A7;
+      --azul-primario: #00C9A7;
+      --teal-dark: #00A88C;
+      --azul-hover: #00A88C;
+      --teal-light: #E6FAF7;
+      --azul-claro: #E6FAF7;
+      --cyan: #00C9A7;
+      --blanco: #ffffff;
+      --gris-fondo: #F5F7FA;
+      --gris-borde: #E2E8F0;
+      --gris-texto: #64748B;
+      --gris-oscuro: #0F172A;
+      --verde: #059669;
+      --verde-bg: #D1FAE5;
+      --rojo: #DC2626;
+      --rojo-bg: #FEE2E2;
+      --naranja: #D97706;
+      --naranja-bg: #FEF3C7;
+      --sombra-card: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+      --sombra-hover: 0 4px 16px rgba(0,201,167,0.22);
+      --radio: 8px;
+      --radio-lg: 12px;
+      --radio-xl: 16px;
     }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter','Segoe UI',sans-serif;background:var(--gris-fondo);color:var(--gris-oscuro);-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+    button{font-family:inherit;cursor:pointer}
+    input,textarea,select{font-family:inherit}
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:#A7EFE3;border-radius:4px}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+    /* SPLASH */
+    #splash{position:fixed;inset:0;background:linear-gradient(135deg,#050C1A 0%,#0A1F3A 60%,#00C9A7 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:9999;transition:opacity .5s ease}
+    #splash.out{opacity:0;pointer-events:none}
+    .splash-brand{font-family:'Inter',sans-serif;font-weight:900;font-size:2.8rem;letter-spacing:-.04em;line-height:1}
+    .splash-brand .lig{color:#ffffff}
+    .splash-brand .ia{color:#00C9A7}
+    .splash-tagline{color:rgba(255,255,255,.5);font-size:13px;font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+    .splash-spin{width:28px;height:28px;border:2.5px solid rgba(0,201,167,.3);border-top-color:#00C9A7;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-    /* Touch-friendly minimum sizes */
-    button, a {
-      min-height: 44px;
-      min-width: 44px;
-    }
+    /* LAYOUT */
+    .app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
 
-    /* PWA install prompt */
-    #install-prompt {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      right: 20px;
-      z-index: 1000;
-      animation: slideUp 0.3s ease-out;
-    }
+    /* HEADER - estilo LinkedIn */
+    .header{background:#fff;border-bottom:1px solid var(--gris-borde);height:52px;display:flex;align-items:center;padding:0 16px;gap:12px;position:sticky;top:0;z-index:100;flex-shrink:0}
+    .header-logo{height:34px;object-fit:contain}
+    .header-sep{flex:1}
+    .header-medico{display:flex;align-items:center;gap:8px}
+    .header-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--gris-borde);cursor:pointer}
+    .header-avatar-ini{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--azul-primario),var(--azul-marino));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;cursor:pointer;border:2px solid var(--gris-borde)}
+    .header-nombre{font-size:13px;font-weight:600;color:var(--gris-oscuro)}
+    .btn-salir{padding:5px 14px;border:1.5px solid var(--gris-borde);border-radius:20px;font-size:12px;font-weight:600;color:var(--gris-texto);background:#fff;transition:all .15s}
+    .btn-salir:hover{border-color:var(--azul-primario);color:var(--azul-primario)}
+    .btn-inicio{padding:5px 14px;border:1.5px solid var(--gris-borde);border-radius:20px;font-size:12px;font-weight:600;color:var(--gris-texto);background:#fff;transition:all .15s;margin-right:8px}
+    .btn-inicio:hover{border-color:#667eea;color:#667eea}
+    .badge-version{background:var(--azul-claro);color:var(--azul-primario);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
 
-    @keyframes slideUp {
-      from { transform: translateY(100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    /* BODY */
+    .body{display:flex;flex:1;overflow:hidden}
 
-    /* Loading skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-    }
+    /* SIDEBAR */
+    .sidebar{width:240px;background:#fff;border-right:1px solid var(--gris-borde);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+    .sidebar-search{padding:12px}
+    .sidebar-search input{width:100%;padding:7px 12px 7px 32px;border:1.5px solid var(--gris-borde);border-radius:20px;font-size:13px;background:var(--gris-fondo);color:var(--gris-oscuro);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:10px center;transition:border-color .15s}
+    .sidebar-search input:focus{outline:none;border-color:var(--azul-primario);background-color:#fff}
+    .btn-nuevo{margin:0 12px 10px;padding:8px;background:var(--azul-primario);color:#fff;border:none;border-radius:var(--radio);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s}
+    .btn-nuevo:hover{background:var(--azul-marino);box-shadow:var(--sombra-hover)}
+    .sidebar-label{padding:4px 12px 6px;font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.8px}
+    .sidebar-lista{flex:1;overflow-y:auto}
+    .pac-item{padding:10px 12px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;display:flex;align-items:center;gap:10px}
+    .pac-item:hover{background:var(--azul-claro)}
+    .pac-item.activo{border-left-color:var(--azul-primario);background:var(--azul-claro)}
+    .pac-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#A7EFE3,var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0}
+    .pac-avatar.activo{background:linear-gradient(135deg,var(--azul-primario),var(--azul-marino))}
+    .pac-info{flex:1;min-width:0}
+    .pac-nombre{font-size:13px;font-weight:600;color:var(--gris-oscuro);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pac-meta{font-size:11px;color:var(--gris-texto);display:flex;align-items:center;gap:4px;margin-top:1px}
+    .dot-critico{width:6px;height:6px;border-radius:50%;background:var(--rojo);flex-shrink:0}
+    .dot-ok{width:6px;height:6px;border-radius:50%;background:var(--verde);flex-shrink:0}
 
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    /* MAIN */
+    .main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
 
-    /* Offline indicator */
-    .offline-badge {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 999;
+    /* CARDS estilo LinkedIn */
+    .card{background:#fff;border-radius:var(--radio-lg);border:1px solid var(--gris-borde);box-shadow:var(--sombra-card);overflow:hidden;animation:fadeUp .3s ease}
+    .card-header{padding:12px 16px;border-bottom:1px solid var(--gris-borde);display:flex;align-items:center;gap:8px}
+    .card-titulo{font-size:14px;font-weight:700;color:var(--gris-oscuro)}
+    .card-body{padding:16px}
+
+    /* PACIENTE HEADER CARD */
+    .pac-header-card{background:#fff;border-radius:var(--radio-lg);border:1px solid var(--gris-borde);box-shadow:var(--sombra-card);padding:16px;display:flex;align-items:center;gap:14px}
+    .pac-header-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--azul-primario),var(--azul-marino));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;flex-shrink:0}
+    .pac-header-info{flex:1}
+    .pac-header-nombre{font-size:17px;font-weight:800;color:var(--gris-oscuro)}
+    .pac-header-meta{font-size:12px;color:var(--gris-texto);margin-top:2px}
+    .pac-header-alerta{font-size:11px;color:var(--rojo);margin-top:3px;display:flex;align-items:center;gap:4px}
+    .pac-header-acciones{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+
+    /* BOTONES */
+    .btn-primary{padding:8px 18px;background:var(--azul-primario);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary:hover{background:var(--azul-marino);box-shadow:var(--sombra-hover)}
+    .btn-secondary{padding:8px 16px;background:#fff;color:var(--azul-primario);border:1.5px solid var(--azul-primario);border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-secondary:hover{background:var(--azul-claro)}
+    .btn-ghost{padding:7px 14px;background:none;color:var(--gris-texto);border:1.5px solid var(--gris-borde);border-radius:20px;font-size:13px;font-weight:600;transition:all .15s}
+    .btn-ghost:hover{border-color:var(--gris-oscuro);color:var(--gris-oscuro)}
+    .btn-verde{padding:8px 18px;background:var(--verde);color:#fff;border:none;border-radius:20px;font-size:13px;font-weight:700;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+    .btn-verde:hover{background:#046038}
+    .btn-disabled{opacity:.45;cursor:not-allowed!important}
+
+    /* EMPTY STATE */
+    .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;color:#bbb;text-align:center;flex:1}
+    .empty-icono{font-size:52px;margin-bottom:14px}
+    .empty-titulo{font-size:16px;font-weight:700;margin-bottom:6px;color:#999}
+    .empty-sub{font-size:13px;line-height:1.6}
+
+    @media(max-width:768px){
+      .sidebar{display:none}
     }
   </style>
 </head>
+<body>
 
-<body class="bg-surface">
+<div id="splash">
+  <div class="splash-brand"><span class="lig">LU</span><span class="ia">ISA</span></div>
+  <div class="splash-tagline">Inteligencia Clínica</div>
+  <div class="splash-spin"></div>
+</div>
 
-  <!-- Offline Indicator -->
-  <div id="offline-indicator" class="offline-badge hidden">
-    <div class="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-      🔴 Sin conexión
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div style="font-size:18px;font-weight:900;letter-spacing:-.02em">
+      <span style="color:#050C1A">LU</span><span style="color:#00C9A7">ISA</span>
+    </div>
+    <div class="header-sep"></div>
+    <div class="header-medico">
+      <div class="header-nombre" id="header-medico-nombre">Dr. Médico</div>
+      <div class="header-avatar-ini" id="header-avatar">MD</div>
+      <button class="btn-salir" id="btn-logout">Salir</button>
     </div>
   </div>
 
-  <!-- PWA Install Prompt -->
-  <div id="install-prompt" class="hidden">
-    <div class="bg-white rounded-lg shadow-xl p-4 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div style="font-size: 24px; font-weight: 900;">LU<span style="color: #00C9A7;">I</span>SA</div>
-        <div>
-          <p class="font-semibold text-gray-900">Instalar LUISA</p>
-          <p class="text-sm text-gray-600">Funciona como app nativa</p>
+  <!-- BODY -->
+  <div class="body">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-search">
+        <input type="text" placeholder="Buscar paciente..." id="search-pacientes"/>
+      </div>
+      <div class="btn-nuevo">
+        ➕ Nuevo paciente
+      </div>
+      <div class="sidebar-label">Mis Pacientes</div>
+      <div class="sidebar-lista" id="pacientes-list">
+        <div class="empty-state" style="padding:30px 10px">
+          <div class="empty-icono">👥</div>
+          <div class="empty-titulo">Cargando...</div>
         </div>
       </div>
-      <div class="flex space-x-2">
-        <button id="install-dismiss" class="px-3 py-2 text-gray-600 text-sm">
-          Ahora no
-        </button>
-        <button id="install-accept" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium">
-          Instalar
-        </button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div id="main-content" class="empty-state">
+        <div class="empty-icono">👤</div>
+        <div class="empty-titulo">Selecciona un paciente</div>
+        <div class="empty-sub">Elige un paciente de la lista para ver su expediente</div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Main Container -->
-  <div id="app" class="min-h-screen">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-          <div style="font-size: 24px; font-weight: 900; color: #050C1A;">LU<span style="color: #00C9A7;">I</span>SA</div>
-          <div>
-            <h1 class="text-lg font-bold text-gray-900">Inteligencia Clínica</h1>
-            <p class="text-xs text-gray-500">Portal Médico</p>
-          </div>
-        </div>
+<script>
+// ────────────────────────────────────────────────────────────────
+// VANILLA JAVASCRIPT — LUISA APP
+// ────────────────────────────────────────────────────────────────
 
-        <div class="flex items-center space-x-3">
-          <!-- Notifications -->
-          <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
+const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
 
-          <!-- User Menu -->
-          <button id="user-menu" class="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg">
-            <div id="user-avatar" class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center font-semibold text-sm">
-              DR
-            </div>
-          </button>
+let sb = null;
+let currentSession = null;
+let currentMedico = null;
+let pacientes = [];
+let pacienteActual = null;
 
-          <!-- Salir -->
-          <button onclick="logout()" class="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg font-medium">
-            Salir
-          </button>
-        </div>
-      </div>
+// ────────────────────────────────────────────────────────────────
+// INIT SUPABASE & CHECK AUTH
+// ────────────────────────────────────────────────────────────────
 
-      <!-- Navigation Tabs -->
-      <nav class="border-t border-gray-200 overflow-x-auto">
-        <div class="max-w-7xl mx-auto px-4 flex space-x-1">
-          <button data-tab="dashboard" class="tab-btn active px-4 py-3 text-sm font-medium text-primary border-b-2 border-primary whitespace-nowrap">
-            📊 Dashboard
-          </button>
-          <button data-tab="agenda" class="tab-btn px-4 py-3 text-sm font-medium text-gray-600 border-b-2 border-transparent whitespace-nowrap">
-            📅 Agenda
-          </button>
-          <button data-tab="pacientes" class="tab-btn px-4 py-3 text-sm font-medium text-gray-600 border-b-2 border-transparent whitespace-nowrap">
-            👥 Pacientes
-          </button>
-          <button data-tab="consulta" class="tab-btn px-4 py-3 text-sm font-medium text-gray-600 border-b-2 border-transparent whitespace-nowrap">
-            🎤 Consulta
-          </button>
-        </div>
-      </nav>
-    </header>
+async function initApp() {
+  // Check localStorage for session
+  const sessionStr = localStorage.getItem('luisa_session');
+  if (!sessionStr) {
+    window.location.href = '/auth.html';
+    return;
+  }
 
-    <!-- Content Area -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
-
-      <!-- Dashboard Tab -->
-      <div id="tab-dashboard" class="tab-content">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <!-- Stat Cards -->
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600">Citas Hoy</p>
-                <p class="text-2xl font-bold text-gray-900" id="stat-citas">--</p>
-              </div>
-              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-2xl">
-                📅
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600">Pacientes</p>
-                <p class="text-2xl font-bold text-primary" id="stat-pacientes">--</p>
-              </div>
-              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">
-                👥
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600">Notas Sin Firma</p>
-                <p class="text-2xl font-bold text-red-500" id="stat-notas">--</p>
-              </div>
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-2xl">
-                ✍️
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-lg shadow p-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="text-sm text-gray-600">Medicamentos</p>
-                <p class="text-2xl font-bold text-gray-900" id="stat-meds">--</p>
-              </div>
-              <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center text-2xl">
-                💊
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Alertas -->
-        <div class="bg-white rounded-lg shadow mb-6">
-          <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">🚨 Alertas Pendientes</h2>
-          </div>
-          <div id="alertas-list" class="divide-y divide-gray-200">
-            <!-- Loading skeleton -->
-            <div class="p-4">
-              <div class="skeleton h-4 w-3/4 mb-2 rounded"></div>
-              <div class="skeleton h-3 w-1/2 rounded"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Agenda -->
-        <div class="bg-white rounded-lg shadow">
-          <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">🗓️ Agenda de Hoy</h2>
-          </div>
-          <div id="agenda-list" class="divide-y divide-gray-200">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Agenda Tab -->
-      <div id="tab-agenda" class="tab-content hidden">
-        <div class="bg-white rounded-lg shadow p-6 text-center">
-          <div class="text-6xl mb-4">📅</div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">Calendario de Citas</h2>
-          <p class="text-gray-600 mb-4">Vista de agenda semanal próximamente</p>
-          <button class="px-6 py-3 bg-primary text-white rounded-lg font-medium">
-            Nueva Cita
-          </button>
-        </div>
-      </div>
-
-      <!-- Pacientes Tab -->
-      <div id="tab-pacientes" class="tab-content hidden">
-        <div class="bg-white rounded-lg shadow">
-          <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900">Mis Pacientes</h2>
-            <a href="/paciente-nuevo.html" class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 inline-block">
-              + Nuevo Paciente
-            </a>
-          </div>
-          <div id="pacientes-list">
-            <!-- Populated by JS -->
-            <div class="p-8 text-center text-gray-500">
-              Cargando pacientes...
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Consulta Tab -->
-      <div id="tab-consulta" class="tab-content hidden">
-        <div class="bg-white rounded-lg shadow p-6 text-center">
-          <div class="text-6xl mb-4">🎤</div>
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">Nueva Consulta</h2>
-          <p class="text-gray-600 mb-4">Dictado por voz + Extracción SOAP con IA</p>
-          <button onclick="openChatDoc()" class="px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90">
-            🎤 Iniciar Dictación
-          </button>
-        </div>
-      </div>
-
-    </main>
-
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-white border-t border-gray-200 mt-12">
-    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-600">
-      <p>© 2026 LUISA — Inteligencia Clínica</p>
-      <p class="mt-1">Desarrollado por RANNIX • v2.0.0</p>
-    </div>
-  </footer>
-
-  <!-- JavaScript -->
-  <script>
-    const SUPABASE_URL = 'https://kcpooneuqdbdavgivbdp.supabase.co';
-    const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtjcG9vbmV1cWRiZGF2Z2l2YmRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MTE3NDgsImV4cCI6MjA5NzA4Nzc0OH0.dWOhArXA8rv0Jzm-gajRlXtPkuwEg66GNF1YdygidNM';
-    let deferredPrompt = null;
-    let currentMedico = null;
-
-    // ══════════════════════════════════════════════════════════════════════
-    // INIT
-    // ══════════════════════════════════════════════════════════════════════
-
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('[LUISA] Inicializando...');
-
-      initTabs();
-      initPWAInstall();
-      initOfflineDetection();
-      checkSession();
-    });
-
-    // ══════════════════════════════════════════════════════════════════════
-    // TABS NAVIGATION
-    // ══════════════════════════════════════════════════════════════════════
-
-    function initTabs() {
-      const tabButtons = document.querySelectorAll('.tab-btn');
-
-      tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tabName = btn.dataset.tab;
-          switchTab(tabName);
-        });
-      });
-    }
-
-    function switchTab(tabName) {
-      // Update buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        if (btn.dataset.tab === tabName) {
-          btn.classList.add('active', 'text-primary', 'border-primary');
-          btn.classList.remove('text-gray-600', 'border-transparent');
-        } else {
-          btn.classList.remove('active', 'text-primary', 'border-primary');
-          btn.classList.add('text-gray-600', 'border-transparent');
-        }
-      });
-
-      // Update content
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.add('hidden');
-      });
-
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-
-      // Load data for tab
-      if (tabName === 'pacientes') {
-        loadPacientes();
-      }
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // SUPABASE API
-    // ══════════════════════════════════════════════════════════════════════
-
-    async function supabaseApi(table, filters = '') {
-      const url = `${SUPABASE_URL}/rest/v1/${table}${filters}`;
-      const res = await fetch(url, {
-        headers: { 'apikey': ANON_KEY, 'Authorization': `Bearer ${ANON_KEY}` }
-      });
-      if (!res.ok) throw new Error(`${res.status}`);
-      return await res.json();
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // SESSION
-    // ══════════════════════════════════════════════════════════════════════
-
-    async function checkSession() {
-      const session = localStorage.getItem('luisa_session');
-      if (!session) {
-        window.location.href = '/auth.html';
-        return;
-      }
-      const user = JSON.parse(session).user;
-      currentMedico = user;
-      console.log('[LOGIN] currentMedico:', currentMedico);
-
-      // Si no tiene medico_id y es médico, obtenerlo ahora
-      if (!currentMedico.medico_id && currentMedico.rol === 'medico') {
-        try {
-          const medUrl = `${SUPABASE_URL}/rest/v1/medicos?id_usuario=eq.${currentMedico.id}&select=id`;
-          const medRes = await fetch(medUrl, {
-            headers: { 'apikey': SUPABASE_KEY }
-          });
-          if (medRes.ok) {
-            const meds = await medRes.json();
-            if (meds && meds.length > 0) {
-              currentMedico.medico_id = meds[0].id;
-              console.log('[LOGIN] medico_id obtenido:', currentMedico.medico_id);
-            }
-          }
-        } catch (e) {
-          console.error('[LOGIN] Error obteniendo medico_id:', e);
-        }
-      }
-
-      const initials = (currentMedico.nombre_completo || 'U').split(' ').map(n => n[0]).join('').substring(0, 2);
-      document.getElementById('user-avatar').textContent = initials;
-      await loadDashboard();
-    }
-
-    function logout() {
+  try {
+    currentSession = JSON.parse(sessionStr);
+    // Verify session not expired (24h)
+    if (Date.now() - currentSession.timestamp > 24*60*60*1000) {
       localStorage.removeItem('luisa_session');
+      localStorage.removeItem('luisa_user');
       window.location.href = '/auth.html';
+      return;
+    }
+  } catch(e) {
+    window.location.href = '/auth.html';
+    return;
+  }
+
+  // Init Supabase
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Hide splash after 500ms
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    splash.classList.add('out');
+    setTimeout(() => { splash.style.display = 'none'; }, 500);
+  }, 500);
+
+  // Load medico data
+  await loadMedicoData();
+
+  // Load patients
+  await loadPacientes();
+
+  // Setup event listeners
+  setupEventListeners();
+}
+
+// ────────────────────────────────────────────────────────────────
+// LOAD MEDICO DATA FROM SUPABASE
+// ────────────────────────────────────────────────────────────────
+
+async function loadMedicoData() {
+  try {
+    const { data, error } = await sb
+      .from('medicos')
+      .select('*')
+      .eq('email', currentSession.email)
+      .single();
+
+    if (error) throw error;
+
+    currentMedico = data;
+
+    // Update header
+    const iniciales = data.nombre_completo
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0])
+      .join('')
+      .toUpperCase();
+
+    document.getElementById('header-medico-nombre').textContent =
+      data.nombre_completo || 'Dr. Médico';
+    document.getElementById('header-avatar').textContent = iniciales;
+  } catch(e) {
+    console.error('Error loading medico:', e);
+    alert('Error cargando datos del médico');
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// LOAD PACIENTES FROM SUPABASE
+// ────────────────────────────────────────────────────────────────
+
+async function loadPacientes() {
+  if (!currentMedico) return;
+
+  try {
+    // Get relationships
+    const { data: rels, error: relError } = await sb
+      .from('doctor_patient_relationships')
+      .select('id_paciente')
+      .eq('id_medico', currentMedico.id);
+
+    if (relError) throw relError;
+
+    if (!rels || rels.length === 0) {
+      renderPacientesList([]);
+      return;
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // DASHBOARD DATA
-    // ══════════════════════════════════════════════════════════════════════
+    const pacienteIds = rels.map(r => r.id_paciente);
 
-    async function loadDashboard() {
-      try {
-        const medId = currentMedico.medico_id || currentMedico.id;
-        const hoy = new Date();
-        const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).toISOString();
-        const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + 1).toISOString();
+    // Get patient details
+    const { data: pacs, error: pacError } = await sb
+      .from('perfiles_pacientes')
+      .select('*')
+      .in('id', pacienteIds);
 
-        const [citas, pacientes, notas, meds] = await Promise.all([
-          supabaseApi('citas', `?id_medico=eq.${medId}&fecha_hora=gte.${inicio}&fecha_hora=lt.${fin}&order=fecha_hora`),
-          supabaseApi('doctor_patient_relationships', `?id_medico=eq.${medId}&activo=eq.true&select=id_paciente`),
-          supabaseApi('notas_evolucion', `?id_medico=eq.${medId}&firmado=eq.false&select=id`),
-          supabaseApi('medicamentos_paciente', `?activo=eq.true&select=id`)
-        ]);
+    if (pacError) throw pacError;
 
-        // Update stats
-        document.getElementById('stat-citas').textContent = citas.length;
-        document.getElementById('stat-pacientes').textContent = pacientes.length;
-        document.getElementById('stat-notas').textContent = notas.length;
-        document.getElementById('stat-meds').textContent = meds.length;
+    pacientes = pacs || [];
+    renderPacientesList(pacientes);
+  } catch(e) {
+    console.error('Error loading pacientes:', e);
+    renderPacientesList([]);
+  }
+}
 
-        // Render alertas
-        renderAlertas(citas, notas);
+// ────────────────────────────────────────────────────────────────
+// RENDER PACIENTES LIST
+// ────────────────────────────────────────────────────────────────
 
-        // Render agenda
-        renderAgenda(citas);
+function renderPacientesList(list) {
+  const container = document.getElementById('pacientes-list');
 
-      } catch (error) {
-        console.error('[DASHBOARD] Error:', error);
-        showOfflineData();
-      }
-    }
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="padding:30px 10px">
+        <div class="empty-icono">👥</div>
+        <div class="empty-titulo">Sin pacientes</div>
+        <div class="empty-sub" style="font-size:11px">Aquí aparecerán tus pacientes</div>
+      </div>
+    `;
+    return;
+  }
 
-    function renderAlertas(citas, notas) {
-      const container = document.getElementById('alertas-list');
-      const alertas = [];
+  container.innerHTML = list.map(p => {
+    const iniciales = (p.nombre_completo || 'P')
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(w => w[0])
+      .join('')
+      .toUpperCase();
 
-      if (notas.length > 0) {
-        alertas.push({
-          paciente: `${notas.length} nota(s) sin firma`,
-          prioridad: 2,
-          tipo: 'notas',
-          descripcion: 'Notas pendientes de firma electrónica',
-          fecha: new Date().toISOString()
-        });
-      }
-
-      const citasPendientes = citas.filter(c => c.estado !== 'completada');
-      if (citasPendientes.length > 0) {
-        alertas.push({
-          paciente: `${citasPendientes.length} cita(s) pendiente(s)`,
-          prioridad: 1,
-          tipo: 'citas',
-          descripcion: 'Citas programadas sin completar',
-          fecha: new Date().toISOString()
-        });
-      }
-
-      if (alertas.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center text-gray-500">
-            <div class="text-4xl mb-2">✅</div>
-            <p>No hay alertas pendientes</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = alertas.map(alerta => `
-        <div class="p-4 hover:bg-gray-50 cursor-pointer">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center space-x-2 mb-1">
-                <span class="font-semibold text-gray-900">${alerta.paciente}</span>
-                <span class="px-2 py-0.5 text-xs font-medium rounded-full ${
-                  alerta.prioridad === 2 ? 'bg-yellow-100 text-yellow-700' :
-                  'bg-blue-100 text-blue-700'
-                }">
-                  ${alerta.tipo === 'notas' ? 'Firma' : 'Citas'}
-                </span>
-              </div>
-              <p class="text-sm text-gray-600">${alerta.descripcion}</p>
-              <p class="text-xs text-gray-400 mt-1">${formatDate(alerta.fecha)}</p>
-            </div>
-            <button class="ml-3 px-3 py-1 text-sm text-primary hover:bg-primary hover:text-white rounded-lg transition">
-              Revisar
-            </button>
+    return `
+      <div class="pac-item" data-pac-id="${p.id}">
+        <div class="pac-avatar">
+          ${iniciales}
+        </div>
+        <div class="pac-info">
+          <div class="pac-nombre">${p.nombre_completo || 'Sin nombre'}</div>
+          <div class="pac-meta">
+            <span>${p.edad || '—'} años</span>
           </div>
         </div>
-      `).join('');
-    }
+      </div>
+    `;
+  }).join('');
 
-    function renderAgenda(citas) {
-      const container = document.getElementById('agenda-list');
+  // Add event listeners to items
+  container.querySelectorAll('.pac-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const pacId = item.dataset.pacId;
+      selectPaciente(pacId);
+    });
+  });
+}
 
-      if (citas.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center text-gray-500">
-            <div class="text-4xl mb-2">☀️</div>
-            <p>Sin citas programadas hoy</p>
-          </div>
-        `;
-        return;
-      }
+// ────────────────────────────────────────────────────────────────
+// SELECT PACIENTE & SHOW DETAILS
+// ────────────────────────────────────────────────────────────────
 
-      container.innerHTML = citas.map(c => {
-        const hora = new Date(c.fecha_hora).toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit'});
-        const estadoColor = c.estado === 'completada' ? 'text-green-500' : 'text-yellow-500';
-        return `
-          <div class="p-4 hover:bg-gray-50 cursor-pointer">
-            <div class="flex items-center justify-between">
-              <div>
-                <div class="font-semibold text-gray-900">${hora}</div>
-                <p class="text-sm text-gray-600">${c.tipo_consulta || 'Consulta general'}</p>
-              </div>
-              <div class="text-right">
-                <div class="text-sm font-bold ${estadoColor}">
-                  ${c.estado || 'programada'}
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+async function selectPaciente(pacId) {
+  pacienteActual = pacientes.find(p => p.id === pacId);
 
-    // ══════════════════════════════════════════════════════════════════════
-    // PACIENTES
-    // ══════════════════════════════════════════════════════════════════════
+  if (!pacienteActual) return;
 
-    async function loadPacientes() {
-      const container = document.getElementById('pacientes-list');
+  // Update sidebar active state
+  document.querySelectorAll('.pac-item').forEach(item => {
+    item.classList.toggle('activo', item.dataset.pacId === pacId);
+  });
 
-      try {
-        const medicoId = currentMedico.medico_id || currentMedico.id;
-        console.log('[DEBUG] currentMedico:', currentMedico);
-        console.log('[DEBUG] medicoId:', medicoId);
-        const pacientes = await supabaseApi('doctor_patient_relationships', `?id_medico=eq.${medicoId}&activo=eq.true&select=id_paciente`);
-        console.log('[DEBUG] pacientes encontrados:', pacientes.length);
+  // Render patient card in main
+  renderPacienteDetail(pacienteActual);
+}
 
-        if (pacientes.length === 0) {
-          container.innerHTML = `
-            <div class="p-12 text-center text-gray-500">
-              <div class="text-6xl mb-4">👥</div>
-              <p class="text-lg mb-2">No tienes pacientes registrados</p>
-              <p class="text-sm">Comienza agregando tu primer paciente</p>
-            </div>
-          `;
-          return;
-        }
+// ────────────────────────────────────────────────────────────────
+// RENDER PACIENTE DETAIL CARD
+// ────────────────────────────────────────────────────────────────
 
-        container.innerHTML = `
-          <div class="divide-y divide-gray-200">
-            ${pacientes.map(p => `
-              <div class="p-4 hover:bg-gray-50 cursor-pointer transition">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-semibold text-lg">
-                      P
-                    </div>
-                    <div>
-                      <p class="font-semibold text-gray-900">Paciente ${p.id_paciente.substring(0, 8)}...</p>
-                      <p class="text-sm text-gray-600">ID: ${p.id_paciente}</p>
-                    </div>
-                  </div>
-                  <div class="text-right">
-                    <div class="text-lg font-bold text-primary">--</div>
-                    <p class="text-xs text-gray-500">Sin datos</p>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
+function renderPacienteDetail(pac) {
+  const mainContent = document.getElementById('main-content');
 
-      } catch (error) {
-        console.error('[PACIENTES] Error:', error);
-        container.innerHTML = `
-          <div class="p-8 text-center text-red-500">
-            <p>Error cargando pacientes</p>
-            <button onclick="loadPacientes()" class="mt-2 text-sm text-primary">
-              Reintentar
-            </button>
-          </div>
-        `;
-      }
-    }
+  const iniciales = (pac.nombre_completo || 'P')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase();
 
-    // ══════════════════════════════════════════════════════════════════════
-    // CONSULTA / CHAT DOC
-    // ══════════════════════════════════════════════════════════════════════
-
-    function openChatDoc() {
-      alert('🎤 Dictación + Chat Doc — próximamente integrado');
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // PWA INSTALL
-    // ══════════════════════════════════════════════════════════════════════
-
-    function initPWAInstall() {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-
-        // Show install prompt
-        document.getElementById('install-prompt').classList.remove('hidden');
-      });
-
-      document.getElementById('install-accept')?.addEventListener('click', async () => {
-        if (!deferredPrompt) return;
-
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-
-        console.log('[PWA] Install:', outcome);
-
-        if (outcome === 'accepted') {
-          document.getElementById('install-prompt').classList.add('hidden');
-        }
-
-        deferredPrompt = null;
-      });
-
-      document.getElementById('install-dismiss')?.addEventListener('click', () => {
-        document.getElementById('install-prompt').classList.add('hidden');
-      });
-
-      window.addEventListener('appinstalled', () => {
-        console.log('[PWA] App instalada');
-        document.getElementById('install-prompt').classList.add('hidden');
-      });
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // OFFLINE DETECTION
-    // ══════════════════════════════════════════════════════════════════════
-
-    function initOfflineDetection() {
-      const indicator = document.getElementById('offline-indicator');
-
-      window.addEventListener('online', () => {
-        indicator.classList.add('hidden');
-        console.log('[NETWORK] Online');
-        loadDashboard(); // Refresh data
-      });
-
-      window.addEventListener('offline', () => {
-        indicator.classList.remove('hidden');
-        console.log('[NETWORK] Offline');
-      });
-
-      // Initial check
-      if (!navigator.onLine) {
-        indicator.classList.remove('hidden');
-      }
-    }
-
-    function showOfflineData() {
-      // Show cached/dummy data when offline
-      document.getElementById('stat-citas').textContent = '--';
-      document.getElementById('stat-pacientes').textContent = '--';
-      document.getElementById('stat-notas').textContent = '--';
-      document.getElementById('stat-meds').textContent = '--';
-
-      document.getElementById('alertas-list').innerHTML = `
-        <div class="p-8 text-center text-gray-500">
-          <div class="text-4xl mb-2">📡</div>
-          <p>Sin conexión a internet</p>
-          <p class="text-sm mt-1">Los datos se actualizarán al reconectar</p>
+  mainContent.innerHTML = `
+    <div class="pac-header-card">
+      <div class="pac-header-avatar">${iniciales}</div>
+      <div class="pac-header-info">
+        <div class="pac-header-nombre">${pac.nombre_completo || 'Sin nombre'}</div>
+        <div class="pac-header-meta">
+          ${pac.edad || '—'} años · ${pac.sexo || '—'} · ${pac.telefono || 'Sin teléfono'}
         </div>
-      `;
-    }
+        ${pac.alergias ? `
+          <div class="pac-header-alerta">
+            ⚠️ Alergias: ${pac.alergias}
+          </div>
+        ` : ''}
+      </div>
+      <div class="pac-header-acciones">
+        <button class="btn-primary">📋 Ver expediente</button>
+        <button class="btn-secondary">📅 Nueva cita</button>
+      </div>
+    </div>
 
-    // ══════════════════════════════════════════════════════════════════════
-    // UTILS
-    // ══════════════════════════════════════════════════════════════════════
+    <div class="card">
+      <div class="card-header">
+        <div class="card-titulo">📝 Información General</div>
+      </div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px">
+          <div>
+            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Edad</div>
+            <div style="color:var(--gris-oscuro)">${pac.edad || '—'}</div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Sexo</div>
+            <div style="color:var(--gris-oscuro)">${pac.sexo || '—'}</div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Teléfono</div>
+            <div style="color:var(--gris-oscuro)">${pac.telefono || '—'}</div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--azul-primario);font-size:11px;text-transform:uppercase;margin-bottom:4px">Alergias</div>
+            <div style="color:var(--gris-oscuro)">${pac.alergias || 'No reportadas'}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    function formatDate(dateString) {
-      if (!dateString) return 'N/A';
+    <div class="card">
+      <div class="card-header">
+        <div class="card-titulo">💊 Medicamentos Actuales</div>
+      </div>
+      <div class="card-body">
+        <div style="color:var(--gris-texto);font-size:13px;line-height:1.6">
+          ${pac.medicamentos_actuales || 'No hay medicamentos registrados'}
+        </div>
+      </div>
+    </div>
+  `;
+}
 
-      const date = new Date(dateString);
-      const now = new Date();
-      const diffMs = now - date;
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+// ────────────────────────────────────────────────────────────────
+// SETUP EVENT LISTENERS
+// ────────────────────────────────────────────────────────────────
 
-      if (diffDays === 0) return 'Hoy';
-      if (diffDays === 1) return 'Ayer';
-      if (diffDays < 7) return `Hace ${diffDays} días`;
+function setupEventListeners() {
+  // Logout button
+  document.getElementById('btn-logout').addEventListener('click', handleLogout);
 
-      return date.toLocaleDateString('es-MX', {
-        day: 'numeric',
-        month: 'short',
-        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-      });
-    }
+  // Search pacientes
+  document.getElementById('search-pacientes').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    const filtered = pacientes.filter(p =>
+      (p.nombre_completo || '').toLowerCase().includes(query)
+    );
+    renderPacientesList(filtered);
+  });
+}
 
-    console.log('[LUISA] ✅ App cargada - v2.0.0');
-  </script>
+// ────────────────────────────────────────────────────────────────
+// LOGOUT
+// ────────────────────────────────────────────────────────────────
+
+function handleLogout() {
+  localStorage.removeItem('luisa_session');
+  localStorage.removeItem('luisa_user');
+  window.location.href = '/auth.html';
+}
+
+// ────────────────────────────────────────────────────────────────
+// START APP
+// ────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', initApp);
+</script>
 
 </body>
 </html>
