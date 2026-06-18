@@ -645,7 +645,7 @@ async function init() {
 
   try {
     // Usar localStorage (sesión LUISA propia) en vez de Supabase Auth
-    const sessionStr = localStorage.getItem('ligia_session');
+    const sessionStr = localStorage.getItem('luisa_session');
     if (!sessionStr) {
       document.getElementById('auth-screen').style.display = 'flex';
       return;
@@ -655,8 +655,8 @@ async function init() {
 
     // Verificar expiración 24h
     if (Date.now() - session.timestamp > 24*60*60*1000) {
-      localStorage.removeItem('ligia_user');
-      localStorage.removeItem('ligia_session');
+      localStorage.removeItem('luisa_user');
+      localStorage.removeItem('luisa_session');
       document.getElementById('auth-screen').style.display = 'flex';
       return;
     }
