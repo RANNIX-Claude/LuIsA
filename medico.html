@@ -539,7 +539,7 @@ function AuthGuard({children}){
   const [listo,setListo] = useState(false);
   useEffect(()=>{
     // Usar localStorage (sesión LUISA propia) en vez de Supabase Auth
-    const sessionStr = localStorage.getItem('ligia_session');
+    const sessionStr = localStorage.getItem('luisa_session');
     if(!sessionStr) {
       window.location.href='/auth.html';
       return;
@@ -549,7 +549,7 @@ function AuthGuard({children}){
       // Verificar expiración 24h
       if (Date.now() - session.timestamp > 24*60*60*1000) {
         localStorage.removeItem('ligia_user');
-        localStorage.removeItem('ligia_session');
+        localStorage.removeItem('luisa_session');
         window.location.href='/auth.html';
         return;
       }
